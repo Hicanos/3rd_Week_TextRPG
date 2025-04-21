@@ -8,39 +8,23 @@
     "net9.0": []
   },
   "packageFolders": {
-<<<<<<< HEAD
     "C:\\Users\\ppsik\\.nuget\\packages\\": {},
-=======
-    "C:\\Users\\User\\.nuget\\packages\\": {},
->>>>>>> main
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
       "projectUniqueName": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
       "projectName": "Program",
       "projectPath": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
       "packagesPath": "C:\\Users\\ppsik\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\obj\\",
-=======
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\githubdesk\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
-      "projectName": "Program",
-      "projectPath": "C:\\Users\\User\\Desktop\\githubdesk\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\githubdesk\\3rd_Week_TextRPG\\TextRPG\\Program\\obj\\",
->>>>>>> main
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-<<<<<<< HEAD
         "C:\\Users\\ppsik\\AppData\\Roaming\\NuGet\\NuGet.Config",
-=======
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
->>>>>>> main
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -91,5 +75,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "캐시 파일 C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\obj\\project.nuget.cache을(를) 읽는 동안 문제가 발생했습니다. Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
