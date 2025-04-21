@@ -1,5 +1,6 @@
 {
   "Version": 1,
+<<<<<<< HEAD
   "WorkspaceRootPath": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\",
   "Documents": [
     {
@@ -29,6 +30,13 @@
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Program\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+=======
+  "WorkspaceRootPath": "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|d:\\github\\3rd_week_textrpg\\textrpg\\program\\character.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\character.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+>>>>>>> main
     }
   ],
   "DocumentGroupContainers": [
@@ -42,6 +50,7 @@
           "Children": [
             {
               "$type": "Document",
+<<<<<<< HEAD
               "DocumentIndex": 1,
               "Title": "Weapons.cs",
               "DocumentMoniker": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Weapons.cs",
@@ -123,6 +132,18 @@
               "RelativeToolTip": "Program\\Program.cs",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-21T10:10:30.502Z"
+=======
+              "DocumentIndex": 0,
+              "Title": "Character.cs",
+              "DocumentMoniker": "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\Character.cs",
+              "RelativeDocumentMoniker": "Program\\Character.cs",
+              "ToolTip": "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\Character.cs",
+              "RelativeToolTip": "Program\\Character.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAswEcAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-21T10:24:13.636Z",
+              "EditorCaption": ""
+>>>>>>> main
             }
           ]
         }
