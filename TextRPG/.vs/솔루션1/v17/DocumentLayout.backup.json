@@ -3,28 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\character.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\character.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\weapons.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\weapons.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\weapons.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\weapons.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\character.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\character.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\rest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\rest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|solutionrelative:program\\shop.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4273FF5C-937E-4C3C-B074-146E96A98205}|Program\\Program.csproj|c:\\users\\ppsik\\desktop\\teamtextrpg\\3rd_week_textrpg\\textrpg\\program\\othermethods.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,17 +38,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Weapons.cs",
               "DocumentMoniker": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Weapons.cs",
               "RelativeDocumentMoniker": "Program\\Weapons.cs",
               "ToolTip": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Weapons.cs",
               "RelativeToolTip": "Program\\Weapons.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAJYAAAAAAAAAAAAowBQAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-21T10:12:22.476Z",
               "EditorCaption": ""
@@ -65,14 +61,14 @@
               "RelativeDocumentMoniker": "Program\\Shop.cs",
               "ToolTip": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Shop.cs",
               "RelativeToolTip": "Program\\Shop.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-21T10:12:22.088Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "Rest.cs",
               "DocumentMoniker": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Rest.cs",
               "RelativeDocumentMoniker": "Program\\Rest.cs",
@@ -85,7 +81,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "OtherMethods.cs",
               "DocumentMoniker": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\OtherMethods.cs",
               "RelativeDocumentMoniker": "Program\\OtherMethods.cs",
@@ -98,46 +94,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "GameManager.cs",
               "DocumentMoniker": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\GameManager.cs",
               "RelativeDocumentMoniker": "Program\\GameManager.cs",
               "ToolTip": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\GameManager.cs",
               "RelativeToolTip": "Program\\GameManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-21T10:12:20.578Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Enemy.cs",
-              "DocumentMoniker": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Enemy.cs",
-              "RelativeDocumentMoniker": "Program\\Enemy.cs",
-              "ToolTip": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Enemy.cs",
-              "RelativeToolTip": "Program\\Enemy.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwsAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-21T10:11:30.395Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Character.cs",
               "DocumentMoniker": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Character.cs",
               "RelativeDocumentMoniker": "Program\\Character.cs",
               "ToolTip": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Character.cs",
               "RelativeToolTip": "Program\\Character.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-21T10:11:11.601Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.cs",
               "RelativeDocumentMoniker": "Program\\Program.cs",
