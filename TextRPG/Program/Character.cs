@@ -23,6 +23,8 @@ namespace TextRPG.CharacterManagemant
         public string Name { get; set; }
         public int Level { get; set; }
         public string ClassName { get; set; }
+        
+        public int MaxHealth { get; set; }
         public int Health { get; set; }
         public double Attack { get; set; }
         public int Defense { get; set; }
@@ -36,11 +38,12 @@ namespace TextRPG.CharacterManagemant
         public Character(){  }
 
         //캐릭터 생성자
-        public Character(string name, string className, int level, int health, double attack, int defense, int gold)
+        public Character(string name, string className, int level, int maxhealth, int health, double attack, int defense, int gold)
         {
             Name = name;
             ClassName = className;
             Level = level;
+            MaxHealth = maxhealth;
             Health = health;
             Attack = attack;
             Defense = defense;

@@ -6,6 +6,7 @@ using TextRPG.WeaponManagemant;
 using TextRPG.ShopManagemant;
 using TextRPG.RestManagemant;
 using TextRPG.OtherMethods;
+using TextRPG.MonsterManagement;
 
 namespace TextRPG.GameManager
 {
@@ -31,7 +32,7 @@ namespace TextRPG.GameManager
             Weapons axe = new Weapons(false, false, "청동 도끼", "공격력", 5, "어디선가 사용됐던 것 같은 도끼입니다.", 1500);
             Weapons rtanSpear = new Weapons(false, false, "스파르타의 창", "공격력", 7, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 3000);
 
-            Character character = new Character("Chad", "전사", 1, 100, 10, 5, 10000);
+            Character character = new Character("Chad", "전사", 1, 100, 100, 10, 5, 10000);
 
             // 환영합니다 문구는 최초 시작 시 한번만
             bool welcomeText = true;
@@ -61,6 +62,7 @@ namespace TextRPG.GameManager
                         InputHelper.WaitForZeroInput();
                         break;
                     case 2: // 전투시작 로직 추가 예정
+                        Monster.SpawnMonster(character);
                         break;
                     case 3:
                         Weapons.ShowInventory(character);
