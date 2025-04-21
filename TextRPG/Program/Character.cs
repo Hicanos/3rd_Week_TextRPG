@@ -86,7 +86,52 @@ namespace TextRPG.CharacterManagemant
             Gold = 0;
         }
 
+        public int CrIticalAttack() // 캐릭터가 공격을 수행할때 15%확률로 160%의
+                                    // 치명타 공격을 하게 해주는 메소드.
+        {
+            Random rnd = new Random();
 
+            // 0~99까지의 랜덤값을 생성하여 15보다 작으면 true
+            bool Critical = rnd.Next(0, 100) < 15;
+
+            // true면 치명타 공격력, false면 일반 공격력
+            // ? (true) : (false) 삼항 연산자
+            int damage = Critical ? (int)(Attack * 1.6) : (int)Attack;
+
+            if (Critical)
+            {
+                Console.WriteLine($"{Name}의 치명타 공격!");  // level 옆에 몬스터 이름 추가 해야함! 
+                Console.WriteLine($"Lv. {Level}의 적에게 {damage}의 피해를 입혔습니다.");
+            }
+            else
+            {
+                Console.WriteLine($"{Name}의 공격!");// level 옆에 몬스터 이름 추가 해야함! 
+                Console.WriteLine($"Lv. {Level}의 적에게 {damage}의 피해를 입혔습니다.");
+            }
+            return damage;
+        }
+
+        // 몬스터 객채 설정을 안해서 빨간줄이 뜨는거라고 함. 
+        public int MissAttack() // 10% 확률로 공격이 빗나가게 해주는 메소드.
+        {
+            Random rnd = new Random();
+            // 0~99까지의 랜덤값을 생성하여 10보다 작으면 true
+            bool Miss = rnd.Next(0, 100) < 10;
+            // true면 빗나간 공격력, false면 일반 공격력 
+            int miss = Miss ? (int)(Attack * 0) : (int)Attack;
+
+            if (Miss)
+            {
+                Console.WriteLine($"{Name}의 공격!"); // level 옆에 몬스터 이름 추가 해야함!
+                Console.WriteLine($"Lv. {Level}의 적을 공격했지만 아무일도 일어나지 않았습니다.");
+            }
+            else
+            {
+                Console.WriteLine($"{Name}의 공격!");// level 옆에 몬스터 이름 추가 해야함! 
+                Console.WriteLine($"Lv. {Level}의 적에게 {miss}의 피해를 입혔습니다.");
+            }
+            return miss;
+        }
     }
 
 }
