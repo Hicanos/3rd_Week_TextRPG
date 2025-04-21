@@ -56,7 +56,7 @@ namespace TextRPG.CharacterManagemant
             Console.WriteLine($"공격력 : {Attack}");
             Console.WriteLine($"방어력 : {Defense}");
             Console.WriteLine($"체력 : {Health}");
-            Console.WriteLine($"Gold: {Gold} G");
+            Console.WriteLine($"소지금: {Gold} 원");
             Console.WriteLine("-----------------------------");
 
             Console.WriteLine("\n0. 나가기\n");
