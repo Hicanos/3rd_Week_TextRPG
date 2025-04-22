@@ -117,9 +117,9 @@ namespace TextRPG.CharacterManagemant
 
         //캐릭터 공격 메서드
         //타겟은 메인 스크립트에서 선택했다고 가정
-        public void AttackMethod()
+        public static void AttackMethod(Character character, Monster monster)
         {
-            int DamageMargin = (int)Attack / 10; // 공격력의 10%를 사용하여 공격을 수행하는 메소드.
+            int DamageMargin = (int)character.Attack / 10; // 공격력의 10%를 사용하여 공격을 수행하는 메소드.
             //나누기 후 소수점(나머지)가 있을 경우 올림처리
             if (DamageMargin % 10 != 0)
             {
@@ -127,7 +127,7 @@ namespace TextRPG.CharacterManagemant
             }
 
             //공격 시 대미지 범위 설정 (11일 경우 10-2부터 10+2까지)
-            int damageRange = new Random().Next((int)Attack - DamageMargin, (int)Attack + DamageMargin + 1);
+            int damageRange = new Random().Next((int)character.Attack - DamageMargin, (int)character.Attack + DamageMargin + 1);
 
             //공격 시 일정 확률로 크리티컬 혹은 miss 발생
             //크리티컬 공격
@@ -140,29 +140,36 @@ namespace TextRPG.CharacterManagemant
             {
                 //크리티컬 공격
                 //크리티컬 공격력 = 공격력 * 1.6
-                Console.WriteLine($"{Name}의 크리티컬 공격!");
-                Console.WriteLine($"Lv. {Level}의 적에게 {damageRange * 1.6}의 피해를 입혔습니다.");
+                Console.WriteLine($"{character.Name}의 크리티컬 공격!");
+                Console.WriteLine($"Lv.{monster.Level} {monster.Name}에게 {damageRange * 1.6}의 피해를 입혔습니다.");
 
                 //타겟 체력 감소- Monster 클래스의 Health를 사용
-                Monster.currentBattleMonsters[0].Health -= (int)(damageRange * 1.6); // 몬스터의 체력 감소
+                monster.Health -= (int)(damageRange * 1.6); // 몬스터의 체력 감소
 
             }
             else if (miss <= 10) //크리티컬이 발동하면 miss는 발동하지 않음
             {
                 //miss 공격
-                Console.WriteLine($"{Name}의 공격!");
-                Console.WriteLine($"Lv. {Level}의 적을 공격했지만 아무일도 일어나지 않았습니다.");
+                Console.WriteLine($"{character.Name}의 공격!");
+                Console.WriteLine($"Lv.{monster.Level} {monster.Name}을(를) 공격했지만 아무일도 일어나지 않았습니다.");
 
             }
             else
             {
                 //일반 공격
-                Console.WriteLine($"{Name}의 공격!");
-                Console.WriteLine($"Lv. {Level}의 적에게 {damageRange}의 피해를 입혔습니다.");
+                Console.WriteLine($"{character.Name}의 공격!");
+                Console.WriteLine($"Lv.{monster.Level} {monster.Name}에게 {damageRange}의 피해를 입혔습니다.");
                 //타겟 체력 감소- Monster 클래스의 Health를 사용
-                Monster.currentBattleMonsters[0].Health -= damageRange; // 몬스터의 체력 감소
+                monster.Health -= damageRange; // 몬스터의 체력 감소
 
             }
+            //몬스터가 죽었을 경우
+
+            if (monster.Health <= 0)
+            {
+                monster.Health = 0; // 몬스터의 체력을 0으로 설정
+            }
+
         }
 
 
