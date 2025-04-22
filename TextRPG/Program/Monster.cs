@@ -39,18 +39,28 @@ namespace TextRPG.MonsterManagement
             monsterTypes.AddRange(new List<Monster> { monster1, monster2, monster3, monster4 });
         }
 
+        public static List<Monster> currentBattleMonsters = new List<Monster>();
         public static void SpawnMonster(Character character)
         {
             InitMonsters();
             Random rand = new Random();
-            int numberOfMonster = rand.Next(1, monsterTypes.Count+1);
+            int numberOfMonster = rand.Next(1, monsterTypes.Count + 1);
 
-            for (int i = 1; i <= numberOfMonster; i++)
+            Console.WriteLine("[상사 등장]\n");
+
+            for (int i = 0; i < numberOfMonster; i++)
             {
-                int indexOfMonster = rand.Next(0, monsterTypes.Count);
-                Monster monster = monsterTypes[i];
-                Console.WriteLine($"Lv.{monster.Level} {monster.Name}   HP {monster.Health}");                
+                int index = rand.Next(0, monsterTypes.Count);
+                Monster selected = new Monster(
+                    monsterTypes[index].Name,
+                    monsterTypes[index].Level,
+                    monsterTypes[index].Health,
+                    monsterTypes[index].Attack
+                );
+                currentBattleMonsters.Add(selected);
+                Console.WriteLine($"Lv.{selected.Level} {selected.Name}   HP {selected.Health}");
             }
+
 
             Console.WriteLine("\n\n[내정보]");
             Console.WriteLine($"Lv.{character.Level}  {character.Name} ({character.ClassName})");
@@ -59,11 +69,107 @@ namespace TextRPG.MonsterManagement
             Console.WriteLine("원하시는 행동을 입력해주세요.\n>>");
 
             int choice = InputHelper.MatchOrNot(1, 1);
-            
-            // 여기에 공격 메소드 입력
+        }
+    }
 
+    public static class BattleManager
+    {
+        private static List<Monster> currentBattleMonsters = new List<Monster>();
+
+        public static void SpawnMonster(Character player)
+        {
+            // 간단한 몬스터 스폰 예제 (수정예정)
+            currentBattleMonsters.Clear();
+            currentBattleMonsters.Add(new Monster("상사 A", player.Level, 20, 5));
+            currentBattleMonsters.Add(new Monster("상사 B", player.Level + 1, 25, 6));
+        }
+
+        public static void StartBattle(Character player)
+        {
+            Console.WriteLine("=== 승진 전투 개시 ===\n");
+
+            SpawnMonster(player);
+
+            while (true)
+            {
+                var aliveMonsters = currentBattleMonsters.Where(m => m.Health > 0).ToList();
+
+                if (player.Health <= 0)
+                {
+                    Console.WriteLine("\n당신은 쓰러졌습니다...해고당했습니다 ㅠㅠ 밀린 신용카드 값을 갚지 못했습니다.");
+                    break;
+                }
+
+                if (aliveMonsters.Count == 0)
+                {
+                    Console.WriteLine("\n승진 성공!! 모든 상사를 제압했습니다!! 회 사 정 복");
+                    break;
+                }
+
+                Console.Clear();
+                Console.WriteLine("[내 정보]");
+                Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.ClassName})");
+                Console.WriteLine($"HP {player.Health}/{player.MaxHealth}\n");
+
+                Console.WriteLine("[몬스터 목록]");
+                for (int i = 0; i < aliveMonsters.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. Lv.{aliveMonsters[i].Level} {aliveMonsters[i].Name} - HP {aliveMonsters[i].Health}");
+                }
+
+                Console.WriteLine("\n공격할 대상을 선택해주세요.");
+                Console.Write(">> ");
+                int choice = InputHelper.MatchOrNot(1, aliveMonsters.Count);
+                Monster target = aliveMonsters[choice - 1];
+
+                int damage = (int)player.Attack - (target.Level - 1);
+                if (damage < 1) damage = 1;
+
+                target.Health -= damage;
+                if (target.Health < 0) target.Health = 0;
+
+                Console.WriteLine($"\n{target.Name} 에게 {damage}의 데미지를 입혔습니다!");
+                if (target.Health == 0)
+                {
+                    Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
+                }
+
+                Console.WriteLine("\nEnter 키를 누르면 적의 차례가 됩니다...");
+                Console.ReadLine();
+
+                EnemyPhase(player);
+            }
+
+            Console.WriteLine("\n전투 종료. 메인으로 돌아갑니다...");
+            Console.ReadLine();
+        }
+        public static void EnemyPhase(Character player)
+        {
+            Console.WriteLine("[Enemy Phase] 상대의 턴입니다.\n");
+
+            foreach (var monster in currentBattleMonsters)
+            {
+                if (monster.Health <= 0) continue;
+
+                Console.WriteLine($"Lv.{monster.Level} {monster.Name} 의 공격!");
+                int damage = monster.Attack;
+                player.Health -= damage;
+                if (player.Health < 0) player.Health = 0;
+
+                Console.WriteLine($"{player.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                Console.WriteLine($"HP {player.Health + damage} -> {player.Health}\n");
+
+                Console.WriteLine("0. 다음");
+                Console.Write(">> ");
+                Console.ReadLine();
+            }
+
+            Console.WriteLine("\n상대의 공격이 끝났습니다. [플레이어의 차례]");
+            Console.WriteLine("계속하려면 Enter를 누르세요...");
+            Console.ReadLine();
         }
 
     }
-  
 }
+    
+

@@ -16,32 +16,16 @@ namespace TextRPG.CharacterManagemant
         기획팀
     }
 
-    enum Ranks
-    {
-        대리 = 1,
-        과장,
-        차장,
-        부장,
-        전무,
-        상무,
-        이사,        
-        사장,
-        부회장
-    }
 
     // 캐릭터 상태 저장
     public class Character
     {
         public string Name { get; set; }
         public int Level { get; set; }
-
-        public string Rank { get; set; } // 직급
         public string ClassName { get; set; }
         
         public int MaxHealth { get; set; }
         public int Health { get; set; }
-        public int MaxMP { get; set; } // 최대 마나 포인트
-        public int MP { get; set; } // 마나 포인트
         public double Attack { get; set; }
         public int Defense { get; set; }
         public int Gold { get; set; }
@@ -54,15 +38,13 @@ namespace TextRPG.CharacterManagemant
         public Character(){  }
 
         //캐릭터 생성자
-        public Character(string name, string className, int level, int maxhealth, int health, int maxMp, int mp, double attack, int defense, int gold)
+        public Character(string name, string className, int level, int maxhealth, int health, double attack, int defense, int gold)
         {
             Name = name;
             ClassName = className;
             Level = level;
             MaxHealth = maxhealth;
             Health = health;
-            MaxMP = maxMp;
-            MP = mp;
             Attack = attack;
             Defense = defense;
             Gold = gold;
@@ -77,7 +59,6 @@ namespace TextRPG.CharacterManagemant
             Console.WriteLine($"공격력 : {Attack}");
             Console.WriteLine($"방어력 : {Defense}");
             Console.WriteLine($"체력 : {Health}");
-            Console.WriteLine($"마나 : {MP}");
             Console.WriteLine($"소지금: {Gold} 원");
             Console.WriteLine("-----------------------------");
 
@@ -98,23 +79,11 @@ namespace TextRPG.CharacterManagemant
             ClassName = Enum.GetName(typeof(Departments), Convert.ToInt32(Console.ReadLine()));
 
 
-            //기본 스탯
             Level = 1;
-            MaxHealth = 100; // 최대 체력
             Health = 100;
-            MaxMP = 50; // 최대 마나 포인트
-            MP = 50;
             Attack = 10;
             Defense = 5;
             Gold = 0;
-        }
-
-        //캐릭터 공격 메서드
-        //타겟은 메인 스크립트에서 선택했다고 가정
-        public void AttackMethod()
-        {
-            float Damage = (float)Attack * 0.1f; // 공격력의 10%를 사용하여 공격을 수행하는 메소드.
-            int damageRange = new Random().Next();
         }
 
         public int CrIticalAttack() // 캐릭터가 공격을 수행할때 15%확률로 160%의

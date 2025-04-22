@@ -8,6 +8,7 @@ using TextRPG.RestManagemant;
 using TextRPG.OtherMethods;
 using TextRPG.MonsterManagement;
 
+
 namespace TextRPG.GameManager
 {
     internal class Program
@@ -22,6 +23,8 @@ namespace TextRPG.GameManager
 
     internal class GameManager
     {
+        public object Battle { get; private set; }
+
         public void Run()
         {
             // 무기 & 캐릭터 객체 생성
@@ -69,7 +72,8 @@ namespace TextRPG.GameManager
                         InputHelper.WaitForZeroInput();
                         break;
                     case 2: // 전투시작 로직 추가 예정
-                        Monster.SpawnMonster(character);
+                        Monster.SpawnMonster(character);  // 몬스터 생성
+                        BattleManager.StartBattle(character);    // 전투 시작
                         break;
                     case 3:
                         Weapons.ShowInventory(character);
