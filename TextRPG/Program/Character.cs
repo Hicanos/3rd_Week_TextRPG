@@ -26,8 +26,7 @@ namespace TextRPG.CharacterManagemant
         상무,
         이사,        
         사장,
-        부회장,
-        회장
+        부회장
     }
 
     // 캐릭터 상태 저장
