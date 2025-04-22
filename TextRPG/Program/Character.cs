@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -125,7 +126,24 @@ namespace TextRPG.CharacterManagemant
         {
             Console.WriteLine("캐릭터를 생성합니다.");
             Console.Write("이름을 입력하세요 : ");
-            character.Name = Console.ReadLine();
+            //이름 입력-공백 포함 불가
+
+            while (true)
+            {
+                character.Name = Console.ReadLine();
+
+                if (character.Name.Contains(' '))
+                {
+                    Console.WriteLine("이름에 공백이 포함될 수 없습니다.");
+                    Console.WriteLine("이름을 입력하세요 : ");
+
+                    continue;
+                }
+
+                // 이름이 유효하면 반복문 종료
+                break;
+            }
+
             Console.Write("희망 부서를 입력하세요.\n--부서 리스트--\n1.인사팀: 정곡을 찌르는 HR 전략으로 치명타 확률이 높고, 사람을 상대하는 만큼 안정감(방어력, 체력)이 있음.\n2.홍보팀: 말발로 명중률이 높고, 이미지를 꾸미는 데 능숙해 회피율과 치명타도 강함.\n3.총무팀: 회사의 실질적 방패. 강한 방어력과 치명타 운영 능력을 지님.\n4.영업팀: 공격적인 자세로 거래를 성사시키는 딜러형. 치명타 위주의 세팅.\n5.전산팀: 기술 기반 마법 직군. 높은 마나와 명중률로 스킬 캐스터 역할.\n6.기획팀: 전략과 기획으로 정밀한 타격을 주는 포지션. 치명타 특화.\n>>");
 
             //직업 선택 (번호에 따라 직업 결정. enum Departments 사용) > 이후 직업에 따른 스탯 부여
