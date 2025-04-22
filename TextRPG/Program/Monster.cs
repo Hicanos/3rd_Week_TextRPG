@@ -70,7 +70,79 @@ namespace TextRPG.MonsterManagement
 
             int choice = InputHelper.MatchOrNot(1, 1);
         }
-        // EnemyPhase 메소드 추가
+    }
+
+    public static class BattleManager
+    {
+        private static List<Monster> currentBattleMonsters = new List<Monster>();
+
+        public static void SpawnMonster(Character player)
+        {
+            // 간단한 몬스터 스폰 예제 (수정예정)
+            currentBattleMonsters.Clear();
+            currentBattleMonsters.Add(new Monster("상사 A", player.Level, 20, 5));
+            currentBattleMonsters.Add(new Monster("상사 B", player.Level + 1, 25, 6));
+        }
+
+        public static void StartBattle(Character player)
+        {
+            Console.WriteLine("=== 승진 전투 개시 ===\n");
+
+            SpawnMonster(player);
+
+            while (true)
+            {
+                var aliveMonsters = currentBattleMonsters.Where(m => m.Health > 0).ToList();
+
+                if (player.Health <= 0)
+                {
+                    Console.WriteLine("\n당신은 쓰러졌습니다...해고당했습니다 ㅠㅠ 밀린 신용카드 값을 갚지 못했습니다.");
+                    break;
+                }
+
+                if (aliveMonsters.Count == 0)
+                {
+                    Console.WriteLine("\n승진 성공!! 모든 상사를 제압했습니다!! 회 사 정 복");
+                    break;
+                }
+
+                Console.Clear();
+                Console.WriteLine("[내 정보]");
+                Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.ClassName})");
+                Console.WriteLine($"HP {player.Health}/{player.MaxHealth}\n");
+
+                Console.WriteLine("[몬스터 목록]");
+                for (int i = 0; i < aliveMonsters.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. Lv.{aliveMonsters[i].Level} {aliveMonsters[i].Name} - HP {aliveMonsters[i].Health}");
+                }
+
+                Console.WriteLine("\n공격할 대상을 선택해주세요.");
+                Console.Write(">> ");
+                int choice = InputHelper.MatchOrNot(1, aliveMonsters.Count);
+                Monster target = aliveMonsters[choice - 1];
+
+                int damage = (int)player.Attack - (target.Level - 1);
+                if (damage < 1) damage = 1;
+
+                target.Health -= damage;
+                if (target.Health < 0) target.Health = 0;
+
+                Console.WriteLine($"\n{target.Name} 에게 {damage}의 데미지를 입혔습니다!");
+                if (target.Health == 0)
+                {
+                    Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
+                }
+
+                Console.WriteLine("\nEnter 키를 누르면 적의 차례가 됩니다...");
+                Console.ReadLine();
+
+                EnemyPhase(player);
+            }
+
+            Console.WriteLine("\n전투 종료. 메인으로 돌아갑니다...");
+            Console.ReadLine();
+        }
         public static void EnemyPhase(Character player)
         {
             Console.WriteLine("[Enemy Phase] 상대의 턴입니다.\n");
@@ -97,72 +169,7 @@ namespace TextRPG.MonsterManagement
             Console.ReadLine();
         }
 
-
-        public static void StartBattle(Character player)
-        {
-            Console.WriteLine("=== 승진 전투 개시 ===\n");
-
-            //1. 몬스터 생성
-            SpawnMonster(player); // currentBattleMonster에 저장됨
-
-            while (true)
-            {
-                // 몬스터 생존자 목록
-                var aliveMonsters = currentBattleMonsters.Where(m => m.Health > 0).ToList();
-
-                // 2.전투 종료 체크
-                if (player.Health <= 0)
-                {
-                    Console.WriteLine("\n당신은 쓰러졌습니다...해고당했습니다 ㅠㅠ 밀린 신용카드 값을 갚지 못했습니다.");
-                    break;
-                }
-
-                if (aliveMonsters.Count == 0)
-                {
-                    Console.WriteLine("\n승진 성공!! 모든 상사를 제압했습니다!! 회 사 정 복");
-                    break;
-                }
-
-                // 3. 플레이어 턴
-                Console.Clear();
-                Console.WriteLine("[내 정보]");
-                Console.WriteLine($"Lv.{player.Level} {player.Name} ({player.ClassName})");
-                Console.WriteLine($"HP {player.Health}/{player.MaxHealth}\n");
-
-                Console.WriteLine("[몬스터 목록]");
-                for (int i = 0; i < aliveMonsters.Count; i++)
-                {
-                    Console.WriteLine($"{i + 1}. Lv.{aliveMonsters[i].Level} {aliveMonsters[i].Name} - HP {aliveMonsters[i].Health}");
-                }
-
-                Console.WriteLine("\n공격할 대상을 선택해주세요.");
-                Console.Write(">> ");
-                int choice = InputHelper.MatchOrNot(1, aliveMonsters.Count);
-                Monster target = aliveMonsters[choice - 1];
-
-                int damage = (int)player.Attack - (target.Level - 1); // 간단한 데미지 계산
-                if (damage < 1) damage = 1;
-
-                target.Health -= damage;
-                if (target.Health < 0) target.Health = 0;
-
-                Console.WriteLine($"\n{target.Name} 에게 {damage}의 데미지를 입혔습니다!");
-                if (target.Health == 0)
-                {
-                    Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
-                }
-
-                Console.WriteLine("\nEnter 키를 누르면 적의 차례가 됩니다...");
-                Console.ReadLine();
-
-                // 4. 적 턴
-                EnemyPhase(player);
-            }
-
-            Console.WriteLine("\n전투 종료. 메인으로 돌아갑니다...");
-            Console.ReadLine();
-        }
-        }
     }
-
+}
+    
 
