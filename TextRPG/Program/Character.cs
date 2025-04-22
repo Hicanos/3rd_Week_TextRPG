@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TextRPG.MonsterManagement;
@@ -140,8 +141,8 @@ namespace TextRPG.CharacterManagemant
                 Console.WriteLine($"{Name}의 크리티컬 공격!");
                 Console.WriteLine($"Lv. {Level}의 적에게 {damageRange * 1.6}의 피해를 입혔습니다.");
 
-                //타겟 체력 감소
-                Health -= (int)(damageRange * 1.6); //타겟 체력 감소
+                //타겟 체력 감소- Monster 클래스의 Health를 사용
+                Monster.currentBattleMonsters[0].Health -= (int)(damageRange * 1.6); // 몬스터의 체력 감소
 
             }
             else if (miss <= 10) //크리티컬이 발동하면 miss는 발동하지 않음
@@ -149,12 +150,15 @@ namespace TextRPG.CharacterManagemant
                 //miss 공격
                 Console.WriteLine($"{Name}의 공격!");
                 Console.WriteLine($"Lv. {Level}의 적을 공격했지만 아무일도 일어나지 않았습니다.");
+
             }
             else
             {
                 //일반 공격
                 Console.WriteLine($"{Name}의 공격!");
                 Console.WriteLine($"Lv. {Level}의 적에게 {damageRange}의 피해를 입혔습니다.");
+                //타겟 체력 감소- Monster 클래스의 Health를 사용
+                Monster.currentBattleMonsters[0].Health -= damageRange; // 몬스터의 체력 감소
 
             }
         }
