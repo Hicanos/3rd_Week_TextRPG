@@ -36,7 +36,8 @@ namespace TextRPG.GameManager
             Weapons rtanSpear = new Weapons(false, false, "스파르타의 창", "공격력", 7, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 3000);
 
             //(string name, string className, int level, string rank, int maxhealth, int health, int maxMp, int mp, double attack, int defense, int gold)
-            Character character = new Character("Chad", "전사", 1, "대리",100, 100, 50,50,10, 5, 10000);
+            Character character = new Character("Chad", "전사", 1, "대리",100, 100, 50, 50, 10, 5, 10000);
+            Character.MakeCharacter(character);
 
             // 환영합니다 문구는 최초 시작 시 한번만
             bool welcomeText = true;
@@ -52,7 +53,7 @@ namespace TextRPG.GameManager
                     Console.WriteLine("그러던 어느 날, 회장님이 선언했다.");
                     Console.WriteLine("오늘 하루, 무력으로 진급하라!");
                     Console.WriteLine("단 하루뿐인 진급 배틀의 날!");
-                    Console.WriteLine($"평소 쌓인 게 많았던 {character.Name}는 결심한다.\r\n");
+                    Console.WriteLine($"평소 쌓인 게 많았던 {character.Name}. 결국 결심한다.\r\n");
                     Console.WriteLine(" '이 회사는 내가 먹는다.' \n\n");
 
                     welcomeText = false;

@@ -75,8 +75,8 @@ namespace TextRPG.CharacterManagemant
         public void ShowStatus()
         {
             Console.WriteLine("-----------------------------");
-            Console.WriteLine($"Lv. {Level}({Rank})");
-            Console.WriteLine($"{Name} ( {ClassName} )");
+            Console.WriteLine($"Lv. {Level} ({Rank})");
+            Console.WriteLine($"{Name} ({ClassName})");
             Console.WriteLine($"공격력 : {Attack}");
             Console.WriteLine($"방어력 : {Defense}");
             Console.WriteLine($"체력 : {Health}");
@@ -89,28 +89,30 @@ namespace TextRPG.CharacterManagemant
         }
 
         //캐릭터 생성 메서드
-        public void MakeCharacter()
+        public static void MakeCharacter(Character character)
         {
             Console.WriteLine("캐릭터를 생성합니다.");
             Console.Write("이름을 입력하세요 : ");
-            Name = Console.ReadLine();
-            Console.Write("희망 부서를 입력하세요.\n--부서 리스트--\n1.인사팀\n2.홍보팀\n3.총무팀\n4.영업팀\n5.전산팀\n6.기획팀 ");
+            character.Name = Console.ReadLine();
+            Console.Write("희망 부서를 입력하세요.\n--부서 리스트--\n1.인사팀\n2.홍보팀\n3.총무팀\n4.영업팀\n5.전산팀\n6.기획팀\n>>");
 
             //직업 선택 (번호에 따라 직업 결정. enum Departments 사용) > 이후 직업에 따른 스탯 부여
 
-            ClassName = Enum.GetName(typeof(Departments), Convert.ToInt32(Console.ReadLine()));
+           character.ClassName = Enum.GetName(typeof(Departments), Convert.ToInt32(Console.ReadLine()));
 
 
             //기본 스탯
-            Level = 1;
-            Rank = Enum.GetName(typeof(Ranks), 1); // 대리
-            MaxHealth = 100; // 최대 체력
-            Health = 100;
-            MaxMP = 50; // 최대 마나 포인트
-            MP = 50;
-            Attack = 10;
-            Defense = 5;
-            Gold = 0;
+            character.Level = 1;
+            character.Rank = Enum.GetName(typeof(Ranks), 1); // 대리
+            character.MaxHealth = 100; // 최대 체력
+            character.Health = 100;
+            character.MaxMP = 50; // 최대 마나 포인트
+            character.MP = 50;
+            character.Attack = 10;
+            character.Defense = 5;
+            character.Gold = 0;
+
+            Console.Clear();
         }
 
         //캐릭터 공격 메서드
