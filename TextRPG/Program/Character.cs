@@ -31,6 +31,20 @@ namespace TextRPG.CharacterManagemant
         부회장
     }
 
+    public struct Stats
+    {
+        public double Attack;
+        public int Defense;
+        public int MaxHealth;
+        public int Health;
+        public int MaxMP;
+        public int MP;
+        public int DEX;
+        public int CRIT;
+        public float CRITDMG;
+        public int EVA;
+    }
+
     // 캐릭터 상태 저장
     public class Character
     {
@@ -95,6 +109,17 @@ namespace TextRPG.CharacterManagemant
             Console.Write("원하시는 행동을 입력해주세요.\n>>");
         }
 
+
+        Dictionary<Departments, Stats> classStats = new Dictionary<Departments, Stats>
+        {
+            { Departments.인사팀, new Stats { Attack = 8, Defense = 8, MaxHealth = 100, Health = 100, MaxMP = 70, MP = 70, DEX = 70, CRIT = 24, CRITDMG = 1.4f, EVA = 12 }},
+            { Departments.홍보팀, new Stats { Attack = 10, Defense = 4, MaxHealth = 90, Health = 90, MaxMP = 80, MP = 80, DEX = 75, CRIT = 18, CRITDMG = 1.6f, EVA = 16 }},
+            { Departments.총무팀, new Stats { Attack = 8, Defense = 10, MaxHealth = 100, Health = 100, MaxMP = 70, MP = 70, DEX = 65, CRIT = 22, CRITDMG = 1.6f, EVA = 8 }},
+            { Departments.영업팀, new Stats { Attack = 14, Defense = 4, MaxHealth = 90, Health = 90, MaxMP = 70, MP = 70, DEX = 70, CRIT = 22, CRITDMG = 1.6f, EVA = 8 }},
+            { Departments.전산팀, new Stats { Attack = 12, Defense = 6, MaxHealth = 80, Health = 80, MaxMP = 90, MP = 90, DEX = 70, CRIT = 22, CRITDMG = 1.5f, EVA = 8 }},
+            { Departments.기획팀, new Stats { Attack = 10, Defense = 8, MaxHealth = 80, Health = 80, MaxMP = 80, MP = 80, DEX = 60, CRIT = 22, CRITDMG = 1.7f, EVA = 12 }}
+        };
+
         //캐릭터 생성 메서드
         public static void MakeCharacter(Character character)
         {
@@ -105,86 +130,29 @@ namespace TextRPG.CharacterManagemant
 
             //직업 선택 (번호에 따라 직업 결정. enum Departments 사용) > 이후 직업에 따른 스탯 부여
 
-            character.ClassName = Enum.GetName(typeof(Departments), Convert.ToInt32(Console.ReadLine()));
+            int departmentChoice;
+            while (!int.TryParse(Console.ReadLine(), out departmentChoice) || !Enum.IsDefined(typeof(Departments), departmentChoice))
+            {
+                Console.WriteLine("유효한 번호를 입력하세요.");
+                Console.Write("선택: ");
+            }
 
             //캐릭터 직업에 따른 스탯 부여
-            if(character.ClassName == "인사팀")
+            Departments selectedDepartment = (Departments)departmentChoice;
+            character.ClassName = selectedDepartment.ToString();
+
+            if (character.classStats.TryGetValue(selectedDepartment, out Stats selectedStats))
             {
-                character.Attack = 8;
-                character.Defense = 8;
-                character.MaxHealth = 100;
-                character.Health = 100;
-                character.MaxMP = 70;
-                character.MP = 70;
-                character.DEX = 70;
-                character.CRIT = 24;
-                character.CRITDMG = 1.4f;
-                character.EVA = 12;
-            }
-            else if(character.ClassName == "홍보팀")
-            {
-                character.Attack = 10;
-                character.Defense = 4;
-                character.MaxHealth = 90;
-                character.Health = 90;
-                character.MaxMP = 80;
-                character.MP = 80;
-                character.DEX = 75;
-                character.CRIT = 18;
-                character.CRITDMG = 1.6f;
-                character.EVA = 16;
-            }
-            else if (character.ClassName == "총무팀")
-            {
-                character.Attack = 8;
-                character.Defense = 10;
-                character.MaxHealth = 100;
-                character.Health = 100;
-                character.MaxMP = 70;
-                character.MP = 70;
-                character.DEX = 65;
-                character.CRIT = 22;
-                character.CRITDMG = 1.6f;
-                character.EVA = 8;
-            }
-            else if (character.ClassName == "영업팀")
-            {
-                character.Attack = 14;
-                character.Defense = 4;
-                character.MaxHealth = 90;
-                character.Health = 90;
-                character.MaxMP = 70;
-                character.MP = 70;
-                character.DEX = 70;
-                character.CRIT = 22;
-                character.CRITDMG = 1.6f;
-                character.EVA = 8;
-            }
-            else if (character.ClassName == "전산팀")
-            {
-                character.Attack = 12;
-                character.Defense = 6;
-                character.MaxHealth = 80;
-                character.Health = 80;
-                character.MaxMP = 90;
-                character.MP = 90;
-                character.DEX = 70;
-                character.CRIT = 22;
-                character.CRITDMG = 1.5f;
-                character.EVA = 8;
-            }
-            else if (character.ClassName == "기획팀")
-            {
-                character.Attack = 10;
-                character.Defense = 8;
-                character.MaxHealth = 80;
-                character.Health = 80;
-                character.MaxMP = 80;
-                character.MP = 80;
-                character.DEX = 60;
-                character.CRIT = 22;
-                character.CRITDMG = 1.7f;
-                character.EVA = 12;
+                character.Attack = selectedStats.Attack;
+                character.Defense = selectedStats.Defense;
+                character.MaxHealth = selectedStats.MaxHealth;
+                character.Health = selectedStats.Health;
+                character.MaxMP = selectedStats.MaxMP;
+                character.MP = selectedStats.MP;
+                character.DEX = selectedStats.DEX;
+                character.CRIT = selectedStats.CRIT;
+                character.CRITDMG = selectedStats.CRITDMG;
+                character.EVA = selectedStats.EVA;
             }
 
             character.Gold = 1500;
