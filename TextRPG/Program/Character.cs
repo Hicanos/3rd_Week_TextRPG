@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TextRPG.MonsterManagement;
 
 namespace TextRPG.CharacterManagemant
 {
@@ -54,11 +55,12 @@ namespace TextRPG.CharacterManagemant
         public Character(){  }
 
         //캐릭터 생성자
-        public Character(string name, string className, int level, int maxhealth, int health, int maxMp, int mp, double attack, int defense, int gold)
+        public Character(string name, string className, int level, string rank, int maxhealth, int health, int maxMp, int mp, double attack, int defense, int gold)
         {
             Name = name;
             ClassName = className;
             Level = level;
+            Rank = rank;
             MaxHealth = maxhealth;
             Health = health;
             MaxMP = maxMp;
@@ -72,7 +74,7 @@ namespace TextRPG.CharacterManagemant
         public void ShowStatus()
         {
             Console.WriteLine("-----------------------------");
-            Console.WriteLine($"Lv. {Level}");
+            Console.WriteLine($"Lv. {Level}({Rank})");
             Console.WriteLine($"{Name} ( {ClassName} )");
             Console.WriteLine($"공격력 : {Attack}");
             Console.WriteLine($"방어력 : {Defense}");
@@ -100,6 +102,7 @@ namespace TextRPG.CharacterManagemant
 
             //기본 스탯
             Level = 1;
+            Rank = Enum.GetName(typeof(Ranks), 1); // 대리
             MaxHealth = 100; // 최대 체력
             Health = 100;
             MaxMP = 50; // 최대 마나 포인트
@@ -113,56 +116,50 @@ namespace TextRPG.CharacterManagemant
         //타겟은 메인 스크립트에서 선택했다고 가정
         public void AttackMethod()
         {
-            float Damage = (float)Attack * 0.1f; // 공격력의 10%를 사용하여 공격을 수행하는 메소드.
-            int damageRange = new Random().Next();
-        }
-
-        public int CrIticalAttack() // 캐릭터가 공격을 수행할때 15%확률로 160%의
-                                    // 치명타 공격을 하게 해주는 메소드.
-        {
-            Random rnd = new Random();
-
-            // 0~99까지의 랜덤값을 생성하여 15보다 작으면 true
-            bool Critical = rnd.Next(0, 100) < 15;
-
-            // true면 치명타 공격력, false면 일반 공격력
-            // ? (true) : (false) 삼항 연산자
-            int damage = Critical ? (int)(Attack * 1.6) : (int)Attack;
-
-            if (Critical)
+            int DamageMargin = (int)Attack / 10; // 공격력의 10%를 사용하여 공격을 수행하는 메소드.
+            //나누기 후 소수점(나머지)가 있을 경우 올림처리
+            if (DamageMargin % 10 != 0)
             {
-                Console.WriteLine($"{Name}의 치명타 공격!");  // level 옆에 몬스터 이름 추가 해야함! 
-                Console.WriteLine($"Lv. {Level}의 적에게 {damage}의 피해를 입혔습니다.");
+                DamageMargin = DamageMargin / 10 + 1;
             }
-            else
+
+            //공격 시 대미지 범위 설정 (11일 경우 10-2부터 10+2까지)
+            int damageRange = new Random().Next((int)Attack - DamageMargin, (int)Attack + DamageMargin + 1);
+
+            //공격 시 일정 확률로 크리티컬 혹은 miss 발생
+            //크리티컬 공격
+            Random probability = new Random();
+            int critical = probability.Next(1, 101); // 15% 확률로 크리티컬 공격 발생
+            int miss = probability.Next(1, 101); // 10% 확률로 miss 발생
+
+            // level 옆에 몬스터 이름 추가 해야함
+            if (critical <= 15)
             {
-                Console.WriteLine($"{Name}의 공격!");// level 옆에 몬스터 이름 추가 해야함! 
-                Console.WriteLine($"Lv. {Level}의 적에게 {damage}의 피해를 입혔습니다.");
+                //크리티컬 공격
+                //크리티컬 공격력 = 공격력 * 1.6
+                Console.WriteLine($"{Name}의 크리티컬 공격!");
+                Console.WriteLine($"Lv. {Level}의 적에게 {damageRange * 1.6}의 피해를 입혔습니다.");
+
+                //타겟 체력 감소
+                Health -= (int)(damageRange * 1.6); //타겟 체력 감소
+
             }
-            return damage;
-        }
-
-        // 몬스터 객채 설정을 안해서 빨간줄이 뜨는거라고 함. 
-        public int MissAttack() // 10% 확률로 공격이 빗나가게 해주는 메소드.
-        {
-            Random rnd = new Random();
-            // 0~99까지의 랜덤값을 생성하여 10보다 작으면 true
-            bool Miss = rnd.Next(0, 100) < 10;
-            // true면 빗나간 공격력, false면 일반 공격력 
-            int miss = Miss ? (int)(Attack * 0) : (int)Attack;
-
-            if (Miss)
+            else if (miss <= 10) //크리티컬이 발동하면 miss는 발동하지 않음
             {
-                Console.WriteLine($"{Name}의 공격!"); // level 옆에 몬스터 이름 추가 해야함!
+                //miss 공격
+                Console.WriteLine($"{Name}의 공격!");
                 Console.WriteLine($"Lv. {Level}의 적을 공격했지만 아무일도 일어나지 않았습니다.");
             }
             else
             {
-                Console.WriteLine($"{Name}의 공격!");// level 옆에 몬스터 이름 추가 해야함! 
-                Console.WriteLine($"Lv. {Level}의 적에게 {miss}의 피해를 입혔습니다.");
+                //일반 공격
+                Console.WriteLine($"{Name}의 공격!");
+                Console.WriteLine($"Lv. {Level}의 적에게 {damageRange}의 피해를 입혔습니다.");
+
             }
-            return miss;
         }
+
+
     }
 
 }
