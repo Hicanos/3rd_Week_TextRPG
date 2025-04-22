@@ -162,7 +162,6 @@ namespace TextRPG.MonsterManagement
             }
             Console.WriteLine("\n전투 종료. 메인으로 돌아갑니다...");
             Console.ReadLine();
-            Console.Clear();
         }
         // 적과 대치하는 EnemyPhase 메서드 생성
         public static void EnemyPhase(Character character)

@@ -40,6 +40,7 @@ namespace TextRPG.WeaponManagemant
         //인벤토리 보여주기 로직
         public static void ShowInventory(Character character)
         {
+            Console.Clear();
             Console.WriteLine("-----------------------------");
             Console.WriteLine("\n인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n");
             Console.WriteLine("[아이템 목록]");
@@ -77,6 +78,7 @@ namespace TextRPG.WeaponManagemant
 
         public static void ManageMentWeapons(Character character)
         {
+            Console.Clear();
             Console.WriteLine("-----------------------------");
             Console.WriteLine("\n인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n");
             Console.WriteLine("[아이템 목록]");
@@ -184,7 +186,7 @@ namespace TextRPG.WeaponManagemant
                         }
                     }
                 }
-
+                Thread.Sleep(1000);
                 ManageMentWeapons(character); // 작업 후 다시 장착 관리 창으로 돌아가기 위해 메소드 재귀호출
             }
         }

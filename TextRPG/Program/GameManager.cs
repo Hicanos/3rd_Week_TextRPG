@@ -44,6 +44,7 @@ namespace TextRPG.GameManager
 
             while (true)
             {
+                Console.Clear();
                 if (welcomeText)
                 {
                     Console.WriteLine();
