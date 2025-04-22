@@ -117,7 +117,7 @@ namespace TextRPG.CharacterManagemant
             { Departments.총무팀, new Stats { Attack = 8, Defense = 10, MaxHealth = 100, Health = 100, MaxMP = 70, MP = 70, DEX = 65, CRIT = 22, CRITDMG = 1.6f, EVA = 8 }},
             { Departments.영업팀, new Stats { Attack = 14, Defense = 4, MaxHealth = 90, Health = 90, MaxMP = 70, MP = 70, DEX = 70, CRIT = 22, CRITDMG = 1.6f, EVA = 8 }},
             { Departments.전산팀, new Stats { Attack = 12, Defense = 6, MaxHealth = 80, Health = 80, MaxMP = 90, MP = 90, DEX = 70, CRIT = 22, CRITDMG = 1.5f, EVA = 8 }},
-            { Departments.기획팀, new Stats { Attack = 9, Defense = 7, MaxHealth = 95, Health = 95, MaxMP = 75, MP = 75, DEX = 68, CRIT = 20, CRITDMG = 1.5f, EVA = 10 }}
+            { Departments.기획팀, new Stats { Attack = 10, Defense = 8, MaxHealth = 80, Health = 80, MaxMP = 80, MP = 80, DEX = 60, CRIT = 22, CRITDMG = 1.7f, EVA = 12 }}
         };
 
         //캐릭터 생성 메서드
