@@ -51,6 +51,10 @@ namespace TextRPG.CharacterManagemant
         public bool IEquipedAttack { get; set; }
         public int ClearedCount { get; set; }
 
+        public int DEX { get; set; } // 민첩=명중률
+        public int CRIT { get; set; } // 치명타 확률
+        public float CRITDMG { get; set; } // 치명타 대미지 배수
+        public int EVA { get; set; } // 회피율
 
         //역직렬용 생성자
         public Character(){  }
@@ -81,6 +85,8 @@ namespace TextRPG.CharacterManagemant
             Console.WriteLine($"방어력 : {Defense}");
             Console.WriteLine($"체력 : {Health}");
             Console.WriteLine($"마나 : {MP}");
+            Console.WriteLine($"명중률 : {DEX}");
+            Console.WriteLine($"회피율 : {EVA}");
             Console.WriteLine($"소지금: {Gold} 원");
             Console.WriteLine("-----------------------------");
 
@@ -94,23 +100,95 @@ namespace TextRPG.CharacterManagemant
             Console.WriteLine("캐릭터를 생성합니다.");
             Console.Write("이름을 입력하세요 : ");
             character.Name = Console.ReadLine();
-            Console.Write("희망 부서를 입력하세요.\n--부서 리스트--\n1.인사팀\n2.홍보팀\n3.총무팀\n4.영업팀\n5.전산팀\n6.기획팀\n>>");
+            Console.Write("희망 부서를 입력하세요.\n--부서 리스트--\n1.인사팀: 정곡을 찌르는 HR 전략으로 치명타 확률이 높고, 사람을 상대하는 만큼 안정감(방어력, 체력)이 있음.\n2.홍보팀: 말발로 명중률이 높고, 이미지를 꾸미는 데 능숙해 회피율과 치명타도 강함.\n3.총무팀: 회사의 실질적 방패. 강한 방어력과 치명타 운영 능력을 지님.\n4.영업팀: 공격적인 자세로 거래를 성사시키는 딜러형. 치명타 위주의 세팅.\n5.전산팀: 기술 기반 마법 직군. 높은 마나와 명중률로 스킬 캐스터 역할.\n6.기획팀: 전략과 기획으로 정밀한 타격을 주는 포지션. 치명타 특화.\n>>");
 
             //직업 선택 (번호에 따라 직업 결정. enum Departments 사용) > 이후 직업에 따른 스탯 부여
 
-           character.ClassName = Enum.GetName(typeof(Departments), Convert.ToInt32(Console.ReadLine()));
+            character.ClassName = Enum.GetName(typeof(Departments), Convert.ToInt32(Console.ReadLine()));
+
+            //캐릭터 직업에 따른 스탯 부여
+            if(character.ClassName == "인사팀")
+            {
+                character.Attack = 8;
+                character.Defense = 8;
+                character.MaxHealth = 100;
+                character.Health = 100;
+                character.MaxMP = 70;
+                character.MP = 70;
+                character.DEX = 70;
+                character.CRIT = 24;
+                character.CRITDMG = 1.4f;
+                character.EVA = 12;
+            }
+            else if(character.ClassName == "홍보팀")
+            {
+                character.Attack = 10;
+                character.Defense = 4;
+                character.MaxHealth = 90;
+                character.Health = 90;
+                character.MaxMP = 80;
+                character.MP = 80;
+                character.DEX = 75;
+                character.CRIT = 18;
+                character.CRITDMG = 1.6f;
+                character.EVA = 16;
+            }
+            else if (character.ClassName == "총무팀")
+            {
+                character.Attack = 8;
+                character.Defense = 10;
+                character.MaxHealth = 100;
+                character.Health = 100;
+                character.MaxMP = 70;
+                character.MP = 70;
+                character.DEX = 65;
+                character.CRIT = 22;
+                character.CRITDMG = 1.6f;
+                character.EVA = 8;
+            }
+            else if (character.ClassName == "영업팀")
+            {
+                character.Attack = 14;
+                character.Defense = 4;
+                character.MaxHealth = 90;
+                character.Health = 90;
+                character.MaxMP = 70;
+                character.MP = 70;
+                character.DEX = 70;
+                character.CRIT = 22;
+                character.CRITDMG = 1.6f;
+                character.EVA = 8;
+            }
+            else if (character.ClassName == "전산팀")
+            {
+                character.Attack = 12;
+                character.Defense = 6;
+                character.MaxHealth = 80;
+                character.Health = 80;
+                character.MaxMP = 90;
+                character.MP = 90;
+                character.DEX = 70;
+                character.CRIT = 22;
+                character.CRITDMG = 1.5f;
+                character.EVA = 8;
+            }
+            else if (character.ClassName == "기획팀")
+            {
+                character.Attack = 10;
+                character.Defense = 8;
+                character.MaxHealth = 80;
+                character.Health = 80;
+                character.MaxMP = 80;
+                character.MP = 80;
+                character.DEX = 60;
+                character.CRIT = 22;
+                character.CRITDMG = 1.7f;
+                character.EVA = 12;
+            }
+
+            character.Gold = 1500;
 
 
-            //기본 스탯
-            character.Level = 1;
-            character.Rank = Enum.GetName(typeof(Ranks), 1); // 대리
-            character.MaxHealth = 100; // 최대 체력
-            character.Health = 100;
-            character.MaxMP = 50; // 최대 마나 포인트
-            character.MP = 50;
-            character.Attack = 10;
-            character.Defense = 5;
-            character.Gold = 0;
 
             Console.Clear();
         }
