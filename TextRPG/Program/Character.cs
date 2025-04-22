@@ -16,12 +16,27 @@ namespace TextRPG.CharacterManagemant
         기획팀
     }
 
+    enum Ranks
+    {
+        대리 = 1,
+        과장,
+        차장,
+        부장,
+        전무,
+        상무,
+        이사,        
+        사장,
+        부회장,
+        회장
+    }
 
     // 캐릭터 상태 저장
     public class Character
     {
         public string Name { get; set; }
         public int Level { get; set; }
+
+        public string Rank { get; set; } // 직급
         public string ClassName { get; set; }
         
         public int MaxHealth { get; set; }
@@ -95,6 +110,13 @@ namespace TextRPG.CharacterManagemant
             Gold = 0;
         }
 
+        //캐릭터 공격 메서드
+        //타겟은 메인 스크립트에서 선택했다고 가정
+        public void AttackMethod()
+        {
+            float Damage = (float)Attack * 0.1f; // 공격력의 10%를 사용하여 공격을 수행하는 메소드.
+            int damageRange = new Random().Next();
+        }
 
         public int CrIticalAttack() // 캐릭터가 공격을 수행할때 15%확률로 160%의
                                     // 치명타 공격을 하게 해주는 메소드.
