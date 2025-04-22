@@ -52,7 +52,7 @@ namespace TextRPG.MonsterManagement
             currentBattleMonsters.Clear();
             Monster.InitMonsters(); // 몬스터를 InitMonsters에 정의해둔 리스트에서 불러옴
             Random rand = new Random();
-            int numberOfMonster = rand.Next(1, monsterTypes.Count + 1); // 전투에 나올 모스터 수를 랜덤으로 정함
+            int numberOfMonster = rand.Next(1, monsterTypes.Count + 1); // 전투에 나올 몬스터 수를 랜덤으로 정함
             for (int i = 0; i < numberOfMonster; i++)
             {
                 // 랜덤하게 몬스터를 골라 새 인스턴스를 생성하고 전투 몬스터 리스트에 추가
@@ -78,8 +78,10 @@ namespace TextRPG.MonsterManagement
     }
     public class BattleResult // 전투 결과를  출력하는 메소드
     {
+        // 전투가 끝난 뒤 결과(승리,패배)를 계산하고 보성 정보 출력
         public void ShowResult(Character character, List<Monster> monsters)
         {
+            // 전투 결과 계산
             string result;
             int killedCount = monsters.Count(m => m.Health <= 0);
             bool allMonstersDead = monsters.All(m => m.Health <= 0);
@@ -98,9 +100,29 @@ namespace TextRPG.MonsterManagement
             Console.WriteLine("----");
             if (result == "승리")
             {
-                Console.WriteLine($"사원을 {killedCount}명 쓰러뜨렸습니다.");
+                Console.WriteLine($"사원을 {killedCount}명 쓰러뜨렸습니다.\n");
+
+                // 죽은 몬스터에게 골드와 아이템 수집
+                int totalGold = 0;
+                List<string> dropItems = new List<string>();
+                foreach (var m in monsters.Where(m => m.Health <= 0))
+                {
+                    // m.Gold 와 m.DropItems는 Monster클래스에서 속성으로 추가
+                    totalGold += m.Gold;
+                    if (!string.IsNullOrWhiteSpace(m.DropItem))
+                        dropItems.Add(m.DropItem);
+                }
+
+                Console.WriteLine("[캐릭터 정보]");
                 Console.WriteLine($"Lv.{character.Level} {character.Name}");
                 Console.WriteLine($"HP {character.Health}");
+
+                Console.WriteLine("\n[획득 아이템]");
+                Console.WriteLine($"{totalGold} 원");
+                foreach (var item in dropItems)
+                {
+                    Console.WriteLine($"{item} -1");
+                }
             }
             else if (result == "패배")
             {
@@ -108,7 +130,10 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine($"Lv.{character.Level} {character.Name}");
                 Console.WriteLine($"HP {character.Health}");
             }
+
+            Console.WriteLine("\n0. 다음");
             Console.Write(">> ");
+            Console.ReadLine();
         }
     }
 
