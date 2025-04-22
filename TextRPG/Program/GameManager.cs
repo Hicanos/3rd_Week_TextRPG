@@ -8,6 +8,7 @@ using TextRPG.RestManagemant;
 using TextRPG.OtherMethods;
 using TextRPG.MonsterManagement;
 
+
 namespace TextRPG.GameManager
 {
     internal class Program
@@ -22,6 +23,8 @@ namespace TextRPG.GameManager
 
     internal class GameManager
     {
+        public object Battle { get; private set; }
+
         public void Run()
         {
             // 무기 & 캐릭터 객체 생성
@@ -42,8 +45,17 @@ namespace TextRPG.GameManager
                 if (welcomeText)
                 {
                     Console.WriteLine();
-                    Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-                    Console.WriteLine("이제 전투를 시작할 수 있습니다..\n");
+                    Console.WriteLine($"20년째 대리, 그 이름은 {character.Name}.");
+                    Console.WriteLine("업무는 완벽, 출근은 개근. 하지만 사장에게 잘못 찍혀 직급은 정지 상태!");
+                    Console.WriteLine("그러던 어느 날, 세상에 초대형 경기대공황이 몰아치고,");
+                    Console.WriteLine("모든 문명은 붕괴! 기업 문화도 원시시대로 회귀!");
+                    Console.WriteLine("이제 회의 ? 보고서 ? 그런 건 없다.");
+                    Console.WriteLine("진정한 승진의 길은 단 하나! 상사를 쓰러뜨려라!");
+                    Console.WriteLine("\n우리 회사도 과감히 이름을 바꿨다.");
+                    Console.WriteLine("'승진배틀(주)’ — 오직 강자만이 회장 뱃지를 단다!");
+                    Console.WriteLine("\n책상 대신 검, 정장 대신 갑옷!");
+                    Console.WriteLine("이젠 말이 아닌 주먹(혹은 무기)으로 말할 시간.\r\n");
+                    Console.WriteLine("이번엔 진짜 진짜 승진할 수 있을까 ?\n\n");                            
                     welcomeText = false;
                 }
 
@@ -62,7 +74,8 @@ namespace TextRPG.GameManager
                         InputHelper.WaitForZeroInput();
                         break;
                     case 2: // 전투시작 로직 추가 예정
-                        Monster.SpawnMonster(character);
+                        Monster.SpawnMonster(character);  // 몬스터 생성
+                        BattleManager.StartBattle(character);    // 전투 시작
                         break;
                     case 3:
                         Weapons.ShowInventory(character);
