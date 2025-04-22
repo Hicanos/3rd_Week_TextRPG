@@ -71,6 +71,49 @@ namespace TextRPG.MonsterManagement
             int choice = InputHelper.MatchOrNot(1, 1);
         }
     }
+    public class BattleResult // 전투 결과를  출력하는 메소드 
+    {
+        public void ShowResult(Character player, List<Monster> monsters)
+        {
+            string result;
+           
+
+            int killedCount = monsters.Count(m => m.Health <= 0);
+            bool allMonstersDead = monsters.All(m => m.Health <= 0);
+            bool playerDead = player.Health <= 0;
+
+            if (allMonstersDead)
+            {
+                result = "승리";
+            }
+            else if (playerDead)
+            {
+                result = "패배";
+            }
+            else result = "오류";
+
+            Console.WriteLine("----");
+            Console.WriteLine($"{result}");
+            Console.WriteLine("----");
+
+            if (result == "승리")
+            {
+                Console.WriteLine($"던전에서 상사를 {killedCount}명 쓰러뜨렸습니다.");
+                Console.WriteLine($"Lv.{player.Level} {player.Name}");
+                Console.WriteLine($"HP {player.Health}");
+            }
+            else if (result == "패배")
+            {
+                Console.WriteLine("당신은 해고당했습니다.");
+                Console.WriteLine($"Lv.{player.Level} {player.Name}");
+                Console.WriteLine($"HP {player.Health}");
+            }
+
+            Console.WriteLine("\n0. 다음");
+            Console.Write(">> ");
+        }
+    }
+    
 
     public static class BattleManager
     {
@@ -83,7 +126,7 @@ namespace TextRPG.MonsterManagement
             currentBattleMonsters.Add(new Monster("상사 A", player.Level, 20, 5));
             currentBattleMonsters.Add(new Monster("상사 B", player.Level + 1, 25, 6));
         }
-
+       
         public static void StartBattle(Character player)
         {
             Console.WriteLine("=== 승진 전투 개시 ===\n");
@@ -97,12 +140,17 @@ namespace TextRPG.MonsterManagement
                 if (player.Health <= 0)
                 {
                     Console.WriteLine("\n당신은 쓰러졌습니다...해고당했습니다 ㅠㅠ 밀린 신용카드 값을 갚지 못했습니다.");
+
+
+                    new BattleResult().ShowResult(player, currentBattleMonsters);
                     break;
                 }
 
                 if (aliveMonsters.Count == 0)
                 {
                     Console.WriteLine("\n승진 성공!! 모든 상사를 제압했습니다!! 회 사 정 복");
+
+                    new BattleResult().ShowResult(player, currentBattleMonsters);
                     break;
                 }
 
@@ -167,6 +215,7 @@ namespace TextRPG.MonsterManagement
             Console.WriteLine("\n상대의 공격이 끝났습니다. [플레이어의 차례]");
             Console.WriteLine("계속하려면 Enter를 누르세요...");
             Console.ReadLine();
+
         }
 
     }
