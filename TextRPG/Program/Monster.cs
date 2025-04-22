@@ -73,12 +73,12 @@ namespace TextRPG.MonsterManagement
     }
     public class BattleResult // 전투 결과를  출력하는 메소드 
     {
-        public void ShowResult(Character player, List<Monster> monsters)
+        public void ShowResult(Character player, List<Monster> monsters) 
         {
             string result;
            
 
-            int killedCount = monsters.Count(m => m.Health <= 0);
+            int killedCount = monsters.Count(m => m.Health <= 0); 
             bool allMonstersDead = monsters.All(m => m.Health <= 0);
             bool playerDead = player.Health <= 0;
 
@@ -98,7 +98,7 @@ namespace TextRPG.MonsterManagement
 
             if (result == "승리")
             {
-                Console.WriteLine($"던전에서 상사를 {killedCount}명 쓰러뜨렸습니다.");
+                Console.WriteLine($"던전에서 상사를 {killedCount}명 쓰러뜨렸습니다."); // 고쳐야함 
                 Console.WriteLine($"Lv.{player.Level} {player.Name}");
                 Console.WriteLine($"HP {player.Health}");
             }
@@ -139,7 +139,7 @@ namespace TextRPG.MonsterManagement
 
                 if (player.Health <= 0)
                 {
-                    Console.WriteLine("\n당신은 쓰러졌습니다...해고당했습니다 ㅠㅠ 밀린 신용카드 값을 갚지 못했습니다.");
+                    
 
 
                     new BattleResult().ShowResult(player, currentBattleMonsters);
@@ -148,7 +148,7 @@ namespace TextRPG.MonsterManagement
 
                 if (aliveMonsters.Count == 0)
                 {
-                    Console.WriteLine("\n승진 성공!! 모든 상사를 제압했습니다!! 회 사 정 복");
+                   
 
                     new BattleResult().ShowResult(player, currentBattleMonsters);
                     break;
