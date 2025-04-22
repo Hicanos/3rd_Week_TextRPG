@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "dxPYFlF9t8I=",
+  "dgSpecHash": "r5MgOS75PnE=",
   "success": true,
-  "projectFilePath": "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
+  "projectFilePath": "C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "캐시 파일 C:\\Users\\ppsik\\Desktop\\TeamTextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\obj\\project.nuget.cache을(를) 읽는 동안 문제가 발생했습니다. Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
