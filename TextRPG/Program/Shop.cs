@@ -13,6 +13,7 @@ namespace TextRPG.ShopManagemant
     {
         public static void ShowShop(Character character)
         {
+            Console.Clear();
             Console.WriteLine("-----------------------------");
             Console.WriteLine("상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n");
             Console.WriteLine($"[보유 골드] {character.Gold} G\n\n");
@@ -54,6 +55,7 @@ namespace TextRPG.ShopManagemant
 
         public static void BuyItems(Character character)
         {
+            Console.Clear();
             Console.WriteLine("-----------------------------");
             Console.WriteLine("상점 - 아이템 구매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n");
             Console.WriteLine($"[보유 골드] {character.Gold} G\n\n");
@@ -84,7 +86,7 @@ namespace TextRPG.ShopManagemant
 
             if (Choice == 0)
             {
-                Console.WriteLine();
+                ShowShop(character);
                 return;
             }
             else
@@ -105,6 +107,7 @@ namespace TextRPG.ShopManagemant
                     Console.WriteLine("저런, 돈이 부족하네.");
                 }
 
+                Thread.Sleep(1000);
                 BuyItems(character); // 작업 후 다시 아이템 구매 창으로 돌아가기 위해 메소드 재귀호출
             }
         }
@@ -112,6 +115,7 @@ namespace TextRPG.ShopManagemant
 
         public static void SellingItems(Character character)
         {
+            Console.Clear();
             Console.WriteLine("-----------------------------");
             Console.WriteLine("상점 - 아이템 판매\n아이템을 판매할 수 있습니다.\n\n");
             Console.WriteLine($"[보유 골드] {character.Gold} G\n\n");
@@ -154,7 +158,7 @@ namespace TextRPG.ShopManagemant
 
             if (Choice == 0)
             {
-                Console.WriteLine();
+                ShowShop(character);
                 return;
             }
             else
@@ -165,8 +169,10 @@ namespace TextRPG.ShopManagemant
                 character.Gold += (int)(selected.Price * (85.0 / 100));
 
                 Console.WriteLine($"{selected.Name}의 판매를 완료했습니다.");
-                SellingItems(character); // 작업 후 다시 아이템 판매 창으로 돌아가기 위해 메소드 재귀호출
+               
             }
+            Thread.Sleep(1000);
+            SellingItems(character); // 작업 후 다시 아이템 판매 창으로 돌아가기 위해 메소드 재귀호출
         }
 
     }
