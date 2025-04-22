@@ -44,6 +44,7 @@ namespace TextRPG.GameManager
 
             while (true)
             {
+                Console.Clear();
                 if (welcomeText)
                 {
                     Console.WriteLine();
@@ -74,7 +75,6 @@ namespace TextRPG.GameManager
                         InputHelper.WaitForZeroInput();
                         break;
                     case 2: // 전투시작 로직 추가 예정
-                        Monster.SpawnMonster(character);  // 몬스터 생성
                         BattleManager.StartBattle(character);    // 전투 시작
                         break;
                     case 3:

@@ -134,8 +134,24 @@ namespace TextRPG.MonsterManagement
                 }
                 Console.WriteLine("\n공격할 대상을 선택해주세요.");
                 Console.Write(">> ");
-                int choice = InputHelper.MatchOrNot(1, Monster.currentBattleMonsters.Count);
-                Monster target = Monster.currentBattleMonsters[choice - 1];
+
+                Monster target = null;
+
+                while (true)
+                {
+                    int choice = InputHelper.MatchOrNot(1, Monster.currentBattleMonsters.Count);
+                    target = Monster.currentBattleMonsters[choice - 1];
+                    if (target.Health <= 0)
+                    {
+                        Console.WriteLine("이미 쓰러진 상대입니다.. 그렇게 미웠나요?");
+                        Console.WriteLine("\n공격할 대상을 다시 선택해주세요.");
+                        Console.WriteLine(">> ");
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
                 Character.AttackMethod(character, target);
                 if (target.Health == 0)
                 {
@@ -146,7 +162,6 @@ namespace TextRPG.MonsterManagement
             }
             Console.WriteLine("\n전투 종료. 메인으로 돌아갑니다...");
             Console.ReadLine();
-            Console.Clear();
         }
         // 적과 대치하는 EnemyPhase 메서드 생성
         public static void EnemyPhase(Character character)
@@ -169,8 +184,6 @@ namespace TextRPG.MonsterManagement
                     Console.WriteLine($"Lv.{monster.Level} {monster.Name} 은(는) 쓰러진 상태입니다.");
                     Console.ResetColor();
                     Console.WriteLine();
-                    Console.WriteLine("Enter를 입력해주세요..");
-                    Console.ReadLine();
                     continue;
                 }
                 // 살아있는 적이 공격
