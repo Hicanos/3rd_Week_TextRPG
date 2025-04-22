@@ -16,22 +16,32 @@ namespace TextRPG.MonsterManagement
         public int Level { get; set; }
         public int Health { get; set; }
         public int Attack { get; set; }
-        public Monster(string name, int level, int health, int attack)
+        public int Exp { get; set; }
+        public int Gold { get; set; }
+        public string DropItem { get; set; }
+
+        public Monster(string name, int level, int health, int attack, int exp = 0, int gold = 0, string dropItem = "")
         {
             Name = name;
             Level = level;
             Health = health;
             Attack = attack;
+            Exp = exp;
+            Gold = gold;
+            DropItem = dropItem;
+
         }
         public static List<Monster> monsterTypes = new List<Monster>();
         public static void InitMonsters()
         {
             if (monsterTypes.Count > 0) { return; }
-            Monster monster1 = new Monster("송 대리", 2, 15, 5);
-            Monster monster2 = new Monster("조 과장", 3, 10, 9);
-            Monster monster3 = new Monster("전 차장", 5, 25, 8);
-            Monster monster4 = new Monster("이 부장", 7, 30, 10);
-            monsterTypes.AddRange(new List<Monster> { monster1, monster2, monster3, monster4 });
+            Monster monster1 = new Monster("송 대리", 2, 15, 5 , 10 , 200 , "포션"); // 경험치,골드,드랍아이템은 기획서를 보고 수정
+            Monster monster2 = new Monster("조 과장", 3, 10, 9 , 15 , 300 , "가방");
+            Monster monster3 = new Monster("전 차장", 5, 25, 8 , 30 , 500 , "만년필");
+            Monster monster4 = new Monster("이 부장", 7, 30, 10 , 50 , 1000 , "좋은아이템");
+            Monster monster5 = new Monster("석 회장", 11, 40, 14, 70, 1500, "좋은아이템");
+            Monster monster6 = new Monster("노 부회장", 9, 35, 12, 60, 1200, "좋은아이템");
+            monsterTypes.AddRange(new List<Monster> { monster1, monster2, monster3, monster4 , monster5  , monster6  });
         }
         public static List<Monster> currentBattleMonsters = new List<Monster>();
         public static void SpawnMonster(Character character)
@@ -204,5 +214,8 @@ namespace TextRPG.MonsterManagement
             Console.WriteLine("계속하려면 Enter를 누르세요...");
             Console.ReadLine();
         }
+
+        // 보상 지급 메서드
+     
     }
 }
