@@ -170,13 +170,8 @@ namespace TextRPG.MonsterManagement
                 int choice = InputHelper.MatchOrNot(1, aliveMonsters.Count);
                 Monster target = aliveMonsters[choice - 1];
 
-                int damage = (int)player.Attack - (target.Level - 1);
-                if (damage < 1) damage = 1;
+                Character.AttackMethod(player, target);
 
-                target.Health -= damage;
-                if (target.Health < 0) target.Health = 0;
-
-                Console.WriteLine($"\n{target.Name} 에게 {damage}의 데미지를 입혔습니다!");
                 if (target.Health == 0)
                 {
                     Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
