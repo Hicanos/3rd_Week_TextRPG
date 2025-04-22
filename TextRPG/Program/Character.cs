@@ -26,6 +26,8 @@ namespace TextRPG.CharacterManagemant
         
         public int MaxHealth { get; set; }
         public int Health { get; set; }
+        public int MaxMP { get; set; } // 최대 마나 포인트
+        public int MP { get; set; } // 마나 포인트
         public double Attack { get; set; }
         public int Defense { get; set; }
         public int Gold { get; set; }
@@ -38,13 +40,15 @@ namespace TextRPG.CharacterManagemant
         public Character(){  }
 
         //캐릭터 생성자
-        public Character(string name, string className, int level, int maxhealth, int health, double attack, int defense, int gold)
+        public Character(string name, string className, int level, int maxhealth, int health, int maxMp, int mp, double attack, int defense, int gold)
         {
             Name = name;
             ClassName = className;
             Level = level;
             MaxHealth = maxhealth;
             Health = health;
+            MaxMP = maxMp;
+            MP = mp;
             Attack = attack;
             Defense = defense;
             Gold = gold;
@@ -59,6 +63,7 @@ namespace TextRPG.CharacterManagemant
             Console.WriteLine($"공격력 : {Attack}");
             Console.WriteLine($"방어력 : {Defense}");
             Console.WriteLine($"체력 : {Health}");
+            Console.WriteLine($"마나 : {MP}");
             Console.WriteLine($"소지금: {Gold} 원");
             Console.WriteLine("-----------------------------");
 
@@ -79,12 +84,17 @@ namespace TextRPG.CharacterManagemant
             ClassName = Enum.GetName(typeof(Departments), Convert.ToInt32(Console.ReadLine()));
 
 
+            //기본 스탯
             Level = 1;
+            MaxHealth = 100; // 최대 체력
             Health = 100;
+            MaxMP = 50; // 최대 마나 포인트
+            MP = 50;
             Attack = 10;
             Defense = 5;
             Gold = 0;
         }
+
 
         public int CrIticalAttack() // 캐릭터가 공격을 수행할때 15%확률로 160%의
                                     // 치명타 공격을 하게 해주는 메소드.
