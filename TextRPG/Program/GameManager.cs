@@ -42,17 +42,15 @@ namespace TextRPG.GameManager
                 if (welcomeText)
                 {
                     Console.WriteLine();
-                    Console.WriteLine($"20년째 대리, 그 이름은 {character.Name}.");
-                    Console.WriteLine("업무는 완벽, 출근은 개근. 하지만 사장에게 잘못 찍혀 직급은 정지 상태!");
-                    Console.WriteLine("그러던 어느 날, 세상에 초대형 경기대공황이 몰아치고,");
-                    Console.WriteLine("모든 문명은 붕괴! 기업 문화도 원시시대로 회귀!");
-                    Console.WriteLine("이제 회의 ? 보고서 ? 그런 건 없다.");
-                    Console.WriteLine("진정한 승진의 길은 단 하나! 상사를 쓰러뜨려라!");
-                    Console.WriteLine("\n우리 회사도 과감히 이름을 바꿨다.");
-                    Console.WriteLine("'승진배틀(주)’ — 오직 강자만이 회장 뱃지를 단다!");
-                    Console.WriteLine("\n책상 대신 검, 정장 대신 갑옷!");
-                    Console.WriteLine("이젠 말이 아닌 주먹(혹은 무기)으로 말할 시간.\r\n");
-                    Console.WriteLine("이번엔 진짜 진짜 승진할 수 있을까 ?\n\n");                            
+                    Console.WriteLine($"평범한 무역회사에 일하는 20년차 대리, 그 이름은 {character.Name}.");
+                    Console.WriteLine("업무 능력도, 출근 태도도 나무랄 데 없지만");
+                    Console.WriteLine("하필 사장에게 찍혀 진급은 커녕 자리 지키기도 벅찼다!");
+                    Console.WriteLine("그러던 어느 날, 회장님이 선언했다.");
+                    Console.WriteLine("오늘 하루, 무력으로 진급하라!");
+                    Console.WriteLine("단 하루뿐인 진급 배틀의 날!");
+                    Console.WriteLine($"평소 쌓인 게 많았던 {character.Name}는 결심한다.\r\n");
+                    Console.WriteLine(" '이 회사는 내가 먹는다.' \n\n");
+
                     welcomeText = false;
                 }
 
