@@ -78,6 +78,7 @@ namespace TextRPG.CharacterManagemant
         // 상태 보기
         public void ShowStatus()
         {
+            Console.Clear();
             Console.WriteLine("-----------------------------");
             Console.WriteLine($"Lv. {Level} ({Rank})");
             Console.WriteLine($"{Name} ({ClassName})");
