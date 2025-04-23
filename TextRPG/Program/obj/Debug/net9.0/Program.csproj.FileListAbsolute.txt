@@ -28,3 +28,18 @@ D:\GitHub\3rd_Week_TextRPG\TextRPG\Program\bin\Debug\net9.0\Program.dll
 D:\GitHub\3rd_Week_TextRPG\TextRPG\Program\bin\Debug\net9.0\Program.pdb
 D:\GitHub\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.genruntimeconfig.cache
 D:\GitHub\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\ref\Program.dll
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\bin\Debug\net9.0\Program.exe
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\bin\Debug\net9.0\Program.deps.json
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\bin\Debug\net9.0\Program.runtimeconfig.json
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\bin\Debug\net9.0\Program.dll
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\bin\Debug\net9.0\Program.pdb
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.AssemblyInfoInputs.cache
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.AssemblyInfo.cs
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.csproj.CoreCompileInputs.cache
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.sourcelink.json
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.dll
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\refint\Program.dll
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.pdb
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\Program.genruntimeconfig.cache
+C:\Users\socos\OneDrive\바탕 화면\Camp_Unity\C#\Week3_TextRPG\3rd_Week_TextRPG\TextRPG\Program\obj\Debug\net9.0\ref\Program.dll
