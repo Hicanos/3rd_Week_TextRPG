@@ -78,7 +78,7 @@ namespace TextRPG.MonsterManagement
     }
     public class BattleResult // 전투 결과를  출력하는 메소드
     {
-        // 전투가 끝난 뒤 결과(승리,패배)를 계산하고 보성 정보 출력
+        // 전투가 끝난 뒤 결과(승리,패배)를 계산하고 보상 정보 출력
         public void ShowResult(Character character, List<Monster> monsters)
         {
             // 전투 결과 계산
