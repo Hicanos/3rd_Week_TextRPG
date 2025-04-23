@@ -322,11 +322,11 @@ namespace TextRPG.WeaponManagemant
             }
         }
 
-        public static void EquipItem(Character character, Weapons selected, string weaponType, List<Weapons> buyweapon) // 아이템 장착 로직
+        public static void EquipItem(Character character, Weapons selected, List<Weapons> buyweapon) // 아이템 장착 로직
         {
             foreach (Weapons weapon in buyweapon) // 인벤토리 아이템 중
             {
-                if (weapon.IsEquip && weapon.WeaponType == weaponType) // 선택된 아이템 타입의 아이템이 이미 장착되어 있을 시
+                if (weapon.IsEquip && weapon.WeaponType == selected.WeaponType) // 선택된 아이템 타입의 아이템이 이미 장착되어 있을 시
                 {
                     weapon.IsEquip = false; // 해제
                     ApplyOptions(weapon.Options, false, character); // 능력치 감소
@@ -395,7 +395,7 @@ namespace TextRPG.WeaponManagemant
                 {
                     if (character.ClassName == selected.ClassName || selected.ClassName == "전체")
                     {
-                        EquipItem(character, selected, selected.ClassName, buyweapon);
+                        EquipItem(character, selected, buyweapon);
                     }
                     else
                     {
