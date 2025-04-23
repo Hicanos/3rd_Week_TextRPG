@@ -200,8 +200,10 @@ namespace TextRPG.CharacterManagemant
                     Attack += 0.5; // 레벨업 시 공격력 증가
                     Defense += 1; // 레벨업 시 방어력 증가
                     MaxMP += 5; // 레벨업 시 마나 증가
-                    Console.WriteLine($"{Name}이(가) 레벨업했습니다! 현재 레벨: {Level}");
                     MaxEXP = 2.5 * Level * Level + 17.5 + Level - 10; //MaxEXP 갱신
+                    //레벨업 시 클래스이름-랭크 증가(직급 상승)
+                    ClassName = Enum.GetName(typeof(Ranks), Level);
+                    Console.WriteLine($"{Name}이(가) {ClassName}(으)로 승진했습니다! 현재 레벨: {Level}");
                 }
             }
         }
