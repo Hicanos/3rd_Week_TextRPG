@@ -210,56 +210,60 @@ namespace TextRPG.CharacterManagemant
         //타겟은 메인 스크립트에서 선택했다고 가정
         public static void AttackMethod(Character character, Monster monster)
         {
-            int DamageMargin = (int)character.Attack / 10; // 공격력의 10%를 사용하여 공격을 수행하는 메소드.
+            //공격력이 11일때 나머지가 있으므로 오차범위 +1됨.
+            int DamageMargin;
             //나누기 후 소수점(나머지)가 있을 경우 올림처리
-            if (DamageMargin % 10 != 0)
+            if ((int)character.Attack% 10 != 0)
             {
-                DamageMargin = DamageMargin / 10 + 1;
+                DamageMargin = (int)character.Attack / 10 + 1;
+            }
+            else //없으면 그대로 오차범위 확정
+            {
+                DamageMargin = (int)character.Attack / 10;
             }
 
-            //공격 시 대미지 범위 설정 (11일 경우 10-2부터 10+2까지)
-            int damageRange = new Random().Next((int)character.Attack - DamageMargin, (int)character.Attack + DamageMargin + 1);
+                //공격 시 대미지 범위 설정 (11일 경우 10-2부터 10+2까지) 중 랜덤으로 들어감
+            int damage = new Random().Next((int)character.Attack - DamageMargin, (int)character.Attack + DamageMargin + 1);
 
             //공격 시 일정 확률로 크리티컬 혹은 miss 발생
             //크리티컬 공격
             Random probability = new Random();
+            int Accuracy = probability.Next(1, 101); // 명중률에 따라 일반공격 적용
             int critical = probability.Next(1, 101); // 15% 확률로 크리티컬 공격 발생
-            int miss = probability.Next(1, 101); // 10% 확률로 miss 발생
 
-            // level 옆에 몬스터 이름 추가 해야함
-            if (critical <= 15)
+            //최종 명중률 = 공격자 명중률 - 상대방 회피율
+
+            //monster Attack을 이후 EVA 데이터가 만들어지면 교체할 것.
+           
+            if (Accuracy <= character.DEX - monster.Attack)
             {
-                //크리티컬 공격
-                //크리티컬 공격력 = 공격력 * 1.6
-                Console.WriteLine($"{character.Name}의 크리티컬 공격!");
-                Console.WriteLine($"Lv.{monster.Level} {monster.Name}에게 {damageRange * 1.6}의 피해를 입혔습니다.");
+                if(critical <= character.CRIT)
+                {
+                    //크리티컬 공격
+                    //크리티컬 공격력 = 최종대미지*치명타 대미지 배수
+                    int critDamage = (int)(damage * character.CRITDMG);
+                    Console.WriteLine($"{character.Name}의 크리티컬 공격!");
+                    Console.WriteLine($"Lv.{monster.Level} {monster.Name}에게 {critDamage}의 피해를 입혔습니다.");
 
-                //타겟 체력 감소- Monster 클래스의 Health를 사용
-                monster.Health -= (int)(damageRange * 1.6); // 몬스터의 체력 감소
-
-            }
-            else if (miss <= 10) //크리티컬이 발동하면 miss는 발동하지 않음
-            {
-                //miss 공격
-                Console.WriteLine($"{character.Name}의 공격!");
-                Console.WriteLine($"Lv.{monster.Level} {monster.Name}을(를) 공격했지만 아무일도 일어나지 않았습니다.");
-
+                    //타겟 체력 감소- Monster 클래스의 Health를 사용
+                    monster.Health -= critDamage; // 몬스터의 체력 감소
+                }
+                else
+                {
+                    //일반 공격
+                    Console.WriteLine($"{character.Name}의 공격!");
+                    Console.WriteLine($"Lv.{monster.Level} {monster.Name}에게 {damage}의 피해를 입혔습니다.");
+                    //타겟 체력 감소- Monster 클래스의 Health를 사용
+                    monster.Health -= damage; // 몬스터의 체력 감소
+                }
             }
             else
             {
-                //일반 공격
+                //miss
                 Console.WriteLine($"{character.Name}의 공격!");
-                Console.WriteLine($"Lv.{monster.Level} {monster.Name}에게 {damageRange}의 피해를 입혔습니다.");
-                //타겟 체력 감소- Monster 클래스의 Health를 사용
-                monster.Health -= damageRange; // 몬스터의 체력 감소
-
+                Console.WriteLine($"Lv.{monster.Level} {monster.Name}을(를) 공격했지만 아무일도 일어나지 않았습니다.");
             }
-            //몬스터가 죽었을 경우
 
-            if (monster.Health <= 0)
-            {
-                monster.Health = 0; // 몬스터의 체력을 0으로 설정
-            }
 
         }
 
