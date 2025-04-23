@@ -80,14 +80,21 @@ namespace TextRPG.MonsterManagement
         public static List<Monster> GetMonstersByStage(int stageNumber)
         {
             return monsterTypes.Where(m => m.StageNumber == stageNumber).ToList();
-        } 
+        }
 
 
-        
+
         // 리스트 수정한 몬스터 스폰 -- 석재혁 수정
-        public static void SpawnMonster(Character player, int stageNumber)
+        //public static void SpawnMonster(Character character, int stageNumber)
+        //{
+        //    currentBattleMonsters.Clear();
+        //}
+
+            public static void SpawnMonster(Character character, int stageNumber)
         {
             currentBattleMonsters.Clear();
+            Monster.InitMonsters();
+
 
             List<Monster> monsters = GetMonstersByStage(stageNumber);
             for (int i = 1; i < 3; i++)
@@ -106,17 +113,16 @@ namespace TextRPG.MonsterManagement
             }
 
             Console.WriteLine("[내 정보]");
-            Console.WriteLine($"Lv.{player.Level}  {player.Name} ({player.ClassName} 공격력 : {player.Attack})");
-            Console.WriteLine($"HP {player.Health}/{player.MaxHealth}");
-            Console.WriteLine($"Exp {player.EXP}  {player.Gold} 원");
+            Console.WriteLine($"Lv.{character.Level}  {character.Name} ({character.ClassName} 공격력 : {character.Attack})");
+            Console.WriteLine($"HP {character.Health}/{character.MaxHealth}");
+            Console.WriteLine($"Exp {character.EXP}  {character.Gold} 원");
             Console.WriteLine("\n1. 공격\n");
             Console.WriteLine("원하시는 행동을 입력해주세요.\n>>");
 
             int choice = InputHelper.MatchOrNot(1, 1);
         }
 
-    
-    }
+
 
         // 전투 화면 출력 << 이전버전
     //    public static void SpawnMonster(Character character)
