@@ -37,7 +37,7 @@ namespace TextRPG.ShopManagemant
                 Console.WriteLine($"   설명: {weapon.Explain}");
             }
 
-            string selectText = $"0. 나가기 | {(mode == "view" ?  "1. 물건 구매 | 2. 물건 판매 |" : mode == "buy" ? $"{startIndex + 1} ~ {endIndex}. 아이템 구매 |" : $"{startIndex + 1} ~ {endIndex}. 아이템 판매 |")} p. 이전 페이지 | n. 다음 페이지";
+            string selectText = $"0. 나가기 | {(mode == "view" ?  "1. 물건 구매 | 2. 물건 판매 |" : mode == "buy" ? $"{startIndex + 1} ~ {endIndex}. 아이템 구매 |" : mode == "sell" ? $"{startIndex + 1} ~ {endIndex}. 아이템 판매 |" : "")} p. 이전 페이지 | n. 다음 페이지";
             Console.WriteLine(new string('-', 80));
             Console.WriteLine(selectText);
             Console.Write("원하시는 행동을 입력해주세요.\n>> ");
