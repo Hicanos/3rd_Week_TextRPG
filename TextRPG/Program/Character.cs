@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using TextRPG.MonsterManagement;
@@ -71,6 +72,9 @@ namespace TextRPG.CharacterManagemant
         public float CRITDMG { get; set; } // 치명타 대미지 배수
         public int EVA { get; set; } // 회피율
 
+        public int EXP { get; set; } // 경험치
+        public double MaxEXP { get; set; } // 필요 경험치
+
         //역직렬용 생성자
         public Character(){  }
 
@@ -88,6 +92,8 @@ namespace TextRPG.CharacterManagemant
             Attack = attack;
             Defense = defense;
             Gold = gold;
+            EXP = 0;
+            MaxEXP = 2.5 * Level * Level + 17.5 + Level - 10; //필요 경험치 공식 (2.5*level^2 + 17.5*level - 10)
         }
 
         // 상태 보기
@@ -178,6 +184,26 @@ namespace TextRPG.CharacterManagemant
 
 
             Console.Clear();
+        }
+
+
+        //캐릭터 레벨업 메서드
+        public void LevelUP()
+        {
+            if(EXP >= MaxEXP)
+            {
+                while (EXP >= MaxEXP)
+                {
+                    EXP -= (int)MaxEXP; // 남은 경험치
+                    Level++;
+                    MaxHealth += 10; // 레벨업 시 체력 증가
+                    Attack += 0.5; // 레벨업 시 공격력 증가
+                    Defense += 1; // 레벨업 시 방어력 증가
+                    MaxMP += 5; // 레벨업 시 마나 증가
+                    Console.WriteLine($"{Name}이(가) 레벨업했습니다! 현재 레벨: {Level}");
+                    MaxEXP = 2.5 * Level * Level + 17.5 + Level - 10; //MaxEXP 갱신
+                }
+            }
         }
 
         //캐릭터 공격 메서드
