@@ -23,6 +23,7 @@ namespace TextRPG.TitleManagement
         // 예를 들어 특정 조건을 만족하면 타이틀을 해금하는 함수
 
         // 생성자: 타이틀의 이름, 설명, 해금 조건을 받아서 객체 초기화
+        
         public Title(string name, string desc, Func<Character, bool> condition) 
         {
             Name = name;
@@ -41,10 +42,10 @@ namespace TextRPG.TitleManagement
                 //이름 , 설명 , 해금 조건 , 나중에 바꿔야함 임의로 설정 해놈 
                 titles.Add(new Title("신입", "던전을 한 번 클리어한 모험가", c => c.Gold >= 100000));
                 titles.Add(new Title("백수", "퇴사 1번 당한 사람", c => c.Gold >= 100000));
-                titles.Add(new Title("만수르", "10만 골드 보유", c => c.Gold >= 100000));
+                titles.Add(new Title("만수르", "1만 골드 보유", c => c.Gold >= 10000));
                 titles.Add(new Title("폭싹 망했수다", "퇴사 10번 당한 사람", c => c.Gold >= 100000));
                 titles.Add(new Title("능률이 올라갑니다", "모든 무기를 장착한 자", c => c.Gold >= 100000));
-                titles.Add(new Title("회장", "모든 스테이지를 클리어한 자", c => c.Gold >= 100000));
+                titles.Add(new Title("백발백중", "DEX100달성", c => c.DEX >= 100));
             }
 
             public void Tmenu(Character character)
@@ -76,10 +77,11 @@ namespace TextRPG.TitleManagement
                 }
             }
             public void CheckUnlocks()
-            {   // title 목록에 있는 모든 타이틀을 반복하면서 해금 조건 체크
+            {   // titles 목록에 있는 모든 타이틀을 반복하면서 해금 조건 체크
                 foreach (var title in titles)
                 {
-                           // 타이틀이 아직 해금되지 않았고, 해금 조건이 만족되면
+                           // 타이틀이 아직 해금되지 않았고 그리고 
+                           // , 해금 조건이 만족되면
                         if (!title.IsUnlocked && title.UnlockCondition(character))
                     {   // 타이틀 해금 상태 설정 
                         title.IsUnlocked = true;
@@ -111,10 +113,10 @@ namespace TextRPG.TitleManagement
                     string equipped = t.IsEquipped ? " (장착됨)" : "";
 
                     // 해금되지 않았다면 "[잠김]" 표시 추가
-                    string status = t.IsUnlocked ? "" : " [잠김]";
+                    string tlock = t.IsUnlocked ? "" : " [잠김]";
 
                     // 최종 출력: 번호. 이름 - 설명 + 상태
-                    Console.WriteLine($"{i + 1}. {t.Name} - {t.Description}{status}{equipped}");
+                    Console.WriteLine($"{i + 1}. {t.Name} - {t.Description}{tlock}{equipped}");
                 }
 
                 Console.ResetColor(); // 색상 원상복구!
