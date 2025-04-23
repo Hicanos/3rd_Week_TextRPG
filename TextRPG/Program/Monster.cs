@@ -20,7 +20,7 @@ namespace TextRPG.MonsterManagement
         public int Gold { get; set; }
         public string DropItem { get; set; }
 
-        public Monster(string name, int level, int health, int attack, int exp = 0, int gold = 0, string dropItem = "")
+        public Monster(string name, int level, int health, int attack , int exp = 0, int gold = 0, string dropItem = "")
         {
             Name = name;
             Level = level;
@@ -62,15 +62,20 @@ namespace TextRPG.MonsterManagement
                     monsterTypes[index].Name,
                     monsterTypes[index].Level,
                     monsterTypes[index].Health,
-                    monsterTypes[index].Attack
+                    monsterTypes[index].Attack,
+                    monsterTypes[index].Exp,
+                    monsterTypes[index].Gold,
+                    monsterTypes[index].DropItem
                 );
                 currentBattleMonsters.Add(selected);
-                Console.WriteLine($"Lv.{selected.Level} {selected.Name}   HP {selected.Health}");
+                Console.WriteLine($"Lv.{selected.Level} {selected.Name}   HP {selected.Health} 공격력 {selected.Attack}");
+                Console.WriteLine($"Exp. {selected.Exp} {selected.Gold} 원 ");
             }
             // 플레이어 정보 출력
             Console.WriteLine("\n\n[내정보]"); 
-            Console.WriteLine($"Lv.{character.Level}  {character.Name} ({character.ClassName})");
+            Console.WriteLine($"Lv.{character.Level}  {character.Name} ({character.ClassName} 공격력 : {character.Attack})");
             Console.WriteLine($"HP {character.Health}/{character.MaxHealth}");
+            Console.WriteLine($"Exp {character.EXP} {character.Gold} 원 ");
             Console.WriteLine("\n1. 공격\n");
             Console.WriteLine("원하시는 행동을 입력해주세요.\n>>");
             int choice = InputHelper.MatchOrNot(1, 1);
