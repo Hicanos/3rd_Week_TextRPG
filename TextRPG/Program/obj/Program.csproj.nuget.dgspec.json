@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj": {}
+    "C:\\Users\\socos\\OneDrive\\바탕 화면\\Camp_Unity\\C#\\Week3_TextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj": {}
   },
   "projects": {
-    "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj": {
+    "C:\\Users\\socos\\OneDrive\\바탕 화면\\Camp_Unity\\C#\\Week3_TextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
+        "projectUniqueName": "C:\\Users\\socos\\OneDrive\\바탕 화면\\Camp_Unity\\C#\\Week3_TextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
         "projectName": "Program",
-        "projectPath": "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
-        "packagesPath": "C:\\Users\\ruda3\\.nuget\\packages\\",
-        "outputPath": "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\obj\\",
+        "projectPath": "C:\\Users\\socos\\OneDrive\\바탕 화면\\Camp_Unity\\C#\\Week3_TextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
+        "packagesPath": "C:\\Users\\socos\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\socos\\OneDrive\\바탕 화면\\Camp_Unity\\C#\\Week3_TextRPG\\3rd_Week_TextRPG\\TextRPG\\Program\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\ruda3\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\socos\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
