@@ -75,6 +75,20 @@ namespace TextRPG.CharacterManagemant
         public int EXP { get; set; } // 경험치
         public double MaxEXP { get; set; } // 필요 경험치
 
+        //public List<string> Inventory { get; set; } = new List<string>(); // 몬스터 드랍템 획득
+
+        //public void GainRewards(int exp, int gold, string dropItem)
+        //{
+        //    Exp += exp;
+        //    Gold += gold;
+        //    if (!string.IsNullOrEmpty(dropItem))
+        //    {
+        //        Inventory.Add(dropItem);
+        //        Console.WriteLine($"획득 아이템: {dropItem}");
+        //    }
+        //    Console.WriteLine($"EXP +{exp}, Gold +{gold}");
+        //}
+
         //역직렬용 생성자
         public Character(){  }
 
