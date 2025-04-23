@@ -33,7 +33,7 @@
 
 ## 📸 스크린샷
 
-![22조_TextRPG팀프로젝트와이어그램](https://github.com/user-attachments/assets/a44b71d0-6741-4f40-95e4-c0aa26aad42d)
+![22조_TextRPG팀프로젝트와이어그램 ](https://github.com/user-attachments/assets/f25fa770-8654-46c2-ba66-ead2e8c05745)
 
 ---
 
