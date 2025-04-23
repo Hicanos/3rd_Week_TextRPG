@@ -38,7 +38,7 @@ namespace TextRPG.TitleManagement
             public Qs(Character character) 
             {
                 this.character = character;
-                //이름 , 설명 , 해금 조건 
+                //이름 , 설명 , 해금 조건 , 나중에 바꿔야함 임의로 설정 해놈 
                 titles.Add(new Title("신입", "던전을 한 번 클리어한 모험가", c => c.Gold >= 100000));
                 titles.Add(new Title("백수", "퇴사 1번 당한 사람", c => c.Gold >= 100000));
                 titles.Add(new Title("만수르", "10만 골드 보유", c => c.Gold >= 100000));
