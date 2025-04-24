@@ -70,6 +70,7 @@ namespace TextRPG.GameManager
                         character.ShowStatus();
                         InputHelper.WaitForZeroInput();
                         break;
+<<<<<<< HEAD
                     case 2:
                         Console.Clear();
                         Console.WriteLine("[스테이지 선택]");
@@ -82,6 +83,10 @@ namespace TextRPG.GameManager
                         int stageChoice = InputHelper.MatchOrNot(1, 5);
 
                         BattleManager.StartBattle(character,character); 
+=======
+                    case 2:               
+                        BattleManager.StartBattle(character); 
+>>>>>>> main
                         break;
                     case 3:
                         Weapons.ShowInventory(character);

@@ -40,7 +40,7 @@ namespace TextRPG.MonsterManagement
 
 
         public Monster(string name, int level, int attack, int defense, int health, int dex, int eva, int exp = 0,
-            int minGold = 0, int maxGold = 0, List<string> dropItems = null, List <int> dropChance = 0)
+            int minGold = 0, int maxGold = 0, List<string> dropItems = null)
         {
             Name = name;
             Level = level;
@@ -53,22 +53,21 @@ namespace TextRPG.MonsterManagement
             MinGold = minGold;
             MaxGold = maxGold;
             DropItems = dropItems ?? new List<string>();
-            DropChance = dropChance ?? new List<int>(); // 전리품 드랍 확률
         }
 
         public static void InitMonsters()
         {
 
             if (monsterTypes.Count > 0) { return; }
-            Monster monster1 = new Monster("빠대리", 1, 10, 4, 3, 60, 15, 1, 40, 80, new List<string> { "대리의 빠때리" }, new List<int>); // 몬스터 종류와 정보
-            Monster monster2 = new Monster("신과장", 2, 14, 3, 5, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" }, new List<int>);
-            Monster monster3 = new Monster("임차장", 3, 26, 8, 7, 70, 15, 3, 120, 250, new List<string> { "차장의 가발" }, new List<int>);
-            Monster monster4 = new Monster("김부장", 4, 24, 11, 5, 70, 25, 4, 150, 300, new List<string> { "부장의 넥타이" }, new List<int>);
-            Monster monster5 = new Monster("오실장", 5, 32, 15, 14, 70, 15, 5, 250, 400, new List<string> { "직업 평가표" }, new List<int>);
-            Monster monster6 = new Monster("카이사", 6, 38, 17, 10, 75, 25, 6, 300, 500, new List<string> { "유흥업소 명함" }, new List<int>0);
-            Monster monster7 = new Monster("유상무", 7, 43, 25, 18, 75, 30, 7, 400, 700, new List<string> { "한정판 굿즈 명함" }, new List<int>);
-            Monster monster8 = new Monster("최전무", 8, 50, 22, 20, 80, 40, 8, 500, 800, new List<string> { "노또 용지" }, new List<int>);
-            Monster monster9 = new Monster("석회장", 10, 250, 40, 28, 90, 35, 10, 2000, 3000, new List<string> { "직급 명패" }, new List<int>);
+            Monster monster1 = new Monster("빠대리", 1, 10, 4, 3, 60, 15, 1, 40, 80, new List<string> { "대리의 빠때리" }); // 몬스터 종류와 정보
+            Monster monster2 = new Monster("신과장", 2, 14, 3, 5, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" });
+            Monster monster3 = new Monster("임차장", 3, 26, 8, 7, 70, 15, 3, 120, 250, new List<string> { "차장의 가발" });
+            Monster monster4 = new Monster("김부장", 4, 24, 11, 5, 70, 25, 4, 150, 300, new List<string> { "부장의 넥타이" });
+            Monster monster5 = new Monster("오실장", 5, 32, 15, 14, 70, 15, 5, 250, 400, new List<string> { "직업 평가표" });
+            Monster monster6 = new Monster("카이사", 6, 38, 17, 10, 75, 25, 6, 300, 500, new List<string> { "유흥업소 명함" });
+            Monster monster7 = new Monster("유상무", 7, 43, 25, 18, 75, 30, 7, 400, 700, new List<string> { "한정판 굿즈 명함" });
+            Monster monster8 = new Monster("최전무", 8, 50, 22, 20, 80, 40, 8, 500, 800, new List<string> { "노또 용지" });
+            Monster monster9 = new Monster("석회장", 10, 250, 40, 28, 90, 35, 10, 2000, 3000, new List<string> { "직급 명패" });
             monsterTypes.AddRange(new List<Monster> { monster1, monster2, monster3, monster4, monster5, monster6, monster7, monster8, monster9 });
 
 
@@ -281,7 +280,7 @@ namespace TextRPG.MonsterManagement
                                 Random rand = new Random();
                                 foreach (var item in target.DropItems)
                                 {
-                                    int chance = Drop.Next(1, 101);
+                                    int chance = rand.Next(1, 101);
                                     if (chance == 30)
                                     {
                                         Console.WriteLine($"-> {item}을(를) 획득했습니다! (획득 확률 : {chance}%)");
