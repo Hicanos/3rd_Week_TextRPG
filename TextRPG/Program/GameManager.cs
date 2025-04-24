@@ -68,18 +68,8 @@ namespace TextRPG.GameManager
                         character.ShowStatus();
                         InputHelper.WaitForZeroInput();
                         break;
-                    case 2:
-                        Console.Clear();
-                        Console.WriteLine("[스테이지 선택]");
-                        Console.WriteLine("1. 스테이지 1");
-                        Console.WriteLine("2. 스테이지 2");
-                        Console.WriteLine("3. 스테이지 3");
-                        Console.WriteLine("4. 스테이지 4");
-                        Console.WriteLine("5. 스테이지 5 (Boss)");
-                        Console.Write("입장할 스테이지를 선택하세요 >> ");
-                        int stageChoice = InputHelper.MatchOrNot(1, 5);
-
-                        BattleManager.StartBattle(character, stageChoice); 
+                    case 2:               
+                        BattleManager.StartBattle(character); 
                         break;
                     case 3:
                         Weapons.ShowInventory(character);
