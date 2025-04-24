@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TextRPG.CharacterManagemant;
 using TextRPG.MonsterManagement;
+using TextRPG.SkillManagement;
 
 namespace TextRPG.SkillManagement
 {
@@ -15,6 +16,16 @@ namespace TextRPG.SkillManagement
     //직업별(character.ClassName)로 다른 스킬을 AddSkill() 메서드에 추가 >캐릭터cs에 넣을 예정
     //해당 스킬이 사용 가능일 때, UseSkill 발동-해당 로직을 Battle-스킬사용으로 옮길 것
     // if (!CanUseSkill(character, costMP, cooldown)) return;
+
+
+    //타겟 종류 넘버링
+    public enum TargetType
+    {
+        Self = 1,
+        SingleEnemy = 2,
+        AllEnemies = 3
+    }
+
 
 
     //스킬 클래스
@@ -29,7 +40,7 @@ namespace TextRPG.SkillManagement
         public int cooldown { get; set; }
         public int effectDuration { get; set; } //효과 유지 턴
         public bool isEffectActive { get; set; } //효과 활성화 여부
-        public int tagetType { get; set; } //타겟 종류 1. 자신 2. 적 단일 3. 적 n체 4. 적 전체
+        public int targetType { get; set; } //타겟 종류 1. 자신 2. 적 단일 3. 적 전체
 
         //액티브/패시브 스킬 구분
         public bool isActive { get; set; } //true: 액티브, false: 패시브
@@ -37,18 +48,35 @@ namespace TextRPG.SkillManagement
         //스킬 사용
         public abstract void UseSkill(Character character, Monster monster);
 
-        //스킬의 쿨타임 감소
-        public void ReduceCooldown()
+        //스킬 타겟팅 로직
+        public List<Monster> GetTargets(Character character, List<Monster> monsters)
         {
-            if (cooldown > 0)
+            return targetType switch
             {
-                cooldown--;
-            }
-            if (effectDuration > 0)
+                1 => new List<Monster> { null }, // 자신
+                2 => new List<Monster> { monsters.FirstOrDefault() }, // 적 단일
+                3 => monsters, // 적 전체
+                _ => new List<Monster>()
+            };
+        }
+
+        //스킬의 쿨타임 감소/효과 제거 관리
+        public void UpdateSkillState()
+        {
+            if (cooldown > 0) cooldown--;
+            if (effectDuration > 0) effectDuration--;
+            if (effectDuration == 0 && isEffectActive)
             {
-                effectDuration--;
+                EffectRemove();
             }
         }
+        //효과 종료
+        public void EffectRemove()
+        {
+            Console.WriteLine($"{skillName} 효과가 종료되었습니다.");
+            isEffectActive = false; // 효과 비활성화
+        }
+
 
         //부가효과 활성화 여부
         public void isEffective(Character character)
@@ -57,12 +85,6 @@ namespace TextRPG.SkillManagement
             return;
         }
 
-        //효과 종료
-        public void EffectRemove()
-        {
-            Console.WriteLine($"{skillName} 효과가 종료되었습니다.");
-            isEffectActive = false; // 효과 비활성화
-        }
 
         //쿨타임 중
         public void coolTime()
@@ -112,11 +134,11 @@ namespace TextRPG.SkillManagement
             skillName = "인사평가";
             skillDescription = "반갑다 내 주먹은 10점 만점에 몇 점이지?";
             costMP = 20;
-            cooldown = 2;
+            cooldown = 0;
             isActive = true;
             effectDuration = 2;
             isEffectActive = false; // 효과가 활성화되지 않은 상태로 초기화
-            int tagetType = 4; //타겟 종류 1. 자신 2. 적 단일 3. 적 n체 4. 적 전체
+            int tagetType = 3; //타겟 종류 1. 자신 2. 적 단일 3. 적 전체
         }
 
         public override void UseSkill(Character character, Monster monster)
@@ -125,7 +147,12 @@ namespace TextRPG.SkillManagement
 
             //"적 전체에게 범위 딜(공격력 * 1.3), 2턴 명중률 +30%"
             int skillDmg = (int)(character.Attack * 1.3);//공격력 * 1.3
-            monster.Health -= skillDmg;
+            
+            foreach(var enemy in Monster.currentBattleMonsters)
+            {
+                monster.Health -= skillDmg;
+            }
+
 
             Console.WriteLine($"LV.{monster.Level} {monster.Name}에게 {skillDmg}의 피해를 입혔습니다.");
             ApplyEffect(character); //부가효과 적용
@@ -162,7 +189,7 @@ namespace TextRPG.SkillManagement
             skillName = "사내 공지";
             skillDescription = "공지합니다 이제부터 이승 퇴직 권고하겠습니다.";
             costMP = 30;
-            cooldown = 4;
+            cooldown = 0;
             isActive = true;
             effectDuration = 3;
             int tagetType = 1;
@@ -229,14 +256,21 @@ namespace TextRPG.SkillManagement
             skillName = "대외 홍보";
             skillDescription = "30초 광고 들어가겠습니다. 스킵 버튼은 없습니다.";
             costMP = 20;
-            cooldown = 3;
+            cooldown = 0;
             isActive = true;
+            int tagetType = 3; //타겟 종류 1. 자신 2. 적 단일 3. 적 전체
+
         }
         public override void UseSkill(Character character, Monster monster)
         {
             SkillUse(character, monster);
-            int skillDmg = (int)(character.MaxMP * 0.3);
-            Console.WriteLine($"LV.{monster.Level} {monster.Name}에게 {skillDmg}의 피해를 입혔습니다.");
+
+            foreach(var enemy in Monster.currentBattleMonsters)
+            {
+                int skillDmg = (int)(character.MaxMP * 0.3);
+                Console.WriteLine($"LV.{monster.Level} {monster.Name}에게 {skillDmg}의 피해를 입혔습니다.");
+            }
+
             cooldown = 3;
         }
     }
@@ -249,7 +283,7 @@ namespace TextRPG.SkillManagement
             skillName = "이미지 메이킹";
             skillDescription = "겉 모습이 좋아야 잘 먹히는 법";
             costMP = 35;
-            cooldown = 3;
+            cooldown = 0;
             isActive = true;
             effectDuration = 3;
         }
@@ -325,7 +359,7 @@ namespace TextRPG.SkillManagement
             skillName = "예산 통제";
             skillDescription = "이건 예산이 부족하겠는데요?";
             costMP = 20;
-            cooldown = 2;
+            cooldown = 0;
             effectDuration = 2;
             isActive = true;
         }
@@ -368,7 +402,7 @@ namespace TextRPG.SkillManagement
             skillName = "비품 지원";
             skillDescription = "회사 지원이라도 좋아야 일할 맛이 나지";
             costMP = 35;
-            cooldown = 3;
+            cooldown = 0;
             isActive = true;
             effectDuration = 2;
         }
@@ -425,7 +459,7 @@ namespace TextRPG.SkillManagement
             skillDescription = "본인이 하신 거 맞아요? 왜 이렇게 하셨죠?";
             isActive = true;
             costMP = 25;
-            cooldown = 3;
+            cooldown = 0;
 
         }
         public override void UseSkill(Character character, Monster monster)
@@ -454,7 +488,7 @@ namespace TextRPG.SkillManagement
             skillDescription = "내가 매번 듣던 말이 있지. 안되면 되게 하라, 센스있게 잘 좀 하자";
             isActive = true;
             costMP = 30;
-            cooldown = 4;
+            cooldown = 0;
             effectDuration = 3;
 
 
@@ -517,7 +551,7 @@ namespace TextRPG.SkillManagement
             skillDescription = "자신 방어력 5~10 증가(2턴) + 체력(최대체력*10%) 회복, 적 전체 공격력 – 20%";
             isActive = true;
             costMP = 30;
-            cooldown = 4;
+            cooldown = 0;
         }
 
         public override void UseSkill(Character character, Monster monster)
@@ -555,33 +589,167 @@ namespace TextRPG.SkillManagement
                 effectDuration = 2;
                 defenseIncrease = new Random().Next(5, 11);
                 character.Defense += defenseIncrease;
+                Console.WriteLine($"{character.Name}의 방어력이 상승했습니다!");
             }
 
             if (effectDuration < 0)
             {
                 EffectRemove();
                 character.Defense -= defenseIncrease;
+            }            
+        }
+    }
+
+    public class SystemDown : Skill
+    {
+        public SystemDown()
+        {
+            className = "전산팀";
+            skillName = "시스템 다운";
+            skillDescription = "시스템이 튼튼해야 문제가 없지.";
+            isActive = true;
+            costMP = 35;
+            cooldown = 0;
+        }
+
+        public override void UseSkill(Character character, Monster monster)
+        {
+            // 스킬 사용 로직
+            SkillUse(character, monster);
+            int Bonus = (int)(character.Attack * 1.5);
+            character.Attack += Bonus;
+
+            // 적 전체 대미지 공격
+            foreach (var enemy in Monster.currentBattleMonsters)
+            {
+                Character.AttackMethod(character, enemy);
+                ApplyEffect(enemy);
             }
-            
+            // 대미지 출력은 AttackMethod에서 처리           
+
+            cooldown = 3;
+        }
+        public void ApplyEffect(Monster monster)
+        {
+            monster.DEX -= 20;
+        }
+    }
+
+    public class BackupSystem : Skill
+    {
+        int AttackBonus;
+        public BackupSystem()
+        {
+            className = "전산팀";
+            skillName = "백업 시스템";
+            isActive = false;
+            costMP = 0;
+            cooldown = 0;
+        }
+
+        public override void UseSkill(Character character, Monster monster)
+        {
+            //캐릭터 체력이 절반 이하로 떨어지면 공격력 증가
+            if (character.Health <= character.MaxHealth / 2)
+            {
+                isEffectActive = true;
+                AttackBonus = (int)(character.Attack * 0.3);
+                character.Attack += AttackBonus;
+                character.CRIT += 20;
+            }
+            else if(isEffectActive = true &&  character.Health >= character.MaxHealth/2)
+            {
+                //효과를 받는 중, 체력이 50% 이상으로 증가할 경우 원래대로 교체
+                isEffectActive= false;
+                character.Attack -= AttackBonus;
+                character.CRIT -= 20;
+            }
         }
     }
 
 
 
+
+
+}
+
+public class PlanningBombing : Skill
+{
+    public PlanningBombing()
+    {
+        className = "기획팀";
+        skillName = "기획안 폭격";
+        skillDescription = "자신에게 치명타 피해량 + 50%(2턴), 적 전체에 피해(공격력 * 1.2)";
+        isActive = true;
+        costMP = 25;
+        cooldown = 5;
+    }
+
+    public override void UseSkill(Character character, Monster monster)
+    {
+        // 스킬 사용 로직
+        SkillUse(character, monster);
+        // 자신의 치명타 피해량 증가 50% (2턴 지속)
+        character.CRITDMG += 0.5f;
+        // 적 전체에 피해 (공격력 * 1.2)
+        double damage = character.Attack * 1.2;
+        foreach (var enemy in Monster.currentBattleMonsters)
+        {
+            enemy.Health -= (int)damage;
+        }
+
+        // 상태 효과 초기화 (가정)
+        character.CRITDMG -= 0.5f;
+        cooldown = 5;
+    }
+}
+
+public class RiskAnalysis : Skill
+{
+    public RiskAnalysis()
+    {
+        className = "기획팀";
+        skillName = "리스크 분석";
+        skillDescription = "자신에게 회피 + 50%(3턴)";
+        isActive = true;
+        costMP = 30;
+        cooldown = 3;
+    }
+
+    public override void UseSkill(Character character, Monster monster)
+    {
+        // 스킬 사용 로직
+        SkillUse(character, monster);
+
+        character.EVA += 50;
+
+        // 상태 효과 초기화 (가정)
+        // 3턴 후 회피 확률 복구
+        cooldown = 3;
+    }
+}
+
+public class ConceptEstablished : Skill
+{
+    public ConceptEstablished()
+    {
+        className = "기획팀";
+        skillName = "컨셉 잡았다";
+        skillDescription = "매턴 치명타 확률 5% 증가, 명중률 3% 증가";
+        isActive = false;
+        costMP = 0;
+        cooldown = 0;
+    }
+
+    public override void UseSkill(Character character, Monster monster)
+    {
+        // 패시브 스킬은 매턴 자동으로 적용되므로 별도의 구현이 필요 없음
+    }
 }
 
 
 
 /* 
-    {
-        "전산팀", new List<Skill>()
-        {
-            new Skill("긴급 패치", "자신 방어력 5~10 증가(2턴) + 체력(최대체력*10%) 회복, 적 전체 공격력 – 20%", 30, 4, "Active", "긴급 패치 들어가겠습니다. 협조바랍니다."),
-            new Skill("시스템 다운", "적 전체 대미지(공격력 * 1.5) + 명중률 감소 – 20% (2턴)", 35, 3, "Active", "시스템이 튼튼해야 문제가 없지."),
-            new Skill("백업 시스템", "체력이 50% 이하일 때 공격력 + 30%, 치명타 확률 + 20%", 0, 0, "Passive", "")
-        }
-    },
-    {
         "기획팀", new List<Skill>()
         {
             new Skill("기획안 폭격", "자신에게 치명타 피해량 + 50%(2턴), 적 전체에 피해(공격력 * 1.2)", 25, 5, "Active", "여기 기획안 확인하셨죠? 이것도 보시고 작업해주세요."),
