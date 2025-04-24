@@ -234,7 +234,7 @@ namespace TextRPG.WeaponManagement
                     case "방어력":
                         character.Defense += value;
                         break;
-                    case "마나":
+                   case "마나":
                         character.MP += value;
                         character.MaxMP += value;
                         break;
@@ -242,7 +242,8 @@ namespace TextRPG.WeaponManagement
                         character.DEX += value;
                         break;
                     case "치명타 배율":
-                        character.CRITDMG += value;
+                            break;
+                     character.CRITDMG += value;
                         break;
                     case "치명타 확률":
                         character.CRIT += value;
