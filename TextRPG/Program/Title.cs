@@ -17,7 +17,7 @@ namespace TextRPG.TitleManagement
         public string Description { get; set; }
         public bool IsEquipped { get; set; } // 장착 여부 
         public bool IsUnlocked { get; set; } //해금 여부 
-        public Title EquippedTitle { get; set; } // 장착한 칭호 
+       
         
         // 해금 조건 함수
         public Func<Character, bool> UnlockCondition { get; set; }
@@ -38,6 +38,7 @@ namespace TextRPG.TitleManagement
         {
             public List<Title> titles = new List<Title>(); 
             public Character character;
+            public Title EquippedTitle { get; set; } // 장착한 칭호
             public TitleManager(Character character) 
             {
                 this.character = character;
@@ -166,6 +167,7 @@ namespace TextRPG.TitleManagement
                     // 모든 칭호 장착 해제하고
                     unlocked[choice - 1].IsEquipped = true;
                     EquippedTitle = unlocked[choice - 1];
+                    character.EquippedTitle = unlocked[choice - 1];// 캐릭터 cs에 적용
 
                     // 선택한 칭호만 장착 
                     Console.WriteLine($"'{unlocked[choice - 1].Name}' 칭호를 장착했습니다!");
