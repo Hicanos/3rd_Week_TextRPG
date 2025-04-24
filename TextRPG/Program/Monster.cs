@@ -63,19 +63,19 @@ namespace TextRPG.MonsterManagement
             monsterTypes = new List<Monster>()
             {
                  // stage1
-                 new Monster("빠대리", 1, 10, 4, 3, 60, 15, 1, 40, 80, new List<string> {"대리의 빠때리" }), // 몬스터 종류와 정보
-                 new Monster("신과장", 2, 14, 3, 5, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" }),
+                 new Monster("빠대리", 1, 4, 3, 10, 60, 15, 1, 40, 80, new List<string> {"대리의 빠때리" }), // 몬스터 종류와 정보
+                 new Monster("신과장", 2, 3, 5, 14, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" }),
                  // stage 2
-                 new Monster("임차장", 3, 26, 8, 7, 70, 15, 3, 120, 250, new List<string> { "차장의 가발" }),
-                 new Monster("김부장", 4, 24, 11, 5, 70, 25, 4, 150, 300, new List<string> { "부장의 넥타이" }),
+                 new Monster("임차장", 3, 8, 7, 26, 65, 15, 3, 120, 250, new List<string> { "차장의 가발" }),
+                 new Monster("김부장", 4, 11, 5, 24, 70, 25, 4, 150, 300, new List<string> { "부장의 넥타이" , "방석&등받이 쿠션" }),
                  // stage 3
-                 new Monster("오실장", 5, 32, 15, 14, 70, 15, 5, 250, 400, new List<string> { "직업 평가표" }),
-                 new Monster("카이사", 6, 38, 17, 10, 75, 25, 6, 300, 500, new List<string> { "유흥업소 명함" }),
+                 new Monster("오실장", 5, 15, 14, 32, 70, 20, 5, 250, 400, new List<string> { "직업 평가표" , "브랜드 구두" }),
+                 new Monster("카이사", 6, 17, 10, 38, 75, 30, 6, 300, 500, new List<string> { "유흥업소 명함" , "브랜드 정장 하의" }),
                  // stage 4
-                 new Monster("유상무", 7, 43, 25, 18, 75, 30, 7, 400, 700, new List<string> { "한정판 굿즈 명함" }),
-                 new Monster("최전무", 8, 50, 22, 20, 80, 40, 8, 500, 800, new List<string> { "노또 용지" }),
+                 new Monster("유상무", 7, 25, 18, 43, 75, 30, 7, 400, 700, new List<string> { "한정판 굿즈 명함" , "든든한 국밥" , "브랜드 정장 상의" }),
+                 new Monster("박사장", 8, 22, 20, 50, 80, 40, 8, 500, 800, new List<string> { "노또 용지" , "든든한 국밥" , "최신 스마트폰" }),
                  // stage 5 Boss
-                 new Monster("석회장", 10, 250, 40, 28, 90, 35, 10, 2000, 3000, new List<string> { "직급 명패" })
+                 new Monster("석회장", 10, 40, 28, 250, 90, 35, 10, 2000, 3000, new List<string> { "직급 명패" , "든든한 국밥" })
             };
         }
 
@@ -143,6 +143,7 @@ namespace TextRPG.MonsterManagement
     public class BattleResult // 전투 결과를  출력하는 메소드
     {
         // 전투가 끝난 뒤 결과(승리,패배)를 계산하고 보상 정보 출력
+
         public void ShowResult(Character character, List<Monster> monsters)
         {
             // 전투 결과 계산
@@ -160,9 +161,11 @@ namespace TextRPG.MonsterManagement
             }
             else result = "오류";
 
+            
             Console.WriteLine("----");
             Console.WriteLine($"{result}");
             Console.WriteLine("----");
+
 
             if (result == "승리")
             {
@@ -172,11 +175,12 @@ namespace TextRPG.MonsterManagement
                 int totalGold = 0;
                 int totalExp = 0;
                 List<string> dropItems = new List<string>();
+           
 
                 if (Monster.CurrentStage < 5)
                 {
                     Monster.CurrentStage++;
-                    Console.WriteLine($"\n다음 스테이지로 이동합니다! [현재 스테이지 : {Monster.CurrentStage}]");
+                    Console.WriteLine($"\n스테이지 클리어! [다음 스테이지 : {Monster.CurrentStage}]");
                 }
                 else
                 {
@@ -276,7 +280,7 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine("[몬스터 목록]");
                 for (int i = 0; i < aliveMonsters.Count; i++)
                 {
-                    Console.WriteLine($"{i + 1}. {aliveMonsters[i].Name} HP {aliveMonsters[i].Health}");
+                    Console.WriteLine($"{i + 1}. Lv. {aliveMonsters[i].Level} {aliveMonsters[i].Name} HP {aliveMonsters[i].Health}");
                 }
                 Console.WriteLine();
 
@@ -286,7 +290,9 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine("3. 소모품 사용");
 
                 Console.Write(">> ");
-                string input = Console.ReadLine();
+
+               
+
                 int actionChoice = InputHelper.MatchOrNot(1, 3); // InputHelper.MatchOrNot함수로 사용자가 최소~최대 범위 내에서 숫자를 입력할 때까지 반복
 
                 switch (actionChoice)
@@ -298,12 +304,12 @@ namespace TextRPG.MonsterManagement
                             if (Monster.currentBattleMonsters[i].Health <= 0)
                             {
                                 Console.ForegroundColor = ConsoleColor.DarkGray;
-                                Console.WriteLine($"{i + 1}. Lv.{Monster.currentBattleMonsters[i].Level} {Monster.currentBattleMonsters[i].Name} - HP {Monster.currentBattleMonsters[i].Health} Dead");
+                                Console.WriteLine($"{i + 1}. Lv.{Monster.currentBattleMonsters[i].Level} {Monster.currentBattleMonsters[i].Name} HP {Monster.currentBattleMonsters[i].Health} Dead");
                                 Console.ResetColor();
                             }
                             else
                             {
-                                Console.WriteLine($"{i + 1}. Lv.{Monster.currentBattleMonsters[i].Level} {Monster.currentBattleMonsters[i].Name} - HP {Monster.currentBattleMonsters[i].Health}");
+                                Console.WriteLine($"{i + 1}. Lv.{Monster.currentBattleMonsters[i].Level} {Monster.currentBattleMonsters[i].Name} HP {Monster.currentBattleMonsters[i].Health}");
                             }
                         }
 
@@ -331,10 +337,25 @@ namespace TextRPG.MonsterManagement
                         // Character.AttackMethod 호출
                         // 체력이 0이 되면 쓰러졌습니다 출력
                         Character.AttackMethod(character, target);
-                        if (target.Health == 0)
+                        if (target.Health <= 0)
                         {
                             Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
+                        }
 
+                        Console.WriteLine("\n[사원 상태 업데이트]");
+                        for (int i = 0; i < Monster.currentBattleMonsters.Count; i++)
+                        {
+                            var m = Monster.currentBattleMonsters[i];
+                            if (m.Health <= 0)
+                            {
+                                Console.ForegroundColor = ConsoleColor.DarkGray;
+                                Console.WriteLine($"{i + 1}. Lv.{m.Level} {m.Name} [Dead]");
+                                Console.ResetColor();
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{i + 1}. Lv.{m.Level} {m.Name} HP {m.Health}");
+                            }
                             // 아이템 드랍 확률 계산
                             if (target.DropItems != null && target.DropItems.Count > 0)
                             {
@@ -400,11 +421,22 @@ namespace TextRPG.MonsterManagement
                 }
                 // 살아있는 적이 공격
                 Console.WriteLine($"Lv.{monster.Level} {monster.Name} 의 공격!");
-                int damage = monster.Attack;
-                character.Health -= damage;
-                if (character.Health < 0) character.Health = 0;
-                Console.WriteLine($"{character.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
-                Console.WriteLine($"HP {character.Health + damage} -> {character.Health}\n");
+
+                // 명중 판정
+                Random rand = new Random();
+                int hitChance = monster.DEX = character.EVA + 10; // 기본 명중률 계산
+                if (rand.Next(0, 100) < hitChance)
+                {
+                    int damage = monster.Attack;
+                    character.Health -= damage;
+                    if (character.Health < 0) character.Health = 0;
+                    Console.WriteLine($"{character.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                    Console.WriteLine($"HP {character.Health + damage} -> {character.Health}");
+                }
+                else
+                {
+                    Console.WriteLine($"{monster.Name}의 공격이 빗나갔습니다!");
+                }
                 if (character.Health <= 0) // 에너미 턴 진행도중 플레이어 체력이 0 이하가 될 시 GameOver
                 {
                     return;
