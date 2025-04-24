@@ -1,7 +1,9 @@
 ﻿using TextRPG.MonsterManagement;
+using TextRPG.TitleManagement;
 
 namespace TextRPG.CharacterManagement
 {
+
     enum Departments
     {
         인사팀 = 1,
@@ -60,6 +62,7 @@ namespace TextRPG.CharacterManagement
         public bool IEquipedAttack { get; set; }
         public int ClearedCount { get; set; }
 
+        public Title EquippedTitle { get; set; }
         public int DEX { get; set; } // 민첩=명중률
         public int CRIT { get; set; } // 치명타 확률
         public float CRITDMG { get; set; } // 치명타 대미지 배수
@@ -117,6 +120,7 @@ namespace TextRPG.CharacterManagement
             Console.WriteLine($"명중률 : {DEX}");
             Console.WriteLine($"회피율 : {EVA}");
             Console.WriteLine($"소지금: {Gold} 원");
+            Console.WriteLine($"칭호 : {EquippedTitle?.Name ?? "없음"}");
             Console.WriteLine("-----------------------------");
 
             Console.WriteLine("\n0. 나가기\n");
