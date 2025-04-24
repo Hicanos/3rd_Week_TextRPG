@@ -196,7 +196,7 @@ namespace TextRPG.MonsterManagement
     // 전투를 관리하는 BattleManager 클래스 생성
     public static class BattleManager
     {
-        public static void StartBattle(Character character)
+        public static void StartBattle(Character character, Character character1)
         {
             Console.Clear();
             Console.WriteLine("=== 승진 전투 개시 ===\n");
