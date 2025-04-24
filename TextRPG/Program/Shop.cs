@@ -48,11 +48,11 @@ namespace TextRPG.ShopManagement
                         alreadyBuy = $"{weapon.Price} G";
                     }
                 }
-                string classNameOnly = weapon.ClassName == "전체" ? "전체" : $"{weapon.ClassName} 전용";
-                string optionText = weapon.Options != null ? string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}")) : "없음";
+                string classNameOnly = weapon.ClassName == null ? "" : weapon.ClassName == "전체" ? " ( 전체 )" : $" ({weapon.ClassName}) 전용";
+                string optionText = weapon.Options == null ? "없음" : string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}"));
 
                 Console.WriteLine(new string('-', 80));
-                Console.WriteLine($"{i + 1}. {weapon.Name} ({classNameOnly}) - {alreadyBuy}");
+                Console.WriteLine($"{i + 1}. {weapon.Name}{classNameOnly} - {alreadyBuy}");
                 Console.WriteLine($"   옵션: {optionText}");
                 Console.WriteLine($"   설명: {weapon.Explain}");
             }
@@ -75,7 +75,7 @@ namespace TextRPG.ShopManagement
 
             while (true)
             {
-                PageCheck(currentPage, totalShopOptions.Count, itemsPerPage);
+                currentPage = PageCheck(currentPage, totalShopOptions.Count, itemsPerPage);
                 PaginateAndDisplayItems(totalShopOptions, currentPage, itemsPerPage, character, "view");
 
                 string input = Console.ReadLine();
