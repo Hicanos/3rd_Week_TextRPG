@@ -26,11 +26,12 @@ namespace TextRPG.CharacterManagemant
         과장,
         차장,
         부장,
+        실장,
         전무,
         상무,
         이사,        
         사장,
-        부회장
+        부회장,
     }
 
     public struct Stats
