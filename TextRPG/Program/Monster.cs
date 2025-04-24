@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using TextRPG.CharacterManagemant;
+using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
 namespace TextRPG.MonsterManagement
 {
@@ -63,19 +63,19 @@ namespace TextRPG.MonsterManagement
             monsterTypes = new List<Monster>()
             {
                  // stage1
-                 new Monster("빠대리", 1, 5, 3, 10, 60, 10, 1, 40, 80, new List<string> {"대리의 빠때리" }), // 몬스터 종류와 정보
-                 new Monster("신과장", 2, 4, 4, 14, 65, 15, 2, 50, 100, new List<string> { "과장의 사원증" }),
+                 new Monster("빠대리", 1, 4, 3, 10, 60, 15, 1, 40, 80, new List<string> {"대리의 빠때리" }), // 몬스터 종류와 정보
+                 new Monster("신과장", 2, 3, 5, 14, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" }),
                  // stage 2
-                 new Monster("임차장", 3, 9, 5, 26, 65, 10, 3, 120, 250, new List<string> { "차장의 가발" }),
-                 new Monster("김부장", 4, 12, 4, 24, 70, 20, 4, 150, 300, new List<string> { "부장의 넥타이" , "방석&등받이 쿠션" }),
+                 new Monster("임차장", 3, 8, 7, 26, 65, 15, 3, 120, 250, new List<string> { "차장의 가발" }),
+                 new Monster("김부장", 4, 11, 5, 24, 70, 25, 4, 150, 300, new List<string> { "부장의 넥타이" , "방석&등받이 쿠션" }),
                  // stage 3
-                 new Monster("오실장", 5, 16, 10, 36, 70, 15, 5, 250, 400, new List<string> { "직업 평가표" , "브랜드 구두" }),
-                 new Monster("카이사", 6, 19, 8, 32, 75, 25, 6, 300, 500, new List<string> { "유흥업소 명함" , "브랜드 정장 하의" }),
+                 new Monster("오실장", 5, 15, 14, 32, 70, 20, 5, 250, 400, new List<string> { "직업 평가표" , "브랜드 구두" }),
+                 new Monster("카이사", 6, 17, 10, 38, 75, 30, 6, 300, 500, new List<string> { "유흥업소 명함" , "브랜드 정장 하의" }),
                  // stage 4
-                 new Monster("유상무", 7, 28, 17, 43, 75, 20, 7, 400, 700, new List<string> { "한정판 굿즈 명함" , "든든한 국밥" , "브랜드 정장 상의" }),
-                 new Monster("박사장", 8, 25, 14, 50, 80, 30, 8, 500, 800, new List<string> { "노또 용지" , "든든한 국밥" , "최신 스마트폰" }),
+                 new Monster("유상무", 7, 25, 18, 43, 75, 30, 7, 400, 700, new List<string> { "한정판 굿즈 명함" , "든든한 국밥" , "브랜드 정장 상의" }),
+                 new Monster("박사장", 8, 22, 20, 50, 80, 40, 8, 500, 800, new List<string> { "노또 용지" , "든든한 국밥" , "최신 스마트폰" }),
                  // stage 5 Boss
-                 new Monster("석회장", 10, 45, 20, 250, 90, 30, 10, 2000, 3000, new List<string> { "직급 명패" , "든든한 국밥" })
+                 new Monster("석회장", 10, 40, 28, 250, 90, 35, 10, 2000, 3000, new List<string> { "직급 명패" , "든든한 국밥" })
             };
         }
 
