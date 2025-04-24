@@ -96,6 +96,7 @@ namespace TextRPG.ShopManagemant
                 int totalPages = (int)Math.Ceiling((double)availableWeapons.Count / itemsPerPage);
                 currentPage = Math.Max(1, Math.Min(currentPage, totalPages));
 
+                
                 PaginateAndDisplayItems(availableWeapons, currentPage, itemsPerPage, character, "buy");
 
                 string input = Console.ReadLine();
