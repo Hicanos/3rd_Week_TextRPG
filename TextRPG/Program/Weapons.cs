@@ -1,7 +1,7 @@
-﻿using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
 
-namespace TextRPG.WeaponManagemant
+namespace TextRPG.WeaponManagement
 {
     // 장비 목록
     public class Weapons
@@ -14,7 +14,7 @@ namespace TextRPG.WeaponManagemant
         public string Explain { get; set; } // 장비 설명
         public Dictionary<string, int> Options { get; set; } // ex) {방어력, 10}
         public int Price { get; set; } // 가격
-        
+
         // (드랍 아이템 전용 프로퍼티)
         public string DropObject { get; set; } // 획득처 
         public int DropChance { get; set; } // 드랍확률
@@ -22,8 +22,9 @@ namespace TextRPG.WeaponManagemant
 
         //장비들 리스트
         public static List<Weapons> Inventory = new List<Weapons>(); // 상점에서 사는 게 가능한 장비만 모아놓는 리스트
-        public static List<Weapons> NotbuyAbleInventory = new List<Weapons>();
-        public static List<Weapons> PotionInventory = new List<Weapons>();
+        public static List<Weapons> NotbuyAbleInventory = new List<Weapons>(); // 드랍으로만 얻어야하는 장비만 모아놓는 리스트
+        public static List<Weapons> PotionInventory = new List<Weapons>(); // 포션만 모아놓는 리스트
+        public static List<Weapons> RewardInventory = new List<Weapons>(); // 전리품만 모아놓는 리스트
 
         // 상점에서 사는 게 가능한 아이템 생성자
         public Weapons(bool isSelled, bool isEquip, string name, Dictionary<string, int> options, string explain, string className, string weaponType, int price)
@@ -37,7 +38,14 @@ namespace TextRPG.WeaponManagemant
             WeaponType = weaponType;
             Price = price;
 
-            Inventory.Add(this);
+            if (weaponType == "포션")
+            {
+                PotionInventory.Add(this);
+            }
+            else
+            {
+                Inventory.Add(this);
+            }
         }
 
         // 드랍으로만 얻을 수 있는 아이템 생성자
@@ -54,7 +62,14 @@ namespace TextRPG.WeaponManagemant
             DropChance = dropChance;
             SellingPrice = sellingPrice;
 
-            Inventory.Add(this);
+            if (weaponType == "포션")
+            {
+                PotionInventory.Add(this);
+            }
+            else
+            {
+                NotbuyAbleInventory.Add(this);
+            }
         }
 
         // 전리품 전용 생성자
@@ -65,8 +80,10 @@ namespace TextRPG.WeaponManagemant
             Explain = explain;
             WeaponType = weaponType;
             DropObject = dropObject;
-            DropChance= dropChance;
+            DropChance = dropChance;
             SellingPrice = sellingPrice;
+
+            RewardInventory.Add(this);
         }
 
 
@@ -116,6 +133,7 @@ namespace TextRPG.WeaponManagemant
             foreach (var option in options)
             {
                 int value = isEquip ? option.Value : -option.Value; // 착용이면 더하고, 해제면 빼기
+                                                                    // 포션인 경우 무조건 true로 넣으면 됨
 
                 switch (option.Key)
                 {
@@ -140,6 +158,28 @@ namespace TextRPG.WeaponManagemant
                         break;
                     case "회피율":
                         character.EVA += value;
+                        break;
+                    case "HP":
+                        character.Health += value;
+                        if (character.Health > character.MaxHealth)
+                        {
+                            character.Health = character.MaxHealth;
+                        }
+                        break;
+                    case "MP":
+                        character.MP += value;
+                        if (character.MP > character.MaxMP)
+                        {
+                            character.MP = character.MaxMP;
+                        }
+                        break;
+                    case "MaxHP":
+                        character.MaxHealth += value;
+                        character.Health += value;
+                        break;
+                    case "MaxMP":
+                        character.MaxMP += value;
+                        character.MP += value;
                         break;
                 }
             }

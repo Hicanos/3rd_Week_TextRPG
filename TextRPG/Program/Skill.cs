@@ -1,4 +1,4 @@
-﻿using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagement;
 using TextRPG.MonsterManagement;
 
 namespace TextRPG.SkillManagement
@@ -554,7 +554,7 @@ namespace TextRPG.SkillManagement
                 EffectRemove();
                 character.Defense -= defenseIncrease;
             }
-            
+
         }
     }
 

@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextRPG.WeaponManagemant;
+﻿using TextRPG.WeaponManagement;
 
-namespace TextRPG.ItemSpawn
+namespace TextRPG.ItemSpawnManagement
 {
     public class ItemSpawn
     {
+        public static void SettingAllItems()
+        {
+            BuyAbleWeaponSpawn();
+            NotBuyAbleWeaponSpawn();
+            RewardItemSpawn();
+        }
+
         public static void BuyAbleWeaponSpawn() // 상점에서 구매 가능한 아이템들
         {
             if (Weapons.Inventory.Count > 0) return; // 중복 생성 방지
@@ -55,15 +57,39 @@ namespace TextRPG.ItemSpawn
             new Weapons(false, false, "노트북백팩", new Dictionary<string, int> { { "공격력", 3 }, { "방어력", 3 }, { "치명타 확률", 15 } }, "노트북과 함께 싸우자!", "전체", "장신구", 3300);
 
             // 물약 (임시)
-            new Weapons(false, false, "작은 회복 포션", new Dictionary<string, int> { { "HP회복", 50 } }, "작은 병에 담긴 회복 포션.", "전체", "포션", 300);
-            new Weapons(false, false, "중간 회복 포션", new Dictionary<string, int> { { "HP회복", 150 } }, "중간 크기의 회복 포션.", "전체", "포션", 800);
-            new Weapons(false, false, "마나 포션", new Dictionary<string, int> { { "MP회복", 100 } }, "마나를 회복시켜주는 포션.", "전체", "포션", 750);
+            new Weapons(false, false, "작은 회복 포션", new Dictionary<string, int> { { "HP", 50 } }, "작은 병에 담긴 회복 포션.", "전체", "포션", 300);
+            new Weapons(false, false, "중간 회복 포션", new Dictionary<string, int> { { "HP", 150 } }, "중간 크기의 회복 포션.", "전체", "포션", 800);
+            new Weapons(false, false, "마나 포션", new Dictionary<string, int> { { "MP", 100 } }, "마나를 회복시켜주는 포션.", "전체", "포션", 750);
         }
 
-        public static void NotBuyAbleWeaponSpawn() 
+        public static void NotBuyAbleWeaponSpawn()
         {
-            
+            if (Weapons.NotbuyAbleInventory.Count > 0) return;
+
+            new Weapons(false, false, "최신 스마트폰", new Dictionary<string, int> { { "공격력", 18 }, { "치명타 확률", 10 } }, "요즘껀 접히기도 하네..", "전체", "무기", "사장", 15, 2400);
+            new Weapons(false, false, "브랜드 정장 상의", new Dictionary<string, int> { { "방어력", 6 }, { "명중률", 15 }, { "치명타", 20 } }, "고급스러움이 풍기는 상의.", "전체", "상의", "전무", 16, 2200);
+            new Weapons(false, false, "브랜드 정장 하의", new Dictionary<string, int> { { "방어력", 5 }, { "회피율", 15 }, { "치명타 확률", 10 } }, "편안함과 스타일을 동시에.", "전체", "하의", "상무", 17, 2100);
+            new Weapons(false, false, "브랜드 구두", new Dictionary<string, int> { { "공격력", 2 }, { "방어력", 2 }, { "마나", 15 } }, "고급 가죽으로 제작된 구두.", "전체", "신발", "이사", 18, 2000);
+            new Weapons(false, false, "방석&등받이 쿠션", new Dictionary<string, int> { { "방어력", 2 }, { "마나", 20 }, { "회피율", 10 } }, "오래 앉아 있어도 괜찮다!", "전체", "장신구", "실장", 19, 2000);
+            new Weapons(false, false, "반창고", new Dictionary<string, int> { { "HP", 50 } }, "작은 상처는 반창고 하나면 충분!", "전체", "포션", "전체", 18, 300);
+            new Weapons(false, false, "바까스", new Dictionary<string, int> { { "MP", 30 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", "전체", 18, 300);
+            new Weapons(false, false, "든든한 국밥", new Dictionary<string, int> { { "MaxHP", 10 }, { "MP", 10 } }, "마음까지 든든해진다.", "전체", "포션", "전무, 사장, 회장", 5, 1000);
         }
+
+        public static void RewardItemSpawn()
+        {
+            if (Weapons.RewardInventory.Count > 0) return;
+
+            new Weapons(false, "대리의 빠때리", "풋풋한 대리의 그녀의 사랑이 담긴 물건", "전리품", "대리", 35, 300);
+            new Weapons(false, "과장의 사원증", "평소에 안씻기로 유명한 과장님의 사원증", "전리품", "과장", 35, 600);
+            new Weapons(false, "차장의 가발", "차장님의 숨겨진 비밀…어쩐지 측은하다.", "전리품", "차장", 30, 1000);
+            new Weapons(false, "부장의 넥타이", "왠지 매일 화가나있는 부장님의 넥타이", "전리품", "부장", 30, 1600);
+            new Weapons(false, "직원 평가표", "부하 직원들에게 훈수 두는 꼰대 실장님이 적어둔 직원 평가표", "전리품", "실장", 25, 2400);
+            new Weapons(false, "유흥업소 명함", "술고래 이사님의 주머니에서 나온 명함", "전리품", "이사", 25, 3500);
+            new Weapons(false, "한정판 굿즈 인형", "개인 사무실 한편에 전시된 여러 굿즈들 중 가장 비싸보이는 인형", "전리품", "상무", 20, 4800);
+            new Weapons(false, "노또 용지", "전무님 책장에는 매주 노또 용지가 쌓여있다.", "전리품", "전무", 20, 6000);
+            new Weapons(false, "자서전", "부하 직원들에게 사라고 추천하던 책\n나도 반강제적으로 하나 샀었다.", "전리품", "사장", 15, 8000);
+            new Weapons(true, "직급 명패", "전 회장의 명패이니 필요 없겠지?", "전리품", "회장", 10, 10000);
 
         }
     }

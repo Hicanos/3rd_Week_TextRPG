@@ -1,11 +1,11 @@
-﻿using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagement;
+using TextRPG.ItemSpawnManagement;
 using TextRPG.MonsterManagement;
-
 using TextRPG.OtherMethods;
-using TextRPG.RestManagemant;
-using TextRPG.ShopManagemant;
+using TextRPG.RestManagement;
+using TextRPG.ShopManagement;
 using TextRPG.TitleManagement;
-using TextRPG.WeaponManagemant;
+using TextRPG.WeaponManagement;
 
 
 
@@ -16,7 +16,7 @@ namespace TextRPG.GameManager
         // Main과 클래스 분리
         static void Main(string[] args)
         {
-            Weapons.BuyAbleWeaponSpawn();
+            ItemSpawn.SettingAllItems();
             GameManager game = new GameManager();
             game.Run(); // 게임 실행
         }

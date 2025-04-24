@@ -1,6 +1,6 @@
 ﻿using TextRPG.MonsterManagement;
 
-namespace TextRPG.CharacterManagemant
+namespace TextRPG.CharacterManagement
 {
     enum Departments
     {

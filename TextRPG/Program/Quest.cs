@@ -1,4 +1,4 @@
-﻿using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagement;
 
 namespace TextRPG.QuestManagement
 {

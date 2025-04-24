@@ -1,7 +1,7 @@
-﻿using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
 
-namespace TextRPG.RestManagemant
+namespace TextRPG.RestManagement
 {
     public class Rest
     {
