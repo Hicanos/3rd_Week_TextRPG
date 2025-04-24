@@ -17,7 +17,8 @@ namespace TextRPG.TitleManagement
         public string Description { get; set; }
         public bool IsEquipped { get; set; } // 장착 여부 
         public bool IsUnlocked { get; set; } //해금 여부 
-        public bool IsNotified { get; set; } = false;
+        public Title EquippedTitle { get; set; } // 장착한 칭호 
+        
         // 해금 조건 함수
         public Func<Character, bool> UnlockCondition { get; set; }
         // 타이틀 해금 조건을 확인하는 함수 (Character 객체를 인자로 받음)
@@ -134,7 +135,7 @@ namespace TextRPG.TitleManagement
                 }
             }
             // 장착 기능
-            private void EquipTitle()
+            public void EquipTitle()
              // 장착 기능 메서드: 해금된 칭호 중에서 하나 골라서 장착할 수 있게 해줌!
             {
                 List<Title> unlocked = titles.FindAll(t => t.IsUnlocked);
@@ -161,8 +162,11 @@ namespace TextRPG.TitleManagement
                 { // 입력한 게 숫자고, 범위 안에 있으면 장착 진행
 
                     foreach (var t in unlocked) t.IsEquipped = false;
+
                     // 모든 칭호 장착 해제하고
                     unlocked[choice - 1].IsEquipped = true;
+                    EquippedTitle = unlocked[choice - 1];
+
                     // 선택한 칭호만 장착 
                     Console.WriteLine($"'{unlocked[choice - 1].Name}' 칭호를 장착했습니다!");
                 }
