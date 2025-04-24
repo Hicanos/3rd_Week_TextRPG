@@ -1,13 +1,12 @@
 ﻿using TextRPG.CharacterManagemant;
 using TextRPG.MonsterManagement;
-<<<<<<< HEAD
-=======
+
 using TextRPG.OtherMethods;
 using TextRPG.QuestManagement;
 using TextRPG.RestManagemant;
 using TextRPG.ShopManagemant;
 using TextRPG.WeaponManagemant;
->>>>>>> main
+
 
 
 namespace TextRPG.GameManager
