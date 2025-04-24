@@ -17,10 +17,19 @@ namespace TextRPG.WeaponManagemant
         public bool Buyable { get; set; } // 상점에서 구매 가능 여부
 
 
-        //장비들 리스트
-        public static List<Weapons> Inventory = new List<Weapons>();
+        public bool IsGettedByCharacter { get; set; } // 전리품이 획득되었는지 판단하는 값 (드랍 Only 아이템만 적용)
+        public int DropChance { get; set; } // 드랍률 (드랍 Only 아이템만 적용)                                                                            
+        public string GettingFromWhere { get; set; } // 획득처 (드랍 Only 아이템만 적용)
+        public int SellingPrice { get; set; } // 판매가격 (기존 판매가격 로직을 따라가지 않는 가격, 드랍 Only 아이템만 적용)
 
-        // 장비 생성자
+        //장비들 리스트
+        public static List<Weapons> Inventory = new List<Weapons>(); // 상점에서 사는 게 가능한 장비만 모아놓는 리스트
+        public static List<Weapons> NotBuyableInventory = new List<Weapons>(); // 상점에서 사는게 불가능하고, 드랍으로만 얻을 수 있는 장비만 모아놓는 리스트
+        public static List<Weapons> PotionInventory = new List<Weapons>(); // 상점에서 사는 게 가능한 포션만 모아놓는 리스트
+        public static List<Weapons> NotBuyablePotionInventory = new List<Weapons> { }; // 상점에서 사는 게 불가능하고, 드랍으로만 얻을 수 있는 포션만 모아놓는 리스트
+        public static List<Weapons> RewardInventory = new List<Weapons>(); // 전리품 모음 (사용, 구매 불가)
+
+        // 상점에서 사는 게 가능한 장비 생성자
         public Weapons(bool isSelled, bool isEquip, string name, Dictionary<string, int> options, string explain, string className, string weaponType, int price, bool buyable)
         {
             IsSelled = isSelled;
@@ -35,6 +44,49 @@ namespace TextRPG.WeaponManagemant
 
             Inventory.Add(this);
         }
+
+        // 상점에서 구매 불가, 드랍으로만 얻을 수 있는 장비 생성자
+        public Weapons(bool isGettedByCharacter, string name, string weaponType, string gettingFromWhere, int dropchance, Dictionary<string, int> options, string explain, int sellingPrice, bool buyable) 
+        {
+            IsGettedByCharacter = isGettedByCharacter;
+            Name = name;
+            WeaponType = weaponType;
+            GettingFromWhere = gettingFromWhere;
+            DropChance = dropchance;
+            Options = options;
+            Explain = explain;
+            SellingPrice = sellingPrice;
+            Buyable = buyable;
+
+            NotBuyableInventory.Add(this);
+        }
+
+        // 상점에서 사는 게 가능한 포션 생성자
+        public Weapons(string name, Dictionary<string, int>options, string explain, string weaponType, int price, bool buyable) 
+        {
+            Name = name;
+            Options = options;
+            Explain = explain;
+            WeaponType = weaponType;
+            Price= price;
+            Buyable = buyable;
+        }
+
+        // 온전히 판매만 가능한 전리품 생성자
+        public Weapons(bool isGettedByCharacter, string name, string weaponType, string gettingFromWhere, int dropchance, string explain, int sellingPrice, bool buyable) 
+        {
+            isGettedByCharacter = isGettedByCharacter;
+            Name = name;
+            WeaponType = weaponType;
+            GettingFromWhere = gettingFromWhere;
+            DropChance = dropchance;
+            Explain = explain;
+            SellingPrice = sellingPrice;
+            Buyable = buyable;
+
+            RewardInventory.Add(this);
+        }
+
         public static void BuyAbleWeaponSpawn() // 상점에서 구매 가능한 아이템들
         {
             if (Inventory.Count > 0) return; // 중복 생성 방지
