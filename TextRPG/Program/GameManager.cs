@@ -1,12 +1,13 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System;
-using System.IO;
-using TextRPG.CharacterManagemant;
-using TextRPG.WeaponManagemant;
-using TextRPG.ShopManagemant;
-using TextRPG.RestManagemant;
-using TextRPG.OtherMethods;
+﻿using TextRPG.CharacterManagemant;
 using TextRPG.MonsterManagement;
+<<<<<<< HEAD
+=======
+using TextRPG.OtherMethods;
+using TextRPG.QuestManagement;
+using TextRPG.RestManagemant;
+using TextRPG.ShopManagemant;
+using TextRPG.WeaponManagemant;
+>>>>>>> main
 
 
 namespace TextRPG.GameManager
@@ -16,6 +17,7 @@ namespace TextRPG.GameManager
         // Main과 클래스 분리
         static void Main(string[] args)
         {
+            Weapons.BuyAbleWeaponSpawn();
             GameManager game = new GameManager();
             game.Run(); // 게임 실행
         }
@@ -27,16 +29,8 @@ namespace TextRPG.GameManager
 
         public void Run()
         {
-            // 무기 & 캐릭터 객체 생성
-            Weapons noobArmor = new Weapons(false, false, "수련자 갑옷", "방어력", 5, "수련에 도움을 주는 갑옷입니다.", 1000);
-            Weapons ironArmor = new Weapons(false, false, "무쇠갑옷", "방어력", 9, "무쇠로 만들어져 튼튼한 갑옷입니다.", 2000);
-            Weapons rtanArmor = new Weapons(false, false, "스파르타의 갑옷", "방어력", 15, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500);
-            Weapons sword = new Weapons(false, false, "낡은 검", "공격력", 2, "쉽게 볼 수 있는 낡은 검입니다.", 600);
-            Weapons axe = new Weapons(false, false, "청동 도끼", "공격력", 5, "어디선가 사용됐던 것 같은 도끼입니다.", 1500);
-            Weapons rtanSpear = new Weapons(false, false, "스파르타의 창", "공격력", 7, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 3000);
-
             //(string name, string className, int level, string rank, int maxhealth, int health, int maxMp, int mp, double attack, int defense, int gold)
-            Character character = new Character("Chad", "전사", 1, "대리",100, 100, 50, 50, 10, 5, 10000);
+            Character character = new Character("Chad", "전사", 1, "대리", 100, 100, 50, 50, 10, 5, 10000);
             Character.MakeCharacter(character);
 
             // 환영합니다 문구는 최초 시작 시 한번만
@@ -74,8 +68,18 @@ namespace TextRPG.GameManager
                         character.ShowStatus();
                         InputHelper.WaitForZeroInput();
                         break;
-                    case 2: // 전투시작 로직 추가 예정
-                        BattleManager.StartBattle(character);    // 전투 시작
+                    case 2:
+                        Console.Clear();
+                        Console.WriteLine("[스테이지 선택]");
+                        Console.WriteLine("1. 스테이지 1");
+                        Console.WriteLine("2. 스테이지 2");
+                        Console.WriteLine("3. 스테이지 3");
+                        Console.WriteLine("4. 스테이지 4");
+                        Console.WriteLine("5. 스테이지 5 (Boss)");
+                        Console.Write("입장할 스테이지를 선택하세요 >> ");
+                        int stageChoice = InputHelper.MatchOrNot(1, 5);
+
+                        BattleManager.StartBattle(character, stageChoice); 
                         break;
                     case 3:
                         Weapons.ShowInventory(character);

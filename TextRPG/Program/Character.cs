@@ -75,6 +75,20 @@ namespace TextRPG.CharacterManagemant
         public int EXP { get; set; } // 경험치
         public double MaxEXP { get; set; } // 필요 경험치
 
+        //public List<string> Inventory { get; set; } = new List<string>(); // 몬스터 드랍템 획득
+
+        //public void GainRewards(int exp, int gold, string dropItem)
+        //{
+        //    Exp += exp;
+        //    Gold += gold;
+        //    if (!string.IsNullOrEmpty(dropItem))
+        //    {
+        //        Inventory.Add(dropItem);
+        //        Console.WriteLine($"획득 아이템: {dropItem}");
+        //    }
+        //    Console.WriteLine($"EXP +{exp}, Gold +{gold}");
+        //}
+
         //역직렬용 생성자
         public Character(){  }
 
@@ -93,7 +107,7 @@ namespace TextRPG.CharacterManagemant
             Defense = defense;
             Gold = gold;
             EXP = 0;
-            MaxEXP = 2.5 * Level * Level + 17.5 + Level - 10; //필요 경험치 공식 (2.5*level^2 + 17.5*level - 10)
+            MaxEXP = 2.5 * Level * Level + 17.5 * Level - 10; //필요 경험치 공식 (2.5*level^2 + 17.5*level - 10)
         }
 
         // 상태 보기
@@ -196,16 +210,22 @@ namespace TextRPG.CharacterManagemant
                 {
                     EXP -= (int)MaxEXP; // 남은 경험치
                     Level++;
-                    MaxHealth += 10; // 레벨업 시 체력 증가
-                    Attack += 0.5; // 레벨업 시 공격력 증가
-                    Defense += 1; // 레벨업 시 방어력 증가
-                    MaxMP += 5; // 레벨업 시 마나 증가
-                    MaxEXP = 2.5 * Level * Level + 17.5 + Level - 10; //MaxEXP 갱신
+                    ApplyBenefits(); // 레벨업 시 스탯 증가
+                    MaxEXP = 2.5 * Level * Level + 17.5 * Level - 10; //MaxEXP 갱신
                     //레벨업 시 클래스이름-랭크 증가(직급 상승)
                     ClassName = Enum.GetName(typeof(Ranks), Level);
                     Console.WriteLine($"{Name}이(가) {ClassName}(으)로 승진했습니다! 현재 레벨: {Level}");
                 }
             }
+        }
+
+        //레벨업 시 스탯 증가
+        private void ApplyBenefits()
+        {
+            MaxHealth += 10;    // 체력 증가
+            Attack += 0.5;      // 공격력 증가
+            Defense += 1;       // 방어력 증가
+            MaxMP += 5;         // 마나 증가
         }
 
         //캐릭터 공격 메서드
@@ -224,7 +244,7 @@ namespace TextRPG.CharacterManagemant
                 DamageMargin = (int)character.Attack / 10;
             }
 
-                //공격 시 대미지 범위 설정 (11일 경우 10-2부터 10+2까지) 중 랜덤으로 들어감
+            //공격 시 대미지 범위 설정 (11일 경우 10-2부터 10+2까지) 중 랜덤으로 들어감
             int damage = new Random().Next((int)character.Attack - DamageMargin, (int)character.Attack + DamageMargin + 1);
 
             //공격 시 일정 확률로 크리티컬 혹은 miss 발생
@@ -234,9 +254,7 @@ namespace TextRPG.CharacterManagemant
             int critical = probability.Next(1, 101); // 15% 확률로 크리티컬 공격 발생
 
             //최종 명중률 = 공격자 명중률 - 상대방 회피율
-
-            //monster Attack을 이후 EVA 데이터가 만들어지면 교체할 것.
-           
+            //monster Attack을 이후 EVA 데이터가 만들어지면 교체할 것.           
             if (Accuracy <= character.DEX - monster.Attack)
             {
                 if(critical <= character.CRIT)
@@ -266,6 +284,7 @@ namespace TextRPG.CharacterManagemant
                 Console.WriteLine($"Lv.{monster.Level} {monster.Name}을(를) 공격했지만 아무일도 일어나지 않았습니다.");
             }
 
+            if (monster.Health <= 0) monster.Health = 0; //몬스터 체력이 0 이하로 떨어지지 않도록 처리
 
         }
 
