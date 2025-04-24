@@ -26,7 +26,6 @@ namespace TextRPG.MonsterManagement
         public int MinGold { get; set; }        // 획득 최소 골드
         public int MaxGold { get; set; }        // 획득 최대 골드
         public List<string> DropItems { get; set; }  // 드랍 아이템이 여러개여서 리스트로 추가
-        public List<int> DropChance { get; set; }   // 드랍 아이템(전리품)이 드랍할 확률
 
         // 골드 범위 랜덤 설정
         public int GetRandomGold()
@@ -34,8 +33,10 @@ namespace TextRPG.MonsterManagement
             return random.Next(MinGold, MaxGold + 1);
         }
         private static Random random = new Random();
+
         public static List<Monster> currentBattleMonsters = new List<Monster>();
         private static List<Monster> monsterTypes = new List<Monster>();
+        public static int CurrentStage = 1;
 
 
 
@@ -58,38 +59,65 @@ namespace TextRPG.MonsterManagement
         public static void InitMonsters()
         {
 
-            if (monsterTypes.Count > 0) { return; }
-            Monster monster1 = new Monster("빠대리", 1, 10, 4, 3, 60, 15, 1, 40, 80, new List<string> { "대리의 빠때리" }); // 몬스터 종류와 정보
-            Monster monster2 = new Monster("신과장", 2, 14, 3, 5, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" });
-            Monster monster3 = new Monster("임차장", 3, 26, 8, 7, 70, 15, 3, 120, 250, new List<string> { "차장의 가발" });
-            Monster monster4 = new Monster("김부장", 4, 24, 11, 5, 70, 25, 4, 150, 300, new List<string> { "부장의 넥타이" });
-            Monster monster5 = new Monster("오실장", 5, 32, 15, 14, 70, 15, 5, 250, 400, new List<string> { "직업 평가표" });
-            Monster monster6 = new Monster("카이사", 6, 38, 17, 10, 75, 25, 6, 300, 500, new List<string> { "유흥업소 명함" });
-            Monster monster7 = new Monster("유상무", 7, 43, 25, 18, 75, 30, 7, 400, 700, new List<string> { "한정판 굿즈 명함" });
-            Monster monster8 = new Monster("최전무", 8, 50, 22, 20, 80, 40, 8, 500, 800, new List<string> { "노또 용지" });
-            Monster monster9 = new Monster("석회장", 10, 250, 40, 28, 90, 35, 10, 2000, 3000, new List<string> { "직급 명패" });
-            monsterTypes.AddRange(new List<Monster> { monster1, monster2, monster3, monster4, monster5, monster6, monster7, monster8, monster9 });
-
-
+            if (monsterTypes.Count > 0) return;
+            monsterTypes = new List<Monster>()
+            {
+                 // stage1
+                 new Monster("빠대리", 1, 10, 4, 3, 60, 15, 1, 40, 80, new List<string> {"대리의 빠때리" }), // 몬스터 종류와 정보
+                 new Monster("신과장", 2, 14, 3, 5, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" }),
+                 // stage 2
+                 new Monster("임차장", 3, 26, 8, 7, 70, 15, 3, 120, 250, new List<string> { "차장의 가발" }),
+                 new Monster("김부장", 4, 24, 11, 5, 70, 25, 4, 150, 300, new List<string> { "부장의 넥타이" }),
+                 // stage 3
+                 new Monster("오실장", 5, 32, 15, 14, 70, 15, 5, 250, 400, new List<string> { "직업 평가표" }),
+                 new Monster("카이사", 6, 38, 17, 10, 75, 25, 6, 300, 500, new List<string> { "유흥업소 명함" }),
+                 // stage 4
+                 new Monster("유상무", 7, 43, 25, 18, 75, 30, 7, 400, 700, new List<string> { "한정판 굿즈 명함" }),
+                 new Monster("최전무", 8, 50, 22, 20, 80, 40, 8, 500, 800, new List<string> { "노또 용지" }),
+                 // stage 5 Boss
+                 new Monster("석회장", 10, 250, 40, 28, 90, 35, 10, 2000, 3000, new List<string> { "직급 명패" })
+            };
         }
 
-
-
+      
         // 전투 화면 출력
         public static void SpawnMonster(Character character)
         {
 
             currentBattleMonsters.Clear();
-            Monster.InitMonsters(); // 몬스터를 InitMonsters에 정의해둔 리스트에서 불러옴
+            InitMonsters(); // 모든 몬스터 로드
+
+            List<Monster> availableMonsters;
+
+            if (CurrentStage == 5) 
+            { 
+                // 스테이지 5에서는 보스만 등장
+                availableMonsters = monsterTypes.Where(m => m.Name == "석회장").ToList();
+            }
+            else
+            {
+                // 스테이지 1~4에서는 일반 몬스터만 등장
+                availableMonsters = monsterTypes
+                    .Where(m => m.Level <= CurrentStage * 2 && m.Name != "석회장")
+                    .ToList();
+            }
+
+            // 현재 스테이지에 맞느 몬스터만 필터링
+
+            if (availableMonsters.Count == 0)
+            {
+                Console.WriteLine("출현 가능한 사원이 없습니다.");
+                return;
+            }
+
             Random rand = new Random();
-            int numberOfMonster = rand.Next(1, monsterTypes.Count + 1); // 전투에 나올 몬스터 수를 랜덤으로 정함
+            int numberOfMonster = (CurrentStage == 5) ? 1 : rand.Next(1, 3); // 전투에 나올 몬스터 수
+
             for (int i = 0; i < numberOfMonster; i++)
             {
-                // 랜덤하게 몬스터를 골라 새 인스턴스를 생성하고 전투 몬스터 리스트에 추가
-                // 생성된 몬스터를 화면에 출력
-                int index = rand.Next(0, monsterTypes.Count);
-                Monster baseMonster = monsterTypes[index]; // base를 사용해서 부모(Monster)에 있는 함수 호출
-                Monster selected = new Monster(
+              
+                var baseMonster = availableMonsters[rand.Next(availableMonsters.Count)]; // base를 사용해서 부모(Monster)에 있는 함수 호출
+                var selected = new Monster(
                     baseMonster.Name,
                     baseMonster.Level,
                     baseMonster.Attack,
@@ -110,9 +138,6 @@ namespace TextRPG.MonsterManagement
             Console.WriteLine($"Lv.{character.Level} {character.ClassName} {character.Name}    공격력 : {character.Attack}");
             Console.WriteLine($"HP {character.Health}/{character.MaxHealth}");
             Console.WriteLine($"Exp {character.EXP}     소지금 : {character.Gold}원 ");
-            Console.WriteLine("\n1. 공격\n");
-            Console.WriteLine("원하시는 행동을 입력해주세요.\n>>");
-            int choice = InputHelper.MatchOrNot(1, 1);
         }
     }
     public class BattleResult // 전투 결과를  출력하는 메소드
@@ -142,25 +167,52 @@ namespace TextRPG.MonsterManagement
             if (result == "승리")
             {
                 Console.WriteLine($"사원을 {killedCount}명 쓰러뜨렸습니다.\n");
-
+          
                 // 죽은 몬스터에게 골드와 아이템 수집
                 int totalGold = 0;
                 int totalExp = 0;
                 List<string> dropItems = new List<string>();
 
-                foreach (var m in monsters.Where(m => m.Health <= 0)) // 전투에서 쓰러진 체력0이하인 몬스터들만 골라서 반복문을 돔
-                {                                                     // monsters는 전투에 참여한 모든 몬스터 리스트이고 m.Health <= 조건에 해당하는 몬스터만 순회
-                    totalGold += m.GetRandomGold(); // 지정된 골드 범위 내에서 랜덤 보상
-                    totalExp += m.Exp;
+                if (Monster.CurrentStage < 5)
+                {
+                    Monster.CurrentStage++;
+                    Console.WriteLine($"\n다음 스테이지로 이동합니다! [현재 스테이지 : {Monster.CurrentStage}]");
+                }
+                else
+                {
+                    Console.WriteLine("\n최종 스테이지 클리어! 보스를 처치하였습니다. 승 진 배 틀 에서 최종 승리자가 되었습니다!");
+                }
 
-                    foreach (var item in m.DropItems) // 몬스터가 드롭한 아이템 리스트를 하나씩 꺼내기 위한 반복문
+                if (Monster.CurrentStage > 5 && result == "승리")
+                {
+                    Console.WriteLine("\n\n 축하합니다! 최종보스 '석회장'을 물리치고 게임을 클리어했습니다!");
+                    Console.WriteLine("당신은 승진배틀(주)의 회장이 되었습니다!\n");
+
+                    // 게임 종료하거나 메인 메뉴로 복귀
+                    Console.WriteLine("\n1. 게임 종료\n2. 메인 메뉴로 돌아가기");
+                    int input = InputHelper.MatchOrNot(1, 2);
+                    if (input == 1)
                     {
-                        if (!string.IsNullOrWhiteSpace(item)) // 아이템이 null , 빈 문자열 , 공백만 있는 문자열이 아닌 경우에만 처리
-                        {
-                            dropItems.Add(item); // 드롭 아이템 리스트dropItems에 아이템을 추가
-                        }
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        Monster.CurrentStage = 1;
                     }
                 }
+                        foreach (var m in monsters.Where(m => m.Health <= 0)) // 전투에서 쓰러진 체력0이하인 몬스터들만 골라서 반복문을 돔
+                        {                                                     // monsters는 전투에 참여한 모든 몬스터 리스트이고 m.Health <= 조건에 해당하는 몬스터만 순회
+                            totalGold += m.GetRandomGold(); // 지정된 골드 범위 내에서 랜덤 보상
+                            totalExp += m.Exp;
+
+                            foreach (var item in m.DropItems) // 몬스터가 드롭한 아이템 리스트를 하나씩 꺼내기 위한 반복문
+                            {
+                                if (!string.IsNullOrWhiteSpace(item)) // 아이템이 null , 빈 문자열 , 공백만 있는 문자열이 아닌 경우에만 처리
+                                {
+                                    dropItems.Add(item); // 드롭 아이템 리스트dropItems에 아이템을 추가
+                                }
+                            }
+                        }
                 Console.WriteLine("\n[캐릭터 정보]");
                 Console.WriteLine($"Lv.{character.Level} {character.Name}");
                 Console.WriteLine($"HP {character.Health}");
@@ -194,8 +246,8 @@ namespace TextRPG.MonsterManagement
 
     // 전투를 관리하는 BattleManager 클래스 생성
     public static class BattleManager
-    {
-        public static void StartBattle(Character character, Character character1)
+    {   
+        public static void StartBattle(Character character)
         {
             Console.Clear();
             Console.WriteLine("=== 승진 전투 개시 ===\n");
@@ -221,11 +273,20 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine($"Lv.{character.Level} {character.Name} ({character.ClassName})");
                 Console.WriteLine($"HP {character.Health}/{character.MaxHealth}\n");
 
+                Console.WriteLine("[몬스터 목록]");
+                for (int i = 0; i < aliveMonsters.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {aliveMonsters[i].Name} HP {aliveMonsters[i].Health}");
+                }
+                Console.WriteLine();
+
                 Console.WriteLine("[행동 선택]");
                 Console.WriteLine("1. 일반 공격");
                 Console.WriteLine("2. 스킬");
                 Console.WriteLine("3. 소모품 사용");
+
                 Console.Write(">> ");
+                string input = Console.ReadLine();
                 int actionChoice = InputHelper.MatchOrNot(1, 3); // InputHelper.MatchOrNot함수로 사용자가 최소~최대 범위 내에서 숫자를 입력할 때까지 반복
 
                 switch (actionChoice)
@@ -281,10 +342,9 @@ namespace TextRPG.MonsterManagement
                                 foreach (var item in target.DropItems)
                                 {
                                     int chance = rand.Next(1, 101);
-                                    if (chance == 30)
+                                    if (chance <= 30)
                                     {
-                                        Console.WriteLine($"-> {item}을(를) 획득했습니다! (획득 확률 : {chance}%)");
-                                        // 인벤토리에 추가하는 싶으면 여기에 코드 작성
+                                        Console.WriteLine($"-> {item}을(를) 획득했습니다! (획득 확률 : {chance}%)");                                      
                                         // character.Inventory.Add(item);
                                         break;
                                     }
@@ -308,50 +368,54 @@ namespace TextRPG.MonsterManagement
                         Console.WriteLine("Enter를 눌러 계속...");
                         Console.ReadLine();
                         break;
+                    default:
+                        Console.WriteLine("잘못된 입력입니다");
+                        break;
                 }
+
             }
         }
-            // 적과 대치하는 EnemyPhase 메서드 생성
-            public static void EnemyPhase(Character character)
+        // 적과 대치하는 EnemyPhase 메서드 생성
+        public static void EnemyPhase(Character character)
+        {
+            var aliveMonsters = Monster.currentBattleMonsters.Where(m => m.Health > 0).ToList();
+            if (aliveMonsters.Count == 0) //코드 위치 이동, 텍스트 출력 전에 몬스터가 다 죽었다 판단되면 GameOver
             {
-                var aliveMonsters = Monster.currentBattleMonsters.Where(m => m.Health > 0).ToList();
-                if (aliveMonsters.Count == 0) //코드 위치 이동, 텍스트 출력 전에 몬스터가 다 죽었다 판단되면 GameOver
+                return;
+            }
+            Console.WriteLine("\nEnter 키를 누르면 적의 차례가 됩니다...");
+            Console.ReadLine();
+            Console.Clear();
+
+            Console.WriteLine("[Enemy Phase] 상대의 턴입니다.\n");
+            foreach (var monster in Monster.currentBattleMonsters)
+            {
+                if (monster.Health <= 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($"Lv.{monster.Level} {monster.Name} 은(는) 쓰러진 상태입니다.");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    continue;
+                }
+                // 살아있는 적이 공격
+                Console.WriteLine($"Lv.{monster.Level} {monster.Name} 의 공격!");
+                int damage = monster.Attack;
+                character.Health -= damage;
+                if (character.Health < 0) character.Health = 0;
+                Console.WriteLine($"{character.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                Console.WriteLine($"HP {character.Health + damage} -> {character.Health}\n");
+                if (character.Health <= 0) // 에너미 턴 진행도중 플레이어 체력이 0 이하가 될 시 GameOver
                 {
                     return;
                 }
-                Console.WriteLine("\nEnter 키를 누르면 적의 차례가 됩니다...");
-                Console.ReadLine();
-                Console.Clear();
-
-                Console.WriteLine("[Enemy Phase] 상대의 턴입니다.\n");
-                foreach (var monster in Monster.currentBattleMonsters)
-                {
-                    if (monster.Health <= 0)
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.WriteLine($"Lv.{monster.Level} {monster.Name} 은(는) 쓰러진 상태입니다.");
-                        Console.ResetColor();
-                        Console.WriteLine();
-                        continue;
-                    }
-                    // 살아있는 적이 공격
-                    Console.WriteLine($"Lv.{monster.Level} {monster.Name} 의 공격!");
-                    int damage = monster.Attack;
-                    character.Health -= damage;
-                    if (character.Health < 0) character.Health = 0;
-                    Console.WriteLine($"{character.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
-                    Console.WriteLine($"HP {character.Health + damage} -> {character.Health}\n");
-                    if (character.Health <= 0) // 에너미 턴 진행도중 플레이어 체력이 0 이하가 될 시 GameOver
-                    {
-                        return;
-                    }
-                    Console.WriteLine("Enter를 입력해주세요..");
-                    Console.ReadLine();
-                }
-                Console.WriteLine("\n상대의 공격이 끝났습니다. [플레이어의 차례]");
-                Console.WriteLine("계속하려면 Enter를 누르세요...");
+                Console.WriteLine("Enter를 입력해주세요..");
                 Console.ReadLine();
             }
-
+            Console.WriteLine("\n상대의 공격이 끝났습니다. [플레이어의 차례]");
+            Console.WriteLine("계속하려면 Enter를 누르세요...");
+            Console.ReadLine();
         }
+
     }
+}
