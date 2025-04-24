@@ -17,6 +17,7 @@ namespace TextRPG.TitleManagement
         public string Description { get; set; }
         public bool IsEquipped { get; set; } // 장착 여부 
         public bool IsUnlocked { get; set; } //해금 여부 
+        public bool IsNotified { get; set; } = false;
         // 해금 조건 함수
         public Func<Character, bool> UnlockCondition { get; set; }
         // 타이틀 해금 조건을 확인하는 함수 (Character 객체를 인자로 받음)
@@ -40,12 +41,12 @@ namespace TextRPG.TitleManagement
             {
                 this.character = character;
                 //이름 , 설명 , 해금 조건 , 나중에 바꿔야함 임의로 설정 해놈 
-                titles.Add(new Title("신입", "던전을 한 번 클리어한 모험가", c => c.Gold >= 100000));
-                titles.Add(new Title("백수", "퇴사 1번 당한 사람", c => c.Gold >= 100000));
+                titles.Add(new Title("신입", "던전을 한 번 클리어한 모험가", c => c.Gold >= 10000));
+                titles.Add(new Title("백수", "퇴사 1회", c => c.Health <= 0));
                 titles.Add(new Title("만수르", "1만 골드 보유", c => c.Gold >= 10000));
-                titles.Add(new Title("폭싹 망했수다", "퇴사 10번 당한 사람", c => c.Gold >= 100000));
-                titles.Add(new Title("능률이 올라갑니다", "모든 무기를 장착한 자", c => c.Gold >= 100000));
+                titles.Add(new Title("능률이 올라갑니다", "모든 무기를 구매한", c => c.Gold >= 10000));
                 titles.Add(new Title("백발백중", "DEX100달성", c => c.DEX >= 100));
+                titles.Add(new Title("폭싹 망했수다", "???", c => c.Gold <= 0));
             }
 
             public void Tmenu(Character character)
@@ -116,10 +117,21 @@ namespace TextRPG.TitleManagement
                     string tlock = t.IsUnlocked ? "" : " [잠김]";
 
                     // 최종 출력: 번호. 이름 - 설명 + 상태
-                    Console.WriteLine($"{i + 1}. {t.Name} - {t.Description}{tlock}{equipped}");
+                    Console.WriteLine($"{i + 1}. {t.Name} - {t.Description}{tlock}{equipped}\n");
+                    Console.ResetColor(); // 색상 원상복구!          
                 }
+                Console.WriteLine("0.나가기\n");
 
-                Console.ResetColor(); // 색상 원상복구!
+                string input = Console.ReadLine();
+              
+                switch (input)
+                {
+                    case "0":
+                        return;
+                    default:
+                        Console.WriteLine("잘못된 입력입니다!");
+                        break;
+                }
             }
             // 장착 기능
             private void EquipTitle()
@@ -139,7 +151,7 @@ namespace TextRPG.TitleManagement
                 {   // 해금된 칭호들을 쭉 보여줌 (번호랑 이름, 설명까지!)
                     var t = unlocked[i];// i번째 해금된 칭호 꺼냄
                     string equipped = t.IsEquipped ? "(장착됨)" : ""; // 이미 장착 중인 건 표시해줌
-                    Console.WriteLine($"{i + 1}. {t.Name} - {t.Description} {equipped}");
+                    Console.WriteLine($"{i + 1}. {t.Name} {equipped}");
                 }
 
                 Console.Write("번호 입력: ");

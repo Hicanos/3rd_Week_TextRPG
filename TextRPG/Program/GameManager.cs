@@ -57,11 +57,11 @@ namespace TextRPG.GameManager
 
                 // 메인 메뉴
                 Console.WriteLine("-----------------------------");
-                Console.WriteLine("1. 상태창\n2. 전투 시작\n3. 인벤토리\n4. 상점\n5. 휴식하기\n 6. 칭호 \n\n원하시는 행동을 입력해주세요.");
+                Console.WriteLine("1. 상태창\n2. 전투 시작\n3. 인벤토리\n4. 상점\n5. 휴식하기\n6. 칭호 \n\n원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
 
                 // 1~6중 선택 후 switch문 발동
-                int choice = InputHelper.MatchOrNot(1, 5);
+                int choice = InputHelper.MatchOrNot(1, 6);
                 Title.TitleManager titleManager = new Title.TitleManager(character);
 
                 switch (choice)
@@ -70,7 +70,7 @@ namespace TextRPG.GameManager
                         character.ShowStatus();
                         InputHelper.WaitForZeroInput();
                         break;
-<<<<<<< HEAD
+
                     case 2:
                         Console.Clear();
                         Console.WriteLine("[스테이지 선택]");
@@ -82,11 +82,7 @@ namespace TextRPG.GameManager
                         Console.Write("입장할 스테이지를 선택하세요 >> ");
                         int stageChoice = InputHelper.MatchOrNot(1, 5);
 
-                        BattleManager.StartBattle(character,character); 
-=======
-                    case 2:               
-                        BattleManager.StartBattle(character); 
->>>>>>> main
+                        BattleManager.StartBattle(character, character);
                         break;
                     case 3:
                         Weapons.ShowInventory(character);
