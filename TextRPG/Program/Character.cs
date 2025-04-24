@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using TextRPG.MonsterManagement;
+using TextRPG.TitleManagement;
 
 namespace TextRPG.CharacterManagemant
 {
@@ -26,11 +27,12 @@ namespace TextRPG.CharacterManagemant
         과장,
         차장,
         부장,
-        전무,
+        실장,
+        이사,
         상무,
-        이사,        
+        전무,        
         사장,
-        부회장
+        부회장,
     }
 
     public struct Stats
@@ -75,6 +77,7 @@ namespace TextRPG.CharacterManagemant
         public int EXP { get; set; } // 경험치
         public double MaxEXP { get; set; } // 필요 경험치
 
+        public Title EquippedTitle { get; set; }
         //public List<string> Inventory { get; set; } = new List<string>(); // 몬스터 드랍템 획득
 
         //public void GainRewards(int exp, int gold, string dropItem)
@@ -124,6 +127,7 @@ namespace TextRPG.CharacterManagemant
             Console.WriteLine($"명중률 : {DEX}");
             Console.WriteLine($"회피율 : {EVA}");
             Console.WriteLine($"소지금: {Gold} 원");
+            Console.WriteLine($"칭호 : {EquippedTitle?.Name ?? "없음"}");
             Console.WriteLine("-----------------------------");
 
             Console.WriteLine("\n0. 나가기\n");
