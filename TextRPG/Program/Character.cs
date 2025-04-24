@@ -27,9 +27,9 @@ namespace TextRPG.CharacterManagemant
         차장,
         부장,
         실장,
-        전무,
+        이사,
         상무,
-        이사,        
+        전무,        
         사장,
         부회장,
     }
