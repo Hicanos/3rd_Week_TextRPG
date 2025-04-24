@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagemant;
 
 namespace TextRPG.QuestManagement
 {

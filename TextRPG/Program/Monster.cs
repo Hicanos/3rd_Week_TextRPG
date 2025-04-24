@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagemant;
 using TextRPG.OtherMethods;
 namespace TextRPG.MonsterManagement
 {
@@ -311,47 +300,47 @@ namespace TextRPG.MonsterManagement
                 }
             }
         }
-            // 적과 대치하는 EnemyPhase 메서드 생성
-            public static void EnemyPhase(Character character)
+        // 적과 대치하는 EnemyPhase 메서드 생성
+        public static void EnemyPhase(Character character)
+        {
+            var aliveMonsters = Monster.currentBattleMonsters.Where(m => m.Health > 0).ToList();
+            if (aliveMonsters.Count == 0) //코드 위치 이동, 텍스트 출력 전에 몬스터가 다 죽었다 판단되면 GameOver
             {
-                var aliveMonsters = Monster.currentBattleMonsters.Where(m => m.Health > 0).ToList();
-                if (aliveMonsters.Count == 0) //코드 위치 이동, 텍스트 출력 전에 몬스터가 다 죽었다 판단되면 GameOver
+                return;
+            }
+            Console.WriteLine("\nEnter 키를 누르면 적의 차례가 됩니다...");
+            Console.ReadLine();
+            Console.Clear();
+
+            Console.WriteLine("[Enemy Phase] 상대의 턴입니다.\n");
+            foreach (var monster in Monster.currentBattleMonsters)
+            {
+                if (monster.Health <= 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($"Lv.{monster.Level} {monster.Name} 은(는) 쓰러진 상태입니다.");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    continue;
+                }
+                // 살아있는 적이 공격
+                Console.WriteLine($"Lv.{monster.Level} {monster.Name} 의 공격!");
+                int damage = monster.Attack;
+                character.Health -= damage;
+                if (character.Health < 0) character.Health = 0;
+                Console.WriteLine($"{character.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
+                Console.WriteLine($"HP {character.Health + damage} -> {character.Health}\n");
+                if (character.Health <= 0) // 에너미 턴 진행도중 플레이어 체력이 0 이하가 될 시 GameOver
                 {
                     return;
                 }
-                Console.WriteLine("\nEnter 키를 누르면 적의 차례가 됩니다...");
-                Console.ReadLine();
-                Console.Clear();
-
-                Console.WriteLine("[Enemy Phase] 상대의 턴입니다.\n");
-                foreach (var monster in Monster.currentBattleMonsters)
-                {
-                    if (monster.Health <= 0)
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.WriteLine($"Lv.{monster.Level} {monster.Name} 은(는) 쓰러진 상태입니다.");
-                        Console.ResetColor();
-                        Console.WriteLine();
-                        continue;
-                    }
-                    // 살아있는 적이 공격
-                    Console.WriteLine($"Lv.{monster.Level} {monster.Name} 의 공격!");
-                    int damage = monster.Attack;
-                    character.Health -= damage;
-                    if (character.Health < 0) character.Health = 0;
-                    Console.WriteLine($"{character.Name} 을(를) 맞췄습니다. [데미지 : {damage}]");
-                    Console.WriteLine($"HP {character.Health + damage} -> {character.Health}\n");
-                    if (character.Health <= 0) // 에너미 턴 진행도중 플레이어 체력이 0 이하가 될 시 GameOver
-                    {
-                        return;
-                    }
-                    Console.WriteLine("Enter를 입력해주세요..");
-                    Console.ReadLine();
-                }
-                Console.WriteLine("\n상대의 공격이 끝났습니다. [플레이어의 차례]");
-                Console.WriteLine("계속하려면 Enter를 누르세요...");
+                Console.WriteLine("Enter를 입력해주세요..");
                 Console.ReadLine();
             }
-
+            Console.WriteLine("\n상대의 공격이 끝났습니다. [플레이어의 차례]");
+            Console.WriteLine("계속하려면 Enter를 누르세요...");
+            Console.ReadLine();
         }
+
     }
+}

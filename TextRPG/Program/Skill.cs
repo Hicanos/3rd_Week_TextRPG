@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagemant;
 using TextRPG.MonsterManagement;
 
 namespace TextRPG.SkillManagement
@@ -242,13 +234,13 @@ namespace TextRPG.SkillManagement
 
     public class ImageMaking : Skill
     {
-        public ImageMaking() 
+        public ImageMaking()
         {
             className = "홍보팀";
             skillName = "이미지 메이킹";
             skillDescription = "겉 모습이 좋아야 잘 먹히는 법";
             costMP = 35;
-            cooldown= 3;
+            cooldown = 3;
             isActive = true;
             effectDuration = 3;
         }
@@ -366,7 +358,7 @@ namespace TextRPG.SkillManagement
             costMP = 35;
             cooldown = 3;
             isActive = true;
-            effectDuration= 2;
+            effectDuration = 2;
         }
 
         public override void UseSkill(Character character, Monster monster)
@@ -374,7 +366,7 @@ namespace TextRPG.SkillManagement
             BuffUse(character);
             int skillHeal = (int)(character.MaxHealth * 0.15);
             character.Health += skillHeal;
-            Console.WriteLine($"{character.Name}의 체력이 {skillHeal} 회복되었습니다.");            
+            Console.WriteLine($"{character.Name}의 체력이 {skillHeal} 회복되었습니다.");
         }
 
         public void ApplyEffect(Character character)
@@ -405,10 +397,10 @@ namespace TextRPG.SkillManagement
             isActive = false;
         }
 
-        public override void UseSkill(Character character,Monster monster)
+        public override void UseSkill(Character character, Monster monster)
         {
             //상점 판매 매서드와 결과 창에서 직업 확인 후 패시브 적용
-            
+
         }
     }
 

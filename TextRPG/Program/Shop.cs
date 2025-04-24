@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.Design;
-using TextRPG.CharacterManagemant;
-using TextRPG.OtherMethods;
+﻿using TextRPG.CharacterManagemant;
 using TextRPG.WeaponManagemant;
 
 namespace TextRPG.ShopManagemant
@@ -37,7 +35,7 @@ namespace TextRPG.ShopManagemant
                 Console.WriteLine($"   설명: {weapon.Explain}");
             }
 
-            string selectText = $"0. 나가기 | {(mode == "view" ?  "1. 물건 구매 | 2. 물건 판매 |" : mode == "buy" ? $"{startIndex + 1} ~ {endIndex}. 아이템 구매 |" : mode == "sell" ? $"{startIndex + 1} ~ {endIndex}. 아이템 판매 |" : "")} p. 이전 페이지 | n. 다음 페이지";
+            string selectText = $"0. 나가기 | {(mode == "view" ? "1. 물건 구매 | 2. 물건 판매 |" : mode == "buy" ? $"{startIndex + 1} ~ {endIndex}. 아이템 구매 |" : mode == "sell" ? $"{startIndex + 1} ~ {endIndex}. 아이템 판매 |" : "")} p. 이전 페이지 | n. 다음 페이지";
             Console.WriteLine(new string('-', 80));
             Console.WriteLine(selectText);
             Console.Write("원하시는 행동을 입력해주세요.\n>> ");
@@ -59,12 +57,12 @@ namespace TextRPG.ShopManagemant
 
                 string input = Console.ReadLine();
                 if (input == "0") return;
-                else if (input == "1") 
+                else if (input == "1")
                 {
                     BuyItems(character);
                     return;
                 }
-                else if (input == "2") 
+                else if (input == "2")
                 {
                     SellingItems(character);
                     return;
@@ -76,7 +74,7 @@ namespace TextRPG.ShopManagemant
                     Console.WriteLine("잘못된 입력입니다.");
                     Thread.Sleep(1000);
                 }
-                    Console.Clear();
+                Console.Clear();
             }
         }
 
@@ -96,13 +94,13 @@ namespace TextRPG.ShopManagemant
                 int totalPages = (int)Math.Ceiling((double)availableWeapons.Count / itemsPerPage);
                 currentPage = Math.Max(1, Math.Min(currentPage, totalPages));
 
-                
+
                 PaginateAndDisplayItems(availableWeapons, currentPage, itemsPerPage, character, "buy");
 
                 string input = Console.ReadLine();
 
                 if (input == "0") { ShowShop(character); return; }
-                   
+
                 else if (input.ToLower() == "p") currentPage--;
                 else if (input.ToLower() == "n") currentPage++;
                 else if (int.TryParse(input, out int index))
@@ -141,7 +139,7 @@ namespace TextRPG.ShopManagemant
                 else
                 {
                     Console.WriteLine("잘못된 입력입니다.");
-                    Thread.Sleep(1000);  
+                    Thread.Sleep(1000);
                 }
             }
         }

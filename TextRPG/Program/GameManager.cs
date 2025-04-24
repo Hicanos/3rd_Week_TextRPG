@@ -1,9 +1,7 @@
-﻿using System.Numerics;
-using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagemant;
 using TextRPG.MonsterManagement;
 
 using TextRPG.OtherMethods;
-using TextRPG.QuestManagement;
 using TextRPG.RestManagemant;
 using TextRPG.ShopManagemant;
 using TextRPG.TitleManagement;
