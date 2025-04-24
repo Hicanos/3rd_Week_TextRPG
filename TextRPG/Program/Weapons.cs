@@ -72,21 +72,6 @@ namespace TextRPG.WeaponManagemant
             Buyable = buyable;
         }
 
-        // 상점에서 사는게 불가능하고, 드랍으로만 얻을 수 있는 포션 생성자
-        public Weapons(bool isGettedByCharacter, string name, string weaponType, string gettingFromWhere, int dropchance, Dictionary<string, int> options, string explain, int sellingPrice, bool buyable) 
-        {
-            IsGettedByCharacter= isGettedByCharacter;
-            Name = name;
-            WeaponType= weaponType;
-            GettingFromWhere= gettingFromWhere;
-            DropChance = dropchance;
-            Options = options;
-            Explain = explain;
-            SellingPrice= sellingPrice;
-            Buyable = buyable;
-
-        }
-
         // 온전히 판매만 가능한 전리품 생성자
         public Weapons(bool isGettedByCharacter, string name, string weaponType, string gettingFromWhere, int dropchance, string explain, int sellingPrice, bool buyable) 
         {
