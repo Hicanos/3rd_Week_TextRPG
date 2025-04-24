@@ -32,11 +32,11 @@ namespace TextRPG.TitleManagement
             IsEquipped = false;
             IsUnlocked = false;
         }
-        public class Qs
-    {
+        public class TitleManager
+        {
             public List<Title> titles = new List<Title>(); 
             public Character character;
-            public Qs(Character character) 
+            public TitleManager(Character character) 
             {
                 this.character = character;
                 //이름 , 설명 , 해금 조건 , 나중에 바꿔야함 임의로 설정 해놈 
