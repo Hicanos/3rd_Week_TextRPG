@@ -39,16 +39,18 @@ namespace TextRPG.TitleManagement
             public List<Title> titles = new List<Title>(); 
             public Character character;
             public Title EquippedTitle { get; set; } // 장착한 칭호
-            public TitleManager(Character character) 
+            public TitleManager(Character character)
             {
                 this.character = character;
                 //이름 , 설명 , 해금 조건 , 나중에 바꿔야함 임의로 설정 해놈 
-                titles.Add(new Title("신입", "던전을 한 번 클리어한 모험가", c => c.Gold >= 10000));
-                titles.Add(new Title("백수", "퇴사 1회", c => c.Health <= 0));
+                titles.Add(new Title("이제 한 걸음", "lv2", c => c.Level >= 2)); // 레벨 1
+                titles.Add(new Title("고인물", "lv10", c => c.Level >= 10));
+                titles.Add(new Title("텟카이", "방어력 25 달성", c => c.Defense >= 25));
+                titles.Add(new Title("원펀맨", "공격력 40 달성", c => c.Attack >= 40));
+                titles.Add(new Title("백발백중", "명중률 100 달성", c => c.DEX >= 100));
+                titles.Add(new Title("무한", "마나 200 달성", c => c.MP >= 200));
                 titles.Add(new Title("만수르", "1만 골드 보유", c => c.Gold >= 10000));
-                titles.Add(new Title("능률이 올라갑니다", "모든 무기를 구매한", c => c.Gold >= 10000));
-                titles.Add(new Title("백발백중", "DEX100달성", c => c.DEX >= 100));
-                titles.Add(new Title("폭싹 망했수다", "???", c => c.Gold <= 0));
+                titles.Add(new Title("폭싹 망했수다", "???", c => c.Gold <= 0));          
             }
 
             public void Tmenu(Character character)
