@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TextRPG.CharacterManagemant;
-using TextRPG.WeaponManagemant;
+using TextRPG.CharacterManagement;
+using TextRPG.WeaponManagement;
 using TextRPG.OtherMethods;
 using System.Security.Cryptography.X509Certificates;
 using System.Numerics;
@@ -17,6 +17,8 @@ namespace TextRPG.TitleManagement
         public string Description { get; set; }
         public bool IsEquipped { get; set; } // 장착 여부 
         public bool IsUnlocked { get; set; } //해금 여부 
+       
+        
         // 해금 조건 함수
         public Func<Character, bool> UnlockCondition { get; set; }
         // 타이틀 해금 조건을 확인하는 함수 (Character 객체를 인자로 받음)
@@ -36,16 +38,19 @@ namespace TextRPG.TitleManagement
         {
             public List<Title> titles = new List<Title>(); 
             public Character character;
-            public TitleManager(Character character) 
+            public Title EquippedTitle { get; set; } // 장착한 칭호
+            public TitleManager(Character character)
             {
                 this.character = character;
                 //이름 , 설명 , 해금 조건 , 나중에 바꿔야함 임의로 설정 해놈 
-                titles.Add(new Title("신입", "던전을 한 번 클리어한 모험가", c => c.Gold >= 100000));
-                titles.Add(new Title("백수", "퇴사 1번 당한 사람", c => c.Gold >= 100000));
+                titles.Add(new Title("이제 한 걸음", "lv2", c => c.Level >= 2)); // 레벨 1
+                titles.Add(new Title("고인물", "lv10", c => c.Level >= 10));
+                titles.Add(new Title("텟카이", "방어력 25 달성", c => c.Defense >= 25));
+                titles.Add(new Title("원펀맨", "공격력 40 달성", c => c.Attack >= 40));
+                titles.Add(new Title("백발백중", "명중률 100 달성", c => c.DEX >= 100));
+                titles.Add(new Title("무한", "마나 200 달성", c => c.MP >= 200));
                 titles.Add(new Title("만수르", "1만 골드 보유", c => c.Gold >= 10000));
-                titles.Add(new Title("폭싹 망했수다", "퇴사 10번 당한 사람", c => c.Gold >= 100000));
-                titles.Add(new Title("능률이 올라갑니다", "모든 무기를 장착한 자", c => c.Gold >= 100000));
-                titles.Add(new Title("백발백중", "DEX100달성", c => c.DEX >= 100));
+                titles.Add(new Title("폭싹 망했수다", "???", c => c.Gold <= 0));          
             }
 
             public void Tmenu(Character character)
@@ -116,13 +121,24 @@ namespace TextRPG.TitleManagement
                     string tlock = t.IsUnlocked ? "" : " [잠김]";
 
                     // 최종 출력: 번호. 이름 - 설명 + 상태
-                    Console.WriteLine($"{i + 1}. {t.Name} - {t.Description}{tlock}{equipped}");
+                    Console.WriteLine($"{i + 1}. {t.Name} - {t.Description}{tlock}{equipped}\n");
+                    Console.ResetColor(); // 색상 원상복구!          
                 }
+                Console.WriteLine("0.나가기\n");
 
-                Console.ResetColor(); // 색상 원상복구!
+                string input = Console.ReadLine();
+              
+                switch (input)
+                {
+                    case "0":
+                        return;
+                    default:
+                        Console.WriteLine("잘못된 입력입니다!");
+                        break;
+                }
             }
             // 장착 기능
-            private void EquipTitle()
+            public void EquipTitle()
              // 장착 기능 메서드: 해금된 칭호 중에서 하나 골라서 장착할 수 있게 해줌!
             {
                 List<Title> unlocked = titles.FindAll(t => t.IsUnlocked);
@@ -139,7 +155,7 @@ namespace TextRPG.TitleManagement
                 {   // 해금된 칭호들을 쭉 보여줌 (번호랑 이름, 설명까지!)
                     var t = unlocked[i];// i번째 해금된 칭호 꺼냄
                     string equipped = t.IsEquipped ? "(장착됨)" : ""; // 이미 장착 중인 건 표시해줌
-                    Console.WriteLine($"{i + 1}. {t.Name} - {t.Description} {equipped}");
+                    Console.WriteLine($"{i + 1}. {t.Name} {equipped}");
                 }
 
                 Console.Write("번호 입력: ");
@@ -149,8 +165,12 @@ namespace TextRPG.TitleManagement
                 { // 입력한 게 숫자고, 범위 안에 있으면 장착 진행
 
                     foreach (var t in unlocked) t.IsEquipped = false;
+
                     // 모든 칭호 장착 해제하고
                     unlocked[choice - 1].IsEquipped = true;
+                    EquippedTitle = unlocked[choice - 1];
+                    character.EquippedTitle = unlocked[choice - 1];// 캐릭터 cs에 적용
+
                     // 선택한 칭호만 장착 
                     Console.WriteLine($"'{unlocked[choice - 1].Name}' 칭호를 장착했습니다!");
                 }
