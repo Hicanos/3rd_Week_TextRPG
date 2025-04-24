@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.Design;
-using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
-using TextRPG.WeaponManagemant;
+using TextRPG.WeaponManagement;
 
-namespace TextRPG.ShopManagemant
+namespace TextRPG.ShopManagement
 {
     public class Shop
     {
@@ -11,8 +10,7 @@ namespace TextRPG.ShopManagemant
         { // 아이템 목록 페이지로 나눠 보여주기
             int totalPages = (int)Math.Ceiling((double)weapons.Count / itemsPerPage); // 페이지 수 계산 -> Ceiling으로 반올림
                                                                                       // 무기 수에서 한 페이지에 보여줄 무기수를 나눈 다음, 반올림
-            page = Math.Max(1, Math.Min(page, totalPages)); // 현 페이지 -> 1 이상 전체 페이지 수 이하로 코딩
-                                                            // Max(1, )이므로 1 이하로 내려갈 수 없으며, Min(page, totalPages)이므로 전체 페이지 수 초과 불가능
+            page = Math.Max(1, Math.Min(page, totalPages));
 
             Console.Clear();
             Console.WriteLine("-----------------------------");
@@ -27,47 +25,95 @@ namespace TextRPG.ShopManagemant
             for (int i = startIndex; i < endIndex; i++) // 무기 출력 for문
             {
                 Weapons weapon = weapons[i];
-                string alreadyBuy = weapon.IsSelled ? "구매완료" : weapon.Price.ToString();
+                string alreadyBuy; // 가격 부분에 쓸 텍스트 지정
+                if (mode == "sell")
+                {
+                    if (weapon.Price > 0) // 드랍된 아이템이 아닐 시
+                    {
+                        alreadyBuy = $"판매가 : {(int)weapon.Price * 0.5} G";
+                    }
+                    else // 드랍된 아이템일시
+                    {
+                        alreadyBuy = $"판매가 : {weapon.SellingPrice} G";
+                    }
+                }
+                else // 모드가 구매, 보기라면
+                {
+                    if (weapon.IsSelled)
+                    {
+                        alreadyBuy = "구매완료";
+                    }
+                    else
+                    {
+                        alreadyBuy = $"{weapon.Price} G";
+                    }
+                }
                 string classNameOnly = weapon.ClassName == "전체" ? "전체" : $"{weapon.ClassName} 전용";
-                string optionText = string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}"));
+                string optionText = weapon.Options != null ? string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}")) : "없음";
 
                 Console.WriteLine(new string('-', 80));
-                Console.WriteLine($"{i + 1}. {weapon.Name} ({classNameOnly}) - {alreadyBuy} G");
+                Console.WriteLine($"{i + 1}. {weapon.Name} ({classNameOnly}) - {alreadyBuy}");
                 Console.WriteLine($"   옵션: {optionText}");
                 Console.WriteLine($"   설명: {weapon.Explain}");
             }
 
-            string selectText = $"0. 나가기 | {(mode == "view" ?  "1. 물건 구매 | 2. 물건 판매 |" : mode == "buy" ? $"{startIndex + 1} ~ {endIndex}. 아이템 구매 |" : mode == "sell" ? $"{startIndex + 1} ~ {endIndex}. 아이템 판매 |" : "")} p. 이전 페이지 | n. 다음 페이지";
+            string selectText = $"0. 나가기 | {(mode == "view" ? "1. 물건 구매 | 2. 물건 판매 |" : mode == "buy" ? $"{startIndex + 1} ~ {endIndex}. 아이템 구매 |" : mode == "sell" ? $"{startIndex + 1} ~ {endIndex}. 아이템 판매 |" : "")} p. 이전 페이지 | n. 다음 페이지";
             Console.WriteLine(new string('-', 80));
             Console.WriteLine(selectText);
             Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
         }
 
-        public static void ShowShop(Character character)
+        public static void ShowShop(Character character) // 상점 출력 메소드
         {
 
             int currentPage = 1;
             int itemsPerPage = 4; // 5부터는 상단부가 Clear 안됨
 
+            List<Weapons> totalShopOptions = Weapons.Inventory;
+            totalShopOptions.AddRange(Weapons.PotionInventory.Where(x => x.Price > 0));
+
             while (true)
             {
-                int totalPages = (int)Math.Ceiling((double)Weapons.Inventory.Count / itemsPerPage);
-                currentPage = Math.Max(1, Math.Min(currentPage, totalPages));
-
-                PaginateAndDisplayItems(Weapons.Inventory, currentPage, itemsPerPage, character, "view");
+                PageCheck(currentPage, totalShopOptions.Count, itemsPerPage);
+                PaginateAndDisplayItems(totalShopOptions, currentPage, itemsPerPage, character, "view");
 
                 string input = Console.ReadLine();
                 if (input == "0") return;
-                else if (input == "1") 
+                else if (input == "1")
                 {
-                    BuyItems(character);
-                    return;
+                    Console.Clear();
+                    Console.WriteLine("어떤 아이템을 구매하시겠습니까?");
+                    Console.WriteLine("1. 장비");
+                    Console.WriteLine("2. 소모품");
+                    Console.Write(">> ");
+                    int choice = InputHelper.MatchOrNot(1, 2);
+                    List<Weapons> availableWeapons = Weapons.Inventory.Where(w => (w.ClassName == character.ClassName || w.ClassName == "전체")).ToList(); // 구매 가능한 무기 리스트
+                    List<Weapons> potions = Weapons.PotionInventory.Where(w => w.WeaponType == "포션" && w.Price > 0).ToList(); // 구매 가능한 포션 리스트
+
+                    if (choice == 1) BuyItems(character, availableWeapons);  // 장비 구매
+                    else if (choice == 2) BuyItems(character, potions);  // 소모품 구매
                 }
-                else if (input == "2") 
+                else if (input == "2")
                 {
-                    SellingItems(character);
-                    return;
+                    Console.Clear();
+                    Console.WriteLine("어떤 아이템을 판매하시겠습니까?");
+                    Console.WriteLine("1. 장비");
+                    Console.WriteLine("2. 소모품");
+                    Console.WriteLine("3. 전리품");
+                    Console.Write(">> ");
+                    int choice = InputHelper.MatchOrNot(1, 3);
+
+                    List<Weapons> buyweapon = Weapons.Inventory.Where(w => w.IsSelled).ToList(); // 판매가능한 장비 리스트
+                    buyweapon.AddRange(Weapons.NotbuyAbleInventory.Where(w => w.IsSelled)); // 드랍하여 얻은 장비도 포함
+
+                    List<Weapons> potions = Weapons.PotionInventory.Where(w => w.IsSelled).ToList(); // 판매가능한 포션 리스트
+
+                    List<Weapons> rewards = Weapons.RewardInventory.Where(w => w.IsSelled).ToList(); // 판매가능한 전리품 리스트
+
+                    if (choice == 1) SellItems(character, buyweapon);
+                    else if (choice == 2) SellItems(character, potions);
+                    else if (choice == 3) SellItems(character, rewards);
                 }
                 else if (input == "p") currentPage--;
                 else if (input == "n") currentPage++;
@@ -76,111 +122,69 @@ namespace TextRPG.ShopManagemant
                     Console.WriteLine("잘못된 입력입니다.");
                     Thread.Sleep(1000);
                 }
-                    Console.Clear();
+                Console.Clear();
             }
         }
 
+        public static int PageCheck(int currentPage, int totalItems, int itemsPerPage) // 현재페이지가 유효한지 검사하는 메소드 (PaginateAndDisplayItems에서도 쓰는 로직)
+        {                                                                              // PaginateAndDisplayItems에서는 totalPages를 계산에 사용해서 충돌이 날까봐 쓰지않음
+            int totalPages = (int)Math.Ceiling((double)totalItems / itemsPerPage);
+            return Math.Max(1, Math.Min(currentPage, totalPages));
+        }
 
-        public static void BuyItems(Character character)
+        public static (int start, int end) GetPageRange(int currentPage, int itemsPerPage, int itemCount) // 한 페이지 안에서 시작 아이템번호와 끝 아이템번호를 구하는 메소드
         {
-            //foreach문 대신 람다
-            List<Weapons> availableWeapons = Weapons.Inventory
-                .Where(w => (w.ClassName == character.ClassName || w.ClassName == "전체"))
-                .ToList();
+            int startIndex = (currentPage - 1) * itemsPerPage; // 1페이지라면 0부터, 2페이지라면 4부터
+            int endIndex = Math.Min(startIndex + itemsPerPage, itemCount); // 끝나는 인덱스는 아이템 전체 수 이하여야함
+            return (startIndex, endIndex);
+        }
 
+        private static void BuyOrSellItems(Character character, List<Weapons> items, string mode)
+        {
             int currentPage = 1;
             int itemsPerPage = 4;
 
             while (true)
             {
-                int totalPages = (int)Math.Ceiling((double)availableWeapons.Count / itemsPerPage);
-                currentPage = Math.Max(1, Math.Min(currentPage, totalPages));
-
-                
-                PaginateAndDisplayItems(availableWeapons, currentPage, itemsPerPage, character, "buy");
+                currentPage = PageCheck(currentPage, items.Count, itemsPerPage);
+                PaginateAndDisplayItems(items, currentPage, itemsPerPage, character, mode);
 
                 string input = Console.ReadLine();
-
-                if (input == "0") { ShowShop(character); return; }
-                   
+                if (input == "0") {  return; }
                 else if (input.ToLower() == "p") currentPage--;
                 else if (input.ToLower() == "n") currentPage++;
                 else if (int.TryParse(input, out int index))
                 {
-                    int startIndex = (currentPage - 1) * itemsPerPage;
-                    int endIndex = Math.Min(startIndex + itemsPerPage, availableWeapons.Count);
-
-                    if (index >= startIndex + 1 && index <= endIndex)
+                    (int startIndex, int endIndex) = GetPageRange(currentPage, itemsPerPage, items.Count);
+                    index -= 1; // 유저가 보는 번호는 1부터 시작 → 내부 인덱스는 0부터 시작
+                    if (index >= startIndex && index < endIndex)
                     {
-                        // 구매 처리
-                        Weapons selected = availableWeapons[index - 1];
-                        if (!selected.IsSelled && character.Gold >= selected.Price) // 구매하지 않은 물건이며, 충분한 돈을 가지고있다면
+                        Weapons selected = items[index];
+
+                        if (mode == "buy")
                         {
-                            Console.WriteLine($"{selected.Name}의 구매를 완료했습니다.");
-                            selected.IsSelled = true;
-                            character.Gold -= selected.Price;
-                            Thread.Sleep(1000);
+                            if (!selected.IsSelled && character.Gold >= selected.Price)
+                            {
+                                Console.WriteLine($"{selected.Name}의 구매를 완료했습니다.");
+                                selected.IsSelled = true;
+                                character.Gold -= selected.Price;
+                            }
+                            else
+                            {
+                                Console.WriteLine(selected.IsSelled ? "이미 구매한 아이템입니다." : "저런, 돈이 부족하네.");
+                            }
                         }
-                        else if (selected.IsSelled) // 이미 샀다면
+
+                        else if (mode == "sell")
                         {
-                            Console.WriteLine("이미 구매한 아이템입니다.");
-                            Thread.Sleep(1000);
+                            selected.IsSelled = false;
+                            selected.IsEquip = false;
+                            int sellPrice = selected.Price > 0 ? (int)(selected.Price * 0.5) : selected.SellingPrice;
+                            character.Gold += sellPrice;
+                            Console.WriteLine($"{selected.Name}의 판매를 완료했습니다.");
                         }
-                        else // 돈이 없다면
-                        {
-                            Console.WriteLine("저런, 돈이 부족하네.");
-                            Thread.Sleep(1000);
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine("현재 페이지에 있는 아이템 번호만 입력해주세요.");
-                        Thread.Sleep(1000);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Thread.Sleep(1000);  
-                }
-            }
-        }
-
-        public static void SellingItems(Character character)
-        {
-            List<Weapons> buyweapon = Weapons.Inventory.Where(w => w.IsSelled).ToList();
-
-            int currentPage = 1;
-            int itemsPerPage = 4;
-
-            while (true)
-            {
-                int totalPages = (int)Math.Ceiling((double)buyweapon.Count / itemsPerPage);
-                currentPage = Math.Max(1, Math.Min(currentPage, totalPages));
-
-                PaginateAndDisplayItems(buyweapon, currentPage, itemsPerPage, character, "sell");
-
-                string input = Console.ReadLine();
-
-                if (input == "0") { ShowShop(character); return; }
-                else if (input.ToLower() == "p") currentPage--;
-                else if (input.ToLower() == "n") currentPage++;
-                else if (int.TryParse(input, out int index))
-                {
-                    int startIndex = (currentPage - 1) * itemsPerPage;
-                    int endIndex = Math.Min(startIndex + itemsPerPage, buyweapon.Count);
-
-                    if (index >= startIndex + 1 && index <= endIndex)
-                    {
-                        Weapons selected = buyweapon[index - 1];
-                        selected.IsSelled = false;
-                        selected.IsEquip = false;
-                        character.Gold += (int)(selected.Price * 0.5);
-                        Console.WriteLine($"{selected.Name}의 판매를 완료했습니다.");
 
                         Thread.Sleep(1000);
-                        SellingItems(character);
-                        break;
                     }
                     else
                     {
@@ -196,6 +200,19 @@ namespace TextRPG.ShopManagemant
             }
         }
 
+        public static void BuyItems(Character character, List<Weapons> items)
+        {
+            BuyOrSellItems(character, items, "buy");
+        }
+
+        public static void SellItems(Character character, List<Weapons> items)
+        {
+            BuyOrSellItems(character, items, "sell");
+        }
     }
 }
+
+
+
+
 

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextRPG.CharacterManagemant;
+﻿using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
 
-namespace TextRPG.RestManagemant
+namespace TextRPG.RestManagement
 {
     public class Rest
     {

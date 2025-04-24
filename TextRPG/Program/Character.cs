@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using TextRPG.MonsterManagement;
-using TextRPG.TitleManagement;
+﻿using TextRPG.MonsterManagement;
 
-namespace TextRPG.CharacterManagemant
+namespace TextRPG.CharacterManagement
 {
     enum Departments
     {
-        인사팀=1,
+        인사팀 = 1,
         홍보팀,
         총무팀,
         영업팀,
@@ -30,7 +21,7 @@ namespace TextRPG.CharacterManagemant
         실장,
         이사,
         상무,
-        전무,        
+        전무,
         사장,
         부회장,
     }
@@ -57,7 +48,7 @@ namespace TextRPG.CharacterManagemant
 
         public string Rank { get; set; } // 직급
         public string ClassName { get; set; }
-        
+
         public int MaxHealth { get; set; }
         public int Health { get; set; }
         public int MaxMP { get; set; } // 최대 마나 포인트
@@ -77,7 +68,6 @@ namespace TextRPG.CharacterManagemant
         public int EXP { get; set; } // 경험치
         public double MaxEXP { get; set; } // 필요 경험치
 
-        public Title EquippedTitle { get; set; }
         //public List<string> Inventory { get; set; } = new List<string>(); // 몬스터 드랍템 획득
 
         //public void GainRewards(int exp, int gold, string dropItem)
@@ -93,7 +83,7 @@ namespace TextRPG.CharacterManagemant
         //}
 
         //역직렬용 생성자
-        public Character(){  }
+        public Character() { }
 
         //캐릭터 생성자
         public Character(string name, string className, int level, string rank, int maxhealth, int health, int maxMp, int mp, double attack, int defense, int gold)
@@ -127,7 +117,6 @@ namespace TextRPG.CharacterManagemant
             Console.WriteLine($"명중률 : {DEX}");
             Console.WriteLine($"회피율 : {EVA}");
             Console.WriteLine($"소지금: {Gold} 원");
-            Console.WriteLine($"칭호 : {EquippedTitle?.Name ?? "없음"}");
             Console.WriteLine("-----------------------------");
 
             Console.WriteLine("\n0. 나가기\n");
@@ -208,7 +197,7 @@ namespace TextRPG.CharacterManagemant
         //캐릭터 레벨업 메서드
         public void LevelUP()
         {
-            if(EXP >= MaxEXP)
+            if (EXP >= MaxEXP)
             {
                 while (EXP >= MaxEXP)
                 {
@@ -239,7 +228,7 @@ namespace TextRPG.CharacterManagemant
             //공격력이 11일때 나머지가 있으므로 오차범위 +1됨.
             int DamageMargin;
             //나누기 후 소수점(나머지)가 있을 경우 올림처리
-            if ((int)character.Attack% 10 != 0)
+            if ((int)character.Attack % 10 != 0)
             {
                 DamageMargin = (int)character.Attack / 10 + 1;
             }
@@ -261,7 +250,7 @@ namespace TextRPG.CharacterManagemant
             //monster Attack을 이후 EVA 데이터가 만들어지면 교체할 것.           
             if (Accuracy <= character.DEX - monster.Attack)
             {
-                if(critical <= character.CRIT)
+                if (critical <= character.CRIT)
                 {
                     //크리티컬 공격
                     //크리티컬 공격력 = 최종대미지*치명타 대미지 배수
