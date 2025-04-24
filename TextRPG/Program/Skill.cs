@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TextRPG.CharacterManagemant;
+using TextRPG.CharacterManagement;
 using TextRPG.MonsterManagement;
 using TextRPG.SkillManagement;
 
