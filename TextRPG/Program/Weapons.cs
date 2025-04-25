@@ -54,7 +54,7 @@ namespace TextRPG.WeaponManagement
             }
             else
             {
-                Inventory.Add(this); ;
+                NotbuyAbleInventory.Add(this);
             }
         }
 
@@ -78,7 +78,7 @@ namespace TextRPG.WeaponManagement
             }
             else
             {
-                NotbuyAbleInventory.Add(this);
+                Inventory.Add(this);
             }
         }
 
@@ -101,7 +101,7 @@ namespace TextRPG.WeaponManagement
             return new Weapons
             {
                 Name = name,
-                IsSelled = false,
+                IsSelled = true,
                 IsEquip = false,
                 DropObject = "몬스터",
                 DropChance = 30,
@@ -112,9 +112,12 @@ namespace TextRPG.WeaponManagement
                 WeaponType = "기타"
             };
         }
+        public static void PaginateAndDisplayInventory(Character character, Weapons item)
+        {
+            character.NotbuyAbleInventory.Add(item);
+        }
 
 
-        
         public static void PaginateAndDisplayInventory(List<Weapons> weapons, int page, int itemsPerPage, Character character, string mode)
         { // 아이템 목록 페이지로 나눠 보여주기
             int totalPages = (int)Math.Ceiling((double)weapons.Count / itemsPerPage); // 페이지 수 계산 -> Ceiling으로 반올림
@@ -155,7 +158,7 @@ namespace TextRPG.WeaponManagement
                 }
 
                 string classNameOnly = weapon.ClassName == null ? "" : weapon.ClassName == "전체" ? " ( 전체 )" : $" ({weapon.ClassName} 전용)";
-                string optionText = weapon.Options != null && weapon.Options.Count > 0 ? 
+                string optionText = weapon.Options != null && weapon.Options.Count > 0 ?
                 string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}")) : "없음";
 
                 Console.WriteLine(new string('-', 80));
@@ -429,20 +432,6 @@ namespace TextRPG.WeaponManagement
                 }
             }
         }
-
-        internal static void PaginateAndDisplayInventory(Character character, Weapons item)
-        {
-            // 캐릭터의 인벤토리에 아이템 추가
-            character.NotbuyAbleInventory.Add(item);
-
-            // 인벤토리 출력 (간단하게 목록만 출력할게!)
-            Console.WriteLine("\n[ 인벤토리 목록 ]");
-            int index = 1;
-            foreach (var weapon in character.NotbuyAbleInventory)
-            {
-                Console.WriteLine($"{index}. {weapon.Name} (공격력: {weapon.AttackPower})");
-                index++;
-            }
-        }
     }
-}
+  }
+
