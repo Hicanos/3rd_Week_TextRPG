@@ -21,7 +21,7 @@ namespace TextRPG.ShopManagement
             int startIndex = (page - 1) * itemsPerPage; // 페이지당 보여줄 첫 아이템의 인덱스, 처음엔 0으로 시작해야하므로 page - 1
             int endIndex = Math.Min(startIndex + itemsPerPage, weapons.Count); // 페이지당 보여줄 마지막 아이템 인덱스, 첫 인덱스 + 페이지당 보여줄 아이템 갯수로 계산
                                                                                // 무기 개수를 초과하여 계산되지 않도록 Min( , weapons.Count)했음
-
+            
             for (int i = startIndex; i < endIndex; i++) // 무기 출력 for문
             {
                 Weapons weapon = weapons[i];
@@ -48,11 +48,11 @@ namespace TextRPG.ShopManagement
                         alreadyBuy = $"{weapon.Price} G";
                     }
                 }
-                string classNameOnly = weapon.ClassName == null ? "" : weapon.ClassName == "전체" ? " ( 전체 )" : $" ({weapon.ClassName}) 전용";
+                string classNameOnly = weapon.ClassName == null ? "" : weapon.ClassName == "전체" ? " ( 전체 )" : $" ({weapon.ClassName} 전용)";
                 string optionText = weapon.Options == null ? "없음" : string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}"));
 
                 Console.WriteLine(new string('-', 80));
-                Console.WriteLine($"{i + 1}. {weapon.Name}{classNameOnly} - {alreadyBuy}");
+                Console.WriteLine($"{i + 1}. {weapon.WeaponType} | {weapon.Name}{classNameOnly} - {alreadyBuy}");
                 Console.WriteLine($"   옵션: {optionText}");
                 Console.WriteLine($"   설명: {weapon.Explain}");
             }
@@ -146,9 +146,11 @@ namespace TextRPG.ShopManagement
             int itemsPerPage = 4;
 
             while (true)
-            {
-                currentPage = PageCheck(currentPage, items.Count, itemsPerPage);
-                PaginateAndDisplayItems(items, currentPage, itemsPerPage, character, mode);
+            { 
+                List<Weapons> filteredItems = mode == "sell" ? items.Where(i => i.IsSelled).ToList() : items; // 모드가 판매일땐 팔린아이템이 다시 노출되면 안됨
+
+                currentPage = PageCheck(currentPage, filteredItems.Count, itemsPerPage);
+                PaginateAndDisplayItems(filteredItems, currentPage, itemsPerPage, character, mode);
 
                 string input = Console.ReadLine();
                 if (input == "0") {  return; }
@@ -156,11 +158,11 @@ namespace TextRPG.ShopManagement
                 else if (input.ToLower() == "n") currentPage++;
                 else if (int.TryParse(input, out int index))
                 {
-                    (int startIndex, int endIndex) = GetPageRange(currentPage, itemsPerPage, items.Count);
+                    (int startIndex, int endIndex) = GetPageRange(currentPage, itemsPerPage, filteredItems.Count);
                     index -= 1; // 유저가 보는 번호는 1부터 시작 → 내부 인덱스는 0부터 시작
                     if (index >= startIndex && index < endIndex)
                     {
-                        Weapons selected = items[index];
+                        Weapons selected = filteredItems[index];
 
                         if (mode == "buy")
                         {

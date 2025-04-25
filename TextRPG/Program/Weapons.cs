@@ -136,7 +136,7 @@ namespace TextRPG.WeaponManagement
                 string optionText = weapon.Options == null ? "없음" : string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}"));
 
                 Console.WriteLine(new string('-', 80));
-                Console.WriteLine($"{i + 1}. {equipmessage} {classNameOnly}");
+                Console.WriteLine($"{i + 1}. {equipmessage} {classNameOnly} - {weapon.WeaponType}");
                 Console.WriteLine($"   옵션: {optionText}");
                 Console.WriteLine($"   설명: {weapon.Explain}");
             }
@@ -155,16 +155,17 @@ namespace TextRPG.WeaponManagement
         //인벤토리 보여주기 로직
         public static void ShowInventory(Character character)
         {
-            List<Weapons> isSelledItems = Inventory.Where(w => w.IsSelled == true).ToList();
+            List<Weapons> isSelledItems = new List<Weapons>();
+            isSelledItems.AddRange(Inventory.Where(w => w.IsSelled == true));
             isSelledItems.AddRange(NotbuyAbleInventory.Where(w => w.IsSelled == true));
             isSelledItems.AddRange(PotionInventory.Where(w => w.IsSelled == true));
+            isSelledItems.AddRange(RewardInventory.Where(w => w.IsSelled == true));
 
             int currentPage = 1;
             int itemsPerPage = 4;
 
             while (true)
             {
-
                 currentPage = Shop.PageCheck(currentPage, isSelledItems.Count, itemsPerPage);
                 PaginateAndDisplayInventory(isSelledItems, currentPage, itemsPerPage, character, "view");
 
@@ -174,10 +175,8 @@ namespace TextRPG.WeaponManagement
                 else if (input.ToLower() == "n") currentPage++;
                 else if (input == "1")
                 {
-                    Console.Clear();
-                    List<Weapons> canEquipItems = isSelledItems.Where(w => (w.ClassName == character.ClassName || w.ClassName == "전체") && w.WeaponType != "포션").ToList(); // 장착 가능 무기 리스트
-
-                    string choice = Console.ReadLine();
+                    ManageMentWeapons(character);
+                    break;
                 }
                 else if (input == "2")
                 { 
@@ -218,7 +217,13 @@ namespace TextRPG.WeaponManagement
                     {
                         Weapons selected = items[index];
                         EquipItem(character, selected, items);
+                        Thread.Sleep(1000);
                     }
+                }
+                else 
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                    Thread.Sleep(1000);
                 }
             }
         }
@@ -309,7 +314,7 @@ namespace TextRPG.WeaponManagement
                     }
                 }
 
-                    Console.WriteLine("소모품을 사용했습니다.");
+                Console.WriteLine("소모품을 사용했습니다.");
                 List<string> recovered = new List<string>();
 
                 foreach (var m in selected.Options)
@@ -352,74 +357,54 @@ namespace TextRPG.WeaponManagement
 
         public static void ManageMentWeapons(Character character)
         {
-            Console.Clear();
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine("\n인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n");
-            Console.WriteLine("[아이템 목록]");
-            int numberOfWeapons = 1;
-            List<Weapons> buyweapon = new List<Weapons>();
+            List<Weapons> myweapon = new List<Weapons>();
+            myweapon.AddRange(Weapons.Inventory.Where(w => w.IsSelled && (w.ClassName == "전체" || w.ClassName == character.ClassName)));
+            myweapon.AddRange(Weapons.NotbuyAbleInventory.Where(w => w.IsSelled && (w.ClassName == "전체" || w.ClassName == character.ClassName)));
 
-            //착용되어 있을 시 [E]표시 넣기
-            foreach (Weapons weapon in Inventory)
+            int currentPage = 1;
+            int itemsPerPage = 4;
+
+            while (true)
             {
-                String equipmessage;
-                if (weapon.IsEquip == false)
+                currentPage = Shop.PageCheck(currentPage, myweapon.Count, itemsPerPage);
+                PaginateAndDisplayInventory(myweapon, currentPage, itemsPerPage, character, "equip");
+
+                string input = Console.ReadLine();
+                if (input == "0") return;
+                else if (input.ToLower() == "p") currentPage--;
+                else if (input.ToLower() == "n") currentPage++;
+                else if (int.TryParse(input, out int index))
                 {
-                    equipmessage = weapon.Name;
+                    (int startIndex, int endIndex) = Shop.GetPageRange(currentPage, itemsPerPage, myweapon.Count);
+                    index -= 1;
+                    if (index >= startIndex && index < endIndex)
+                    {
+                        Weapons selected = myweapon[index];
+                        if (selected.IsEquip == true)
+                        {
+                            selected.IsEquip = false; // 해제
+                            ApplyOptions(selected.Options, false, character); // 능력치 감소
+                            Console.WriteLine($"{selected.Name}의 장착이 해제되었습니다.");
+                            Thread.Sleep(1000);
+                        }
+                        else
+                        {
+                            EquipItem(character, selected, myweapon);
+                            Thread.Sleep(1000);
+                        }
+                    }
+                    else 
+                    {
+                        Console.WriteLine("현재 페이지에 있는 아이템 번호만 입력해주세요.");
+                        Thread.Sleep(1000);
+                    }
                 }
                 else
                 {
-                    equipmessage = $"[E]{weapon.Name}";
+                    Console.WriteLine("잘못된 입력입니다.");
+                    Thread.Sleep(1000);
                 }
-
-                if (weapon.IsSelled) // 구매 했다면.
-                {
-                    string optionText = string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}"));
-                    Console.WriteLine($"- {numberOfWeapons} {equipmessage}  | {optionText} | {weapon.Explain}");
-                    buyweapon.Add(weapon); // 가지고 있는 무기들 전용 리스트에 추가한다. 이러면 순차적으로 추가된다
-                    numberOfWeapons++;
-                }
-            }
-
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine("\n0. 나가기\n");
-            Console.Write("원하시는 행동을 입력해주세요.\n>>");
-            int count = buyweapon.Count;
-            int Choice = InputHelper.MatchOrNot(0, count); // 입력값 검사의 범위는 0~리스트 인수의 갯수까지
-
-            if (Choice == 0)
-            {
-                Console.WriteLine();
-                return; // return 실행 시 ManageMentWeapon()을 탈출함 -> 바로 아래에 있던 break; 작동 -> 메인메뉴를 다시 비춤
-            }
-
-            else
-            {
-                Weapons selected = buyweapon[Choice - 1]; // Choice는 1부터 시작이므로 -1을 해야 리스트값 참조가 정상적으로 가능
-                if (selected.IsEquip == true) //장착되어 있다면
-                {
-                    selected.IsEquip = false; // 해제
-                    ApplyOptions(selected.Options, false, character); // 능력치 변경
-
-                    Console.WriteLine($"{selected.Name}의 장착을 해제 했습니다.");
-                }
-                else // 선택한 장비가 장착되지 않았다면
-                {
-                    if (character.ClassName == selected.ClassName || selected.ClassName == "전체")
-                    {
-                        EquipItem(character, selected, buyweapon);
-                    }
-                    else
-                    {
-                        Console.WriteLine("선택된 아이템은 다른 부서만 사용 가능합니다..");
-                        ManageMentWeapons(character);
-                        return;
-                    }
-                }
-                Thread.Sleep(1000);
-                ManageMentWeapons(character); // 작업 후 다시 장착 관리 창으로 돌아가기 위해 메소드 재귀호출
             }
         }
     }
-
 }
