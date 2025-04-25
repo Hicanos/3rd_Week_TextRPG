@@ -33,6 +33,8 @@ namespace TextRPG.WeaponManagement
             return Name;
         }
 
+        public Weapons() { }
+
         // 상점에서 사는 게 가능한 아이템 생성자
         public Weapons(bool isSelled, bool isEquip, string name, Dictionary<string, int> options, string explain, string className, string weaponType, int price)
         {
@@ -94,6 +96,25 @@ namespace TextRPG.WeaponManagement
             RewardInventory.Add(this);
         }
 
+        public static Weapons CreateDrop(string name)
+        {
+            return new Weapons
+            {
+                Name = name,
+                IsSelled = false,
+                IsEquip = false,
+                DropObject = "몬스터",
+                DropChance = 30,
+                SellingPrice = 0,
+                Options = new Dictionary<string, int>(),
+                Explain = "몬스터가 떨어뜨린 장비입니다.",
+                ClassName = "전체",
+                WeaponType = "기타"
+            };
+        }
+
+
+        
         public static void PaginateAndDisplayInventory(List<Weapons> weapons, int page, int itemsPerPage, Character character, string mode)
         { // 아이템 목록 페이지로 나눠 보여주기
             int totalPages = (int)Math.Ceiling((double)weapons.Count / itemsPerPage); // 페이지 수 계산 -> Ceiling으로 반올림
@@ -134,7 +155,8 @@ namespace TextRPG.WeaponManagement
                 }
 
                 string classNameOnly = weapon.ClassName == null ? "" : weapon.ClassName == "전체" ? " ( 전체 )" : $" ({weapon.ClassName} 전용)";
-                string optionText = weapon.Options == null ? "없음" : string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}"));
+                string optionText = weapon.Options != null && weapon.Options.Count > 0 ? 
+                string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}")) : "없음";
 
                 Console.WriteLine(new string('-', 80));
                 Console.WriteLine($"{i + 1}. {equipmessage} {classNameOnly} - {weapon.WeaponType}");

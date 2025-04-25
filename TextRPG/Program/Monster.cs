@@ -46,7 +46,7 @@ namespace TextRPG.MonsterManagement
 
 
         public Monster(string name, int level, int attack, int defense, int health, int dex, int eva, int exp = 0,
-            int minGold = 0, int maxGold = 0, List<string> dropItems = null)
+            int minGold = 0, int maxGold = 0, List<Weapons> dropItems = null)
         {
             Name = name;
             Level = level;
@@ -58,24 +58,10 @@ namespace TextRPG.MonsterManagement
             Exp = exp;
             MinGold = minGold;
             MaxGold = maxGold;
-            DropItems = new List<Weapons>();
+            DropItems = dropItems ?? new List<Weapons>();
         }
 
-        public Monster(string name, int level, int attack, int defense, int health, int dEX, int eVA, int exp, int minGold, int maxGold, List<Weapons> dropItems)
-        {
-            Name = name;
-            Level = level;
-            Attack = attack;
-            Defense = defense;
-            Health = health;
-            DEX = dEX;
-            EVA = eVA;
-            Exp = exp;
-            MinGold = minGold;
-            MaxGold = maxGold;
-            DropItems = dropItems;
-        }
-
+      
         public static void InitMonsters()
         {
 
@@ -83,19 +69,19 @@ namespace TextRPG.MonsterManagement
             monsterTypes = new List<Monster>()
             {
                  // stage 1
-                 new Monster("빠대리", 1, 4, 3, 10, 60, 15, 1, 40, 80, new List<string> {"대리의 빠때리" }), // 몬스터 종류와 정보
-                 new Monster("신과장", 2, 3, 5, 14, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" }),
+                 new Monster("빠대리", 1, 4, 3, 10, 60, 15, 1, 40, 80, new List<Weapons> { Weapons.CreateDrop("대리의 빠때리") }), // 몬스터 종류와 정보
+                 new Monster("신과장", 2, 3, 5, 14, 65, 20, 2, 50, 100, new List<Weapons> { Weapons.CreateDrop("과장의 사원증") }),
                  // stage 2
-                 new Monster("임차장", 3, 8, 7, 26, 65, 15, 3, 120, 250, new List<string> { "차장의 가발" }),
-                 new Monster("김부장", 4, 11, 5, 24, 70, 25, 4, 150, 300, new List<string> { "부장의 넥타이" , "방석&등받이 쿠션" }),
+                 new Monster("임차장", 3, 8, 7, 26, 65, 15, 3, 120, 250, new List<Weapons> { Weapons.CreateDrop("차장의 가발") }),
+                 new Monster("김부장", 4, 11, 5, 24, 70, 25, 4, 150, 300, new List<Weapons> { Weapons.CreateDrop("부장의 넥타이")}),
                  // stage 3
-                 new Monster("오실장", 5, 15, 14, 32, 70, 20, 5, 250, 400, new List<string> { "직업 평가표" , "브랜드 구두" }),
-                 new Monster("카이사", 6, 17, 10, 38, 75, 30, 6, 300, 500, new List<string> { "유흥업소 명함" , "브랜드 정장 하의" }),
+                 new Monster("오실장", 5, 15, 14, 32, 70, 20, 5, 250, 400, new List<Weapons> { Weapons.CreateDrop("직업 평가표") }),
+                 new Monster("카이사", 6, 17, 10, 38, 75, 30, 6, 300, 500, new List<Weapons> { Weapons.CreateDrop("유흥업소 명함") }),
                  // stage 4
-                 new Monster("유상무", 7, 25, 18, 43, 75, 30, 7, 400, 700, new List<string> { "한정판 굿즈 명함" , "든든한 국밥" , "브랜드 정장 상의" }),
-                 new Monster("박사장", 8, 22, 20, 50, 80, 40, 8, 500, 800, new List<string> { "노또 용지" , "든든한 국밥" , "최신 스마트폰" }),
+                 new Monster("유상무", 7, 25, 18, 43, 75, 30, 7, 400, 700, new List<Weapons> { Weapons.CreateDrop("한정판 굿즈 명함") }),
+                 new Monster("박사장", 8, 22, 20, 50, 80, 40, 8, 500, 800, new List<Weapons> { Weapons.CreateDrop("노또 용지") }),
                  // stage 5 Boss
-                 new Monster("석회장", 10, 40, 28, 250, 90, 35, 10, 2000, 3000, new List<string> { "직급 명패" , "든든한 국밥" })
+                 new Monster("석회장", 10, 40, 28, 250, 90, 35, 10, 2000, 3000, new List<Weapons> { Weapons.CreateDrop("직급 명패") })
             };
         }
 
@@ -182,7 +168,7 @@ namespace TextRPG.MonsterManagement
             }
             else result = "오류";
 
-            
+
             Console.WriteLine("----");
             Console.WriteLine($"{result}");
             Console.WriteLine("----");
@@ -216,14 +202,8 @@ namespace TextRPG.MonsterManagement
                     // 게임 종료하거나 메인 메뉴로 복귀
                     Console.WriteLine("\n1. 게임 종료\n2. 메인 메뉴로 돌아가기");
                     int input = InputHelper.MatchOrNot(1, 2);
-                    if (input == 1)
-                    {
-                        Environment.Exit(0);
-                    }
-                    else
-                    {
-                        Monster.CurrentStage = 1;
-                    }
+                    if (input == 1) Environment.Exit(0);
+                    else Monster.CurrentStage = 1;
                 }
                 foreach (var m in monsters.Where(m => m.Health <= 0))
                 {
@@ -237,35 +217,35 @@ namespace TextRPG.MonsterManagement
                             int dropChance = new Random().Next(1, 101);
                             if (dropChance <= 90)
                             {
-                                // 캐릭터 인벤토리 및 전리품 인벤토리에 추가
-                                character.NotbuyAbleInventory.Add(item);
-                                Monster.RewardInventory.Add(item);
+                                if (!character.NotbuyAbleInventory.Contains(item))
+                                {
+                                    character.NotbuyAbleInventory.Add(item);
+                                }
 
-                                dropItems.Add(item.Name); // 전리품 리스트에 추가
+                                item.IsSelled = true; // 인벤토리에 보여주기
+                                                      // 아이템 중복 방지 - 드랍 전에 체크
 
                                 Console.WriteLine($"-> {item.Name} 을(를) 전리품으로 획득했습니다! (확률: {dropChance}%)");
                             }
                         }
-
-                        Console.WriteLine("\n[캐릭터 정보]");
-                        Console.WriteLine($"Lv.{character.Level} {character.Name}");
-                        Console.WriteLine($"HP {character.Health}");
-
-                        Console.WriteLine("\n[획득 아이템]");
-                        Console.WriteLine($"{totalGold}원");
-                        Console.WriteLine($"Exp + {totalExp}");
-
-                        // 아이템 카운팅 정리
-                        // GroupBy를 활용해서 드랍 아이템을 합쳐서 출력
-                        var itemCounts = dropItems.GroupBy(i => i).ToDictionary(g => g.Key, g => g.Count()); // itemCounts는 Dictionary의 자료형
-
-                        foreach (var item in itemCounts)  // itemCounts 딕셔너리 안에 있는 각 Key-Value 쌍을 하나씩 가져와서 item에 넣음
-                        {
-                            Console.WriteLine($"{item.Key} - {item.Value}");
-                        }
                     }
                 }
+
+                Console.WriteLine("\n[캐릭터 정보]");
+                Console.WriteLine($"Lv.{character.Level} {character.Name}");
+                Console.WriteLine($"HP {character.Health}");
+
+                Console.WriteLine("\n[획득 아이템]");
+                Console.WriteLine($"{totalGold}원");
+                Console.WriteLine($"Exp + {totalExp}");
+
+                // 아이템 카운팅 정리
+                // GroupBy를 활용해서 드랍 아이템을 합쳐서 출력
+                var itemCounts = dropItems
+                    .GroupBy(i => i)
+                    .ToDictionary(g => g.Key, g => g.Count());
             }
+        
             else if (result == "패배")
             {
                 Console.WriteLine("당신은 해고당했습니다.");
