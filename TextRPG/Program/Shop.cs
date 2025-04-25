@@ -70,7 +70,8 @@ namespace TextRPG.ShopManagement
             int currentPage = 1;
             int itemsPerPage = 4; // 5부터는 상단부가 Clear 안됨
 
-            List<Weapons> totalShopOptions = Weapons.Inventory;
+            List<Weapons> totalShopOptions = new List<Weapons>();
+            totalShopOptions.AddRange(Weapons.Inventory.Where(x => x.WeaponType != "포션"));
             totalShopOptions.AddRange(Weapons.PotionInventory.Where(x => x.Price > 0));
 
             while (true)

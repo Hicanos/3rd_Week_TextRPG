@@ -27,6 +27,11 @@ namespace TextRPG.WeaponManagement
         public static List<Weapons> PotionInventory = new List<Weapons>(); // 포션만 모아놓는 리스트
         public static List<Weapons> RewardInventory = new List<Weapons>(); // 전리품만 모아놓는 리스트
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         // 상점에서 사는 게 가능한 아이템 생성자
         public Weapons(bool isSelled, bool isEquip, string name, Dictionary<string, int> options, string explain, string className, string weaponType, int price)
         {
@@ -39,13 +44,14 @@ namespace TextRPG.WeaponManagement
             WeaponType = weaponType;
             Price = price;
 
+
             if (weaponType == "포션" && !PotionInventory.Contains(this))
             {
                 PotionInventory.Add(this);
             }
             else
             {
-                Inventory.Add(this);
+                Inventory.Add(this);;
             }
         }
 
@@ -284,14 +290,26 @@ namespace TextRPG.WeaponManagement
             }
             if (selected.WeaponType == "포션")
             {
-                if (character.Health >= character.MaxHealth) 
+                if (selected.Options.ContainsKey("HP"))
                 {
-                    Console.WriteLine("체력이 이미 최대입니다.");
-                    Thread.Sleep(1000);
-                    return;
+                    if (character.Health >= character.MaxHealth)
+                    {
+                        Console.WriteLine("체력이 이미 최대입니다.");
+                        Thread.Sleep(1000);
+                        return;
+                    }
+                }
+                else if (selected.Options.ContainsKey("MP")) 
+                {
+                    if (character.MP >= character.MaxMP)
+                    {
+                        Console.WriteLine("마나가 이미 최대입니다.");
+                        Thread.Sleep(1000);
+                        return;
+                    }
                 }
 
-                Console.WriteLine("소모품을 사용했습니다.");
+                    Console.WriteLine("소모품을 사용했습니다.");
                 List<string> recovered = new List<string>();
 
                 foreach (var m in selected.Options)
@@ -303,13 +321,12 @@ namespace TextRPG.WeaponManagement
                     if (stat == "HP")
                     {
                         healed = Math.Min(value, character.MaxHealth - character.Health);
-                        character.Health += healed;
                     }
                     else if (stat == "MP")
                     {
                         healed = Math.Min(value, character.MaxMP - character.MP);
-                        character.MP += healed;
                     }
+
                     else
                     {
                         healed = value; // 그냥 표시만 할 수도 있음
@@ -318,7 +335,7 @@ namespace TextRPG.WeaponManagement
                     recovered.Add($"{stat} {(healed >= 0 ? "+" : "")}{healed}");
                 }
 
-                Console.WriteLine($"{string.Join(", ", recovered)} 회복했습니다.");
+                Console.WriteLine($"{string.Join(", ", recovered)} 효과를 받았습니다.");
                 ApplyOptions(selected.Options, true, character);
                 Thread.Sleep(1000);
                 selected.IsSelled = false;
