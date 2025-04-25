@@ -1,5 +1,6 @@
 ﻿using TextRPG.MonsterManagement;
 using TextRPG.TitleManagement;
+using TextRPG.WeaponManagement;
 
 namespace TextRPG.CharacterManagement
 {
@@ -70,6 +71,7 @@ namespace TextRPG.CharacterManagement
 
         public int EXP { get; set; } // 경험치
         public double MaxEXP { get; set; } // 필요 경험치
+        public List<Weapons> NotbuyAbleInventory { get; set; } = new List<Weapons>();
 
         //public List<string> Inventory { get; set; } = new List<string>(); // 몬스터 드랍템 획득
 
