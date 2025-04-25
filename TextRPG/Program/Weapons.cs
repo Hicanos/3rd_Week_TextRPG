@@ -20,12 +20,18 @@ namespace TextRPG.WeaponManagement
         public string DropObject { get; set; } // 획득처 
         public int DropChance { get; set; } // 드랍확률
         public int SellingPrice { get; set; } // 드랍아이템은 판매가격이 정해져있음
+        public object AttackPower { get; private set; }
 
         //장비들 리스트
         public static List<Weapons> Inventory = new List<Weapons>(); // 상점에서 사는 게 가능한 장비만 모아놓는 리스트
         public static List<Weapons> NotbuyAbleInventory = new List<Weapons>(); // 드랍으로만 얻어야하는 장비만 모아놓는 리스트
         public static List<Weapons> PotionInventory = new List<Weapons>(); // 포션만 모아놓는 리스트
         public static List<Weapons> RewardInventory = new List<Weapons>(); // 전리품만 모아놓는 리스트
+
+        public override string ToString()
+        {
+            return Name;
+        }
 
         // 상점에서 사는 게 가능한 아이템 생성자
         public Weapons(bool isSelled, bool isEquip, string name, Dictionary<string, int> options, string explain, string className, string weaponType, int price)
@@ -39,13 +45,14 @@ namespace TextRPG.WeaponManagement
             WeaponType = weaponType;
             Price = price;
 
+
             if (weaponType == "포션" && !PotionInventory.Contains(this))
             {
                 PotionInventory.Add(this);
             }
             else
             {
-                Inventory.Add(this);
+                Inventory.Add(this); ;
             }
         }
 
@@ -99,11 +106,11 @@ namespace TextRPG.WeaponManagement
             {
                 Console.WriteLine("\n인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n");
             }
-            else if (mode == "drink") 
+            else if (mode == "drink")
             {
                 Console.WriteLine("\n인벤토리\n소모품을 섭취할 수 있습니다.\n\n");
             }
-            else if (mode == "equip") 
+            else if (mode == "equip")
             {
                 Console.WriteLine("\n인벤토리 - 장착 관리\n보유중인 아이템을 장착할 수 있습니다.\n\n");
             }
@@ -130,7 +137,7 @@ namespace TextRPG.WeaponManagement
                 string optionText = weapon.Options == null ? "없음" : string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}"));
 
                 Console.WriteLine(new string('-', 80));
-                Console.WriteLine($"{i + 1}. {equipmessage} {classNameOnly}");
+                Console.WriteLine($"{i + 1}. {equipmessage} {classNameOnly} - {weapon.WeaponType}");
                 Console.WriteLine($"   옵션: {optionText}");
                 Console.WriteLine($"   설명: {weapon.Explain}");
             }
@@ -149,16 +156,17 @@ namespace TextRPG.WeaponManagement
         //인벤토리 보여주기 로직
         public static void ShowInventory(Character character)
         {
-            List<Weapons> isSelledItems = Inventory.Where(w => w.IsSelled == true).ToList();
+            List<Weapons> isSelledItems = new List<Weapons>();
+            isSelledItems.AddRange(Inventory.Where(w => w.IsSelled == true));
             isSelledItems.AddRange(NotbuyAbleInventory.Where(w => w.IsSelled == true));
             isSelledItems.AddRange(PotionInventory.Where(w => w.IsSelled == true));
+            isSelledItems.AddRange(RewardInventory.Where(w => w.IsSelled == true));
 
             int currentPage = 1;
             int itemsPerPage = 4;
 
             while (true)
             {
-
                 currentPage = Shop.PageCheck(currentPage, isSelledItems.Count, itemsPerPage);
                 PaginateAndDisplayInventory(isSelledItems, currentPage, itemsPerPage, character, "view");
 
@@ -168,13 +176,11 @@ namespace TextRPG.WeaponManagement
                 else if (input.ToLower() == "n") currentPage++;
                 else if (input == "1")
                 {
-                    Console.Clear();
-                    List<Weapons> canEquipItems = isSelledItems.Where(w => (w.ClassName == character.ClassName || w.ClassName == "전체") && w.WeaponType != "포션").ToList(); // 장착 가능 무기 리스트
-
-                    string choice = Console.ReadLine();
+                    ManageMentWeapons(character);
+                    break;
                 }
                 else if (input == "2")
-                { 
+                {
                     DrinkingPotion(character);
                     break;
                 }
@@ -207,12 +213,18 @@ namespace TextRPG.WeaponManagement
                 else if (int.TryParse(input, out int index))
                 {
                     (int startIndex, int endIndex) = Shop.GetPageRange(currentPage, itemsPerPage, items.Count);
-                    index -= 1; 
+                    index -= 1;
                     if (index >= startIndex && index < endIndex)
                     {
                         Weapons selected = items[index];
                         EquipItem(character, selected, items);
+                        Thread.Sleep(1000);
                     }
+                }
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                    Thread.Sleep(1000);
                 }
             }
         }
@@ -284,11 +296,23 @@ namespace TextRPG.WeaponManagement
             }
             if (selected.WeaponType == "포션")
             {
-                if (character.Health >= character.MaxHealth) 
+                if (selected.Options.ContainsKey("HP"))
                 {
-                    Console.WriteLine("체력이 이미 최대입니다.");
-                    Thread.Sleep(1000);
-                    return;
+                    if (character.Health >= character.MaxHealth)
+                    {
+                        Console.WriteLine("체력이 이미 최대입니다.");
+                        Thread.Sleep(1000);
+                        return;
+                    }
+                }
+                else if (selected.Options.ContainsKey("MP"))
+                {
+                    if (character.MP >= character.MaxMP)
+                    {
+                        Console.WriteLine("마나가 이미 최대입니다.");
+                        Thread.Sleep(1000);
+                        return;
+                    }
                 }
 
                 Console.WriteLine("소모품을 사용했습니다.");
@@ -303,13 +327,12 @@ namespace TextRPG.WeaponManagement
                     if (stat == "HP")
                     {
                         healed = Math.Min(value, character.MaxHealth - character.Health);
-                        character.Health += healed;
                     }
                     else if (stat == "MP")
                     {
                         healed = Math.Min(value, character.MaxMP - character.MP);
-                        character.MP += healed;
                     }
+
                     else
                     {
                         healed = value; // 그냥 표시만 할 수도 있음
@@ -318,7 +341,7 @@ namespace TextRPG.WeaponManagement
                     recovered.Add($"{stat} {(healed >= 0 ? "+" : "")}{healed}");
                 }
 
-                Console.WriteLine($"{string.Join(", ", recovered)} 회복했습니다.");
+                Console.WriteLine($"{string.Join(", ", recovered)} 효과를 받았습니다.");
                 ApplyOptions(selected.Options, true, character);
                 Thread.Sleep(1000);
                 selected.IsSelled = false;
@@ -335,74 +358,69 @@ namespace TextRPG.WeaponManagement
 
         public static void ManageMentWeapons(Character character)
         {
-            Console.Clear();
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine("\n인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n");
-            Console.WriteLine("[아이템 목록]");
-            int numberOfWeapons = 1;
-            List<Weapons> buyweapon = new List<Weapons>();
+            List<Weapons> myweapon = new List<Weapons>();
+            myweapon.AddRange(Weapons.Inventory.Where(w => w.IsSelled && (w.ClassName == "전체" || w.ClassName == character.ClassName)));
+            myweapon.AddRange(Weapons.NotbuyAbleInventory.Where(w => w.IsSelled && (w.ClassName == "전체" || w.ClassName == character.ClassName)));
 
-            //착용되어 있을 시 [E]표시 넣기
-            foreach (Weapons weapon in Inventory)
+            int currentPage = 1;
+            int itemsPerPage = 4;
+
+            while (true)
             {
-                String equipmessage;
-                if (weapon.IsEquip == false)
-                {
-                    equipmessage = weapon.Name;
-                }
-                else
-                {
-                    equipmessage = $"[E]{weapon.Name}";
-                }
+                currentPage = Shop.PageCheck(currentPage, myweapon.Count, itemsPerPage);
+                PaginateAndDisplayInventory(myweapon, currentPage, itemsPerPage, character, "equip");
 
-                if (weapon.IsSelled) // 구매 했다면.
+                string input = Console.ReadLine();
+                if (input == "0") return;
+                else if (input.ToLower() == "p") currentPage--;
+                else if (input.ToLower() == "n") currentPage++;
+                else if (int.TryParse(input, out int index))
                 {
-                    string optionText = string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}"));
-                    Console.WriteLine($"- {numberOfWeapons} {equipmessage}  | {optionText} | {weapon.Explain}");
-                    buyweapon.Add(weapon); // 가지고 있는 무기들 전용 리스트에 추가한다. 이러면 순차적으로 추가된다
-                    numberOfWeapons++;
-                }
-            }
-
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine("\n0. 나가기\n");
-            Console.Write("원하시는 행동을 입력해주세요.\n>>");
-            int count = buyweapon.Count;
-            int Choice = InputHelper.MatchOrNot(0, count); // 입력값 검사의 범위는 0~리스트 인수의 갯수까지
-
-            if (Choice == 0)
-            {
-                Console.WriteLine();
-                return; // return 실행 시 ManageMentWeapon()을 탈출함 -> 바로 아래에 있던 break; 작동 -> 메인메뉴를 다시 비춤
-            }
-
-            else
-            {
-                Weapons selected = buyweapon[Choice - 1]; // Choice는 1부터 시작이므로 -1을 해야 리스트값 참조가 정상적으로 가능
-                if (selected.IsEquip == true) //장착되어 있다면
-                {
-                    selected.IsEquip = false; // 해제
-                    ApplyOptions(selected.Options, false, character); // 능력치 변경
-
-                    Console.WriteLine($"{selected.Name}의 장착을 해제 했습니다.");
-                }
-                else // 선택한 장비가 장착되지 않았다면
-                {
-                    if (character.ClassName == selected.ClassName || selected.ClassName == "전체")
+                    (int startIndex, int endIndex) = Shop.GetPageRange(currentPage, itemsPerPage, myweapon.Count);
+                    index -= 1;
+                    if (index >= startIndex && index < endIndex)
                     {
-                        EquipItem(character, selected, buyweapon);
+                        Weapons selected = myweapon[index];
+                        if (selected.IsEquip == true)
+                        {
+                            selected.IsEquip = false; // 해제
+                            ApplyOptions(selected.Options, false, character); // 능력치 감소
+                            Console.WriteLine($"{selected.Name}의 장착이 해제되었습니다.");
+                            Thread.Sleep(1000);
+                        }
+                        else
+                        {
+                            EquipItem(character, selected, myweapon);
+                            Thread.Sleep(1000);
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("선택된 아이템은 다른 부서만 사용 가능합니다..");
-                        ManageMentWeapons(character);
-                        return;
+                        Console.WriteLine("현재 페이지에 있는 아이템 번호만 입력해주세요.");
+                        Thread.Sleep(1000);
                     }
                 }
-                Thread.Sleep(1000);
-                ManageMentWeapons(character); // 작업 후 다시 장착 관리 창으로 돌아가기 위해 메소드 재귀호출
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                    Thread.Sleep(1000);
+                }
+            }
+        }
+
+        internal static void PaginateAndDisplayInventory(Character character, Weapons item)
+        {
+            // 캐릭터의 인벤토리에 아이템 추가
+            character.NotbuyAbleInventory.Add(item);
+
+            // 인벤토리 출력 (간단하게 목록만 출력할게!)
+            Console.WriteLine("\n[ 인벤토리 목록 ]");
+            int index = 1;
+            foreach (var weapon in character.NotbuyAbleInventory)
+            {
+                Console.WriteLine($"{index}. {weapon.Name} (공격력: {weapon.AttackPower})");
+                index++;
             }
         }
     }
-
 }
