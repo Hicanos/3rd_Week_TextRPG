@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
-using System.Text.Json;
+using Newtonsoft.Json; // 여기 추가
 using TextRPG.CharacterManagement;
 using TextRPG.GameManager;
 using TextRPG.ItemSpawnManagement;
 using TextRPG.WeaponManagement;
 using TextRPG.MonsterManagement;
 
-
 namespace TextRPG.GameSaveAndLoad
 {
     [Serializable]
-    public class GameData   
+    public class GameData
     {
-        public Character CharacterData {  get; set; }
+        public Character CharacterData { get; set; }
         public List<Weapons> Inventory { get; set; }
         public List<Weapons> NotBuyAbleInventory { get; set; }
         public List<Weapons> PotionInventory { get; set; }
@@ -39,25 +35,23 @@ namespace TextRPG.GameSaveAndLoad
                 RewardInventory = rewards
             };
 
-            string json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+            string json = JsonConvert.SerializeObject(data, Formatting.Indented);
             File.WriteAllText(savePath, json);
             Console.WriteLine("게임 저장 완료!");
         }
-        public static GameData LoadGame()
+
+        public static (Character, List<Weapons>, List<Weapons>, List<Weapons>, List<Weapons>) LoadGame()
         {
             if (!File.Exists(savePath))
             {
-                Console.WriteLine("저장된 파일이 없습니다.");
-                return null;
+                Console.WriteLine("저장 파일이 존재하지 않습니다.");
+                return (null, null, null, null, null);
             }
 
             string json = File.ReadAllText(savePath);
-            GameData data = JsonSerializer.Deserialize<GameData>(json);
-            Console.WriteLine("게임 불러오기 완료!");
-            return data;
+            GameData data = JsonConvert.DeserializeObject<GameData>(json);
+
+            return (data.CharacterData, data.Inventory, data.NotBuyAbleInventory, data.PotionInventory, data.RewardInventory);
         }
     }
-}
-
-
 }
