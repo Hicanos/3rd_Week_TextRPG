@@ -1,14 +1,51 @@
-﻿using TextRPG.CharacterManagement;
+﻿using System;
+using System.Collections.Generic;
+using TextRPG.MonsterManagement;
+using TextRPG.CharacterManagement;
 
 namespace TextRPG.QuestManagement
 {
     public class Quest
     {
+        // 수정부분: 스테이지 클리어 퀘스트 보상 맵핑
+        private static readonly Dictionary<int, (int gold, int exp)> StageClearRewards
+            = new Dictionary<int, (int, int)>()
+        {
+            { 1, (150, 15) },
+            { 2, (200, 20) },
+            { 3, (300, 30) },
+            { 4, (400, 40) },
+            { 5, (1000, 700) }
+        };
+
+        // 수정부분: 스테이지 번호로 Quest 인스턴스 생성
+        public static Quest GetStageClearQuest(int stage)
+        {
+            if (!StageClearRewards.TryGetValue(stage, out var reward))
+                throw new ArgumentOutOfRangeException(nameof(stage));
+
+            string name = stage < 5
+                ? $"{stage}단계 클리어"
+                : "보스전 - 석회장 처치";
+            string description = stage < 5
+                ? $"스테이지 {stage}을(를) 클리어하라."
+                : "최종 진급 배틀에서 회장 석회장을 무너뜨려라.";
+            string target = stage < 5 ? null : "석회장";
+
+            return new Quest(name, description, target, reward.gold, reward.exp);
+        }
+
         public string Name { get; set; }
         public string Description { get; set; }
         public string TargetMonster { get; set; }
         public int RewardGold { get; set; }
         public int RewardExp { get; set; }
+
+        public bool IsCompleted { get; private set; }
+        public static bool IsQuestCleared = false;
+        public static string ActiveQuestTargetName = null;
+        public static Quest ActiveQuest = null;
+        public static HashSet<string> CompletedQuestNames = new HashSet<string>();
 
         public Quest(string name, string description, string targetMonster, int rewardGold, int rewardExp)
         {
@@ -17,58 +54,220 @@ namespace TextRPG.QuestManagement
             TargetMonster = targetMonster;
             RewardGold = rewardGold;
             RewardExp = rewardExp;
+            IsCompleted = false;
         }
 
         public void Complete(Character character)
         {
+            if (IsCompleted)
+            {
+                Console.WriteLine($"'{Name}' 퀘스트는 이미 완료되었습니다.");
+                return;
+            }
             Console.WriteLine($"\n[퀘스트 완료] '{Name}' 퀘스트를 완료했습니다!");
-            Console.WriteLine($"보상: 골드 +{RewardGold}, 경험치 +{RewardExp}");
+            Console.WriteLine("보상:");
+            Console.WriteLine($"  골드: +{RewardGold}");
+            if (RewardExp > 0)
+                Console.WriteLine($"  경험치: +{RewardExp}");
 
             character.Gold += RewardGold;
+            character.EXP += RewardExp;
 
-
-            CompletedQuestNames.Add(Name);  // 완료 목록에 추가
+            IsCompleted = true;
+            CompletedQuestNames.Add(Name);
             ActiveQuest = null;
+            ActiveQuestTargetName = null;
         }
 
-        public static Quest ActiveQuest = null;
+        // 퀘스트 수락 상세 UI
+        public static void ShowQuestDetail(Quest quest)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("(승진배틀(주)\n");
+            Console.ResetColor();
 
-        // 클리어한 퀘스트 이름 목록
-        public static HashSet<string> CompletedQuestNames = new HashSet<string>();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Quest!!\n");
+            Console.ResetColor();
 
+            Console.WriteLine(quest.Name + "\n");
+            Console.WriteLine(quest.Description + "\n");
+            if (!string.IsNullOrEmpty(quest.TargetMonster))
+                Console.WriteLine($"- {quest.TargetMonster} 1마리 처치 (0/1)\n");
+
+            Console.WriteLine("- 보상- ");
+            Console.WriteLine($"\t{quest.RewardGold}G");
+            if (quest.RewardExp > 0)
+                Console.WriteLine($"\t{quest.RewardExp}EXP");
+            Console.WriteLine();
+
+            Console.WriteLine("1. 수락");
+            Console.WriteLine("2. 거절");
+            Console.Write("원하시는 행동을 입력해주세요.\n>> ");
+
+            string input = Console.ReadLine();
+            if (input == "1")
+            {
+                ActiveQuest = quest;
+                ActiveQuestTargetName = quest.TargetMonster;
+                Console.WriteLine($"\n'{quest.Name}' 퀘스트를 수락했습니다!");
+                Console.WriteLine("전투 메뉴에서 퀘스트 대상 몬스터를 처치하세요.");
+                Console.WriteLine("\n0. 계속");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("\n퀘스트를 거절했습니다.");
+                Console.WriteLine("\n0. 계속");
+                Console.ReadLine();
+            }
+        }
+
+        // 퀘스트 진행중 UI
+        public static void ShowQuestProgressUI(Quest quest)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("(승진배틀(주))\n");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Quest!! (진행중)\n");
+            Console.ResetColor();
+
+            Console.WriteLine(quest.Name + "\n");
+            Console.WriteLine(quest.Description + "\n");
+            if (!string.IsNullOrEmpty(quest.TargetMonster))
+                Console.WriteLine($"- {quest.TargetMonster} 1마리 처치 (0/1)\n");
+
+            Console.WriteLine("1. 포기하기");
+            Console.WriteLine("2. 돌아가기");
+            Console.Write("원하시는 행동을 입력해주세요.\n>> ");
+
+            string input = Console.ReadLine();
+            if (input == "1")
+            {
+                Console.WriteLine($"\n'{quest.Name}' 퀘스트를 포기했습니다.");
+                ActiveQuest = null;
+                ActiveQuestTargetName = null;
+                Console.WriteLine("\n0. 계속");
+                Console.ReadLine();
+            }
+        }
+
+        // 퀘스트 보상받기 UI
+        public static void ShowQuestRewardUI(Quest quest, Character character)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("(승진배틀(주))\n");
+            Console.ResetColor();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("Quest!!\n");
+            Console.ResetColor();
+
+            Console.WriteLine(quest.Name + "\n");
+            Console.WriteLine(quest.Description + "\n");
+            if (!string.IsNullOrEmpty(quest.TargetMonster))
+                Console.WriteLine($"- {quest.TargetMonster} 1마리 처치 (1/1)\n");
+
+            Console.WriteLine("- 보상- ");
+            Console.WriteLine($"\t{quest.RewardGold}G\n");
+            if (quest.RewardExp > 0)
+                Console.WriteLine($"\t{quest.RewardExp}EXP\n");
+
+            Console.WriteLine("1. 보상 받기");
+            Console.WriteLine("2. 돌아가기");
+            Console.Write("원하시는 행동을 입력해주세요.\n>> ");
+
+            string input = Console.ReadLine();
+            if (input == "1")
+            {
+                quest.Complete(character);
+                Console.WriteLine("\n보상을 수령했습니다. Enter를 누르면 퀘스트 목록으로 돌아갑니다.");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("\nEnter를 누르면 퀘스트 목록으로 돌아갑니다.");
+                Console.ReadLine();
+            }
+        }
+
+        // 퀘스트 메뉴 (5개 퀘스트)
         public static void ShowQuestMenu(Character character)
         {
             Console.Clear();
+
+            if (ActiveQuest != null && IsQuestCleared)
+            {
+                ShowQuestRewardUI(ActiveQuest, character);
+                IsQuestCleared = false;
+                return;
+            }
+
+            Console.Clear();
             Console.WriteLine("=== 퀘스트 목록 ===\n");
 
-            List<Quest> questList = new List<Quest>()
+            var questList = new List<Quest>
             {
-                new Quest("송 대리 처치", "송 대리를 처치하자!", "송 대리", 100, 50),
-                new Quest("조 과장 처치", "조 과장을 처치하자!", "조 과장", 150, 80),
-                new Quest("전 차장 처치", "전 차장을 처치하자!", "전 차장", 200, 120),
-                new Quest("이 부장 처치", "이 부장을 처치하자!", "이 부장", 300, 180),
+                new Quest(
+                    "무력 과시: 신과장과 빠대리  격파   ",
+                    $"평범한 무역회사에 일하는 20년차 대리 {character.Name}, 빠대리와 신과장을 무력으로 제압하고 1단계를 클리어하라.",
+                    null,
+                    150,
+                    15
+                ),
+                new Quest(
+                    "승진 후보 사냥: 임차장·김부장 토벌",
+                    $"사장님 눈밖에 난 {character.Name}, 임차장과 김부장을 쓰러뜨려 2단계를 넘어서라.",
+                    null,
+                    200,
+                    20
+                ),
+                new Quest(
+                    "고공행진: 오실장·카이사 장벽 돌파 ",
+                    $"진급 배틀 3단계 돌파! 오실장과 카이사의 장벽을 부숴라.",
+                    null,
+                    300,
+                    30
+                ),
+                new Quest(
+                    "권력 누각: 유상무·박사장 섬멸     ",
+                    $"권력의 끝판왕 유상무와 박사장을 쓰러뜨리고 마지막 보스를 준비하라.",
+                    null,
+                    400,
+                    40
+                ),
+                new Quest(
+                    "최종 진급 배틀: 회장 석회장 격파   ",
+                    $"이 회사는 내가 먹는다! 최종 진급 배틀에서 회장 석회장을 무너뜨려라.",
+                    "석회장",
+                    1000,
+                    80
+                ),
             };
 
             for (int i = 0; i < questList.Count; i++)
             {
                 var q = questList[i];
-
-                string linePrefix = $"{i + 1}. ";
-
+                string prefix = $"{i + 1}. ";
                 if (ActiveQuest != null && ActiveQuest.Name == q.Name)
                 {
-                    Console.Write(linePrefix);
+                    Console.Write(prefix);
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("[E] ");
+                    Console.Write("[진행중] ");
                     Console.ResetColor();
                 }
                 else
                 {
-                    Console.Write(linePrefix);
+                    Console.Write(prefix);
                 }
 
-                string status = CompletedQuestNames.Contains(q.Name) ? "(완료됨)" : "";
-                Console.WriteLine($"{q.Name} {status}  (보상: {q.RewardGold}G / {q.RewardExp}EXP)");
+                string status = CompletedQuestNames.Contains(q.Name) ? "(완료됨)" : string.Empty;
+                Console.WriteLine($"{q.Name} {status}  (보상: {q.RewardGold}G/{q.RewardExp}EXP)");
             }
 
             Console.WriteLine("0. 돌아가기");
@@ -76,10 +275,9 @@ namespace TextRPG.QuestManagement
             string input = Console.ReadLine();
 
             if (input == "0") return;
-
             if (int.TryParse(input, out int choice) && choice >= 1 && choice <= questList.Count)
             {
-                Quest selected = questList[choice - 1];
+                var selected = questList[choice - 1];
                 if (CompletedQuestNames.Contains(selected.Name))
                 {
                     Console.WriteLine("\n이미 완료한 퀘스트입니다.");
@@ -88,11 +286,10 @@ namespace TextRPG.QuestManagement
                     return;
                 }
 
-                ActiveQuest = selected;
-                Console.WriteLine($"\n'{ActiveQuest.Name}' 퀘스트를 수락했습니다!");
-                Console.WriteLine("전투 메뉴에서 퀘스트 대상 몬스터를 처치하세요.");
-                Console.WriteLine("\n0. 계속");
-                Console.ReadLine();
+                if (ActiveQuest != null && selected.Name == ActiveQuest.Name)
+                    ShowQuestProgressUI(selected);
+                else
+                    ShowQuestDetail(selected);
             }
             else
             {
@@ -102,6 +299,3 @@ namespace TextRPG.QuestManagement
         }
     }
 }
-
-
-
