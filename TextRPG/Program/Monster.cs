@@ -70,19 +70,19 @@ namespace TextRPG.MonsterManagement
             monsterTypes = new List<Monster>()
             {
                  // stage 1
-                 new Monster("빠대리", 1, 4, 3, 10, 60, 15, 1, 40, 80, new List<Weapons> { Weapons.CreateDrop("대리의 빠때리") }), // 몬스터 종류와 정보
-                 new Monster("신과장", 2, 3, 5, 14, 65, 20, 2, 50, 100, new List<Weapons> { Weapons.CreateDrop("과장의 사원증") }),
+                 new Monster("빠대리", 1, 4, 3, 10, 75, 10, 1, 40, 80, new List<Weapons> { Weapons.CreateDrop("대리의 빠때리") }), // 몬스터 종류와 정보
+                 new Monster("신과장", 2, 3, 5, 14, 70, 15, 2, 50, 100, new List<Weapons> { Weapons.CreateDrop("과장의 사원증") }),
                  // stage 2
-                 new Monster("임차장", 3, 8, 7, 26, 65, 15, 3, 120, 250, new List<Weapons> { Weapons.CreateDrop("차장의 가발") }),
-                 new Monster("김부장", 4, 11, 5, 24, 70, 25, 4, 150, 300, new List<Weapons> { Weapons.CreateDrop("부장의 넥타이")}),
+                 new Monster("임차장", 3, 8, 7, 26, 80, 10, 3, 120, 250, new List<Weapons> { Weapons.CreateDrop("차장의 가발") }),
+                 new Monster("김부장", 4, 11, 5, 24, 75, 20, 4, 150, 300, new List<Weapons> { Weapons.CreateDrop("부장의 넥타이")}),
                  // stage 3
-                 new Monster("오실장", 5, 15, 14, 32, 70, 20, 5, 250, 400, new List<Weapons> { Weapons.CreateDrop("직업 평가표") }),
-                 new Monster("카이사", 6, 17, 10, 38, 75, 30, 6, 300, 500, new List<Weapons> { Weapons.CreateDrop("유흥업소 명함") }),
+                 new Monster("오실장", 5, 15, 14, 32, 80, 15, 5, 250, 400, new List<Weapons> { Weapons.CreateDrop("직업 평가표") }),
+                 new Monster("카이사", 6, 17, 10, 38, 80, 25, 6, 300, 500, new List<Weapons> { Weapons.CreateDrop("유흥업소 명함") }),
                  // stage 4
-                 new Monster("유상무", 7, 25, 18, 43, 75, 30, 7, 400, 700, new List<Weapons> { Weapons.CreateDrop("한정판 굿즈 명함") }),
-                 new Monster("박사장", 8, 22, 20, 50, 80, 40, 8, 500, 800, new List<Weapons> { Weapons.CreateDrop("노또 용지") }),
+                 new Monster("유상무", 7, 25, 18, 43, 90, 20, 7, 400, 700, new List<Weapons> { Weapons.CreateDrop("한정판 굿즈 명함") }),
+                 new Monster("박사장", 8, 22, 20, 50, 95, 30, 8, 500, 800, new List<Weapons> { Weapons.CreateDrop("노또 용지") }),
                  // stage 5 Boss
-                 new Monster("석회장", 10, 40, 28, 250, 90, 35, 10, 2000, 3000, new List<Weapons> { Weapons.CreateDrop("직급 명패") })
+                 new Monster("석회장", 10, 40, 28, 250, 110, 30, 10, 2000, 3000, new List<Weapons> { Weapons.CreateDrop("직급 명패") })
             };
         }
 
