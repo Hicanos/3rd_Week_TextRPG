@@ -57,7 +57,7 @@ namespace TextRPG.ItemSpawnManagement
 
             // 물약 (임시)
             new Weapons(false, false, "반창고", new Dictionary<string, int> { { "HP", 50 } }, "작은 상처는 반창고 하나면 충분!", "전체", "포션", 300);
-            new Weapons(false, false, "바까스", new Dictionary<string, int> { { "MP", 30 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 300);
+            new Weapons(false, false, "바까스", new Dictionary<string, int> { { "HP", 30 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 300, true);
         }
 
         public static void NotBuyAbleWeaponSpawn()

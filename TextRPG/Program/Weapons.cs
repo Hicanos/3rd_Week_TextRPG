@@ -15,6 +15,7 @@ namespace TextRPG.WeaponManagement
         public string Explain { get; set; } // 장비 설명
         public Dictionary<string, int> Options { get; set; } // ex) {방어력, 10}
         public int Price { get; set; } // 가격
+        public bool IsOneTimePurchase { get; set; } = false; // 1회 제한 구매 아이템 참거짓값
 
         // (드랍 아이템 전용 프로퍼티)
         public string DropObject { get; set; } // 획득처 
@@ -27,6 +28,9 @@ namespace TextRPG.WeaponManagement
         public static List<Weapons> NotbuyAbleInventory = new List<Weapons>(); // 드랍으로만 얻어야하는 장비만 모아놓는 리스트
         public static List<Weapons> PotionInventory = new List<Weapons>(); // 포션만 모아놓는 리스트
         public static List<Weapons> RewardInventory = new List<Weapons>(); // 전리품만 모아놓는 리스트
+        
+        // 1회 제한 아이템
+        private List<string> purchasedItemNames = new List<string>(); // 이미 구매한 아이템을 추척
 
         public override string ToString()
         {
@@ -36,7 +40,7 @@ namespace TextRPG.WeaponManagement
         public Weapons() { }
 
         // 상점에서 사는 게 가능한 아이템 생성자
-        public Weapons(bool isSelled, bool isEquip, string name, Dictionary<string, int> options, string explain, string className, string weaponType, int price)
+        public Weapons(bool isSelled, bool isEquip, string name, Dictionary<string, int> options, string explain, string className, string weaponType, int price, bool isOneTimePurchase = false)
         {
             IsSelled = isSelled;
             IsEquip = isEquip;
@@ -46,6 +50,7 @@ namespace TextRPG.WeaponManagement
             ClassName = className;
             WeaponType = weaponType;
             Price = price;
+            IsOneTimePurchase = isOneTimePurchase;
 
 
             if (weaponType == "포션" && !PotionInventory.Contains(this))
@@ -339,43 +344,41 @@ namespace TextRPG.WeaponManagement
 
                 Console.WriteLine("소모품을 사용했습니다.");
                 List<string> recovered = new List<string>();
-
-                foreach (var m in selected.Options)
+                foreach (var option in selected.Options)
                 {
-                    string stat = m.Key;
-                    int value = m.Value;
-                    int healed = 0;
-
-                    if (stat == "HP")
+                    if (option.Key == "HP")
                     {
-                        healed = Math.Min(value, character.MaxHealth - character.Health);
+                        int before = character.Health;
+                        character.Health = Math.Min(character.Health + option.Value, character.MaxHealth);
+                        recovered.Add($"HP +{character.Health - before}");
                     }
-                    else if (stat == "MP")
+                    else if (option.Key == "MP")
                     {
-                        healed = Math.Min(value, character.MaxMP - character.MP);
+                        int before = character.MP;
+                        character.MP = Math.Min(character.MP + option.Value, character.MaxMP);
+                        recovered.Add($"MP +{character.MP - before}");
                     }
-
                     else
                     {
-                        healed = value; // 그냥 표시만 할 수도 있음
+                        ApplyOptions(new Dictionary<string, int> { { option.Key, option.Value } }, true, character);
+                        recovered.Add($"{option.Key} +{option.Value}");
                     }
-
-                    recovered.Add($"{stat} {(healed >= 0 ? "+" : "")}{healed}");
                 }
 
-                Console.WriteLine($"{string.Join(", ", recovered)} 효과를 받았습니다.");
-                ApplyOptions(selected.Options, true, character);
-                Thread.Sleep(1000);
+                Console.WriteLine($"[사용 효과] {string.Join(", ", recovered)}");
+                // 사용 후 인벤토리에서 제거
                 selected.IsSelled = false;
+                PotionInventory.Remove(selected);
+                Thread.Sleep(1000);
+                return;
             }
-            else
-            {
 
-                selected.IsEquip = true; // 선택된 아이템 장착
-                Console.WriteLine($"{selected.Name}를 장착했습니다.");
-                ApplyOptions(selected.Options, true, character); // 능력치 증가
-            }
+            selected.IsEquip = true;
+            ApplyOptions(selected.Options, true, character); // 장착 아이템 능력치 반영
+            Console.WriteLine($"{selected.Name} 장착 완료!");
+            Thread.Sleep(1000);
         }
+        
 
 
         public static void ManageMentWeapons(Character character)
