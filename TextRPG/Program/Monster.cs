@@ -247,6 +247,9 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine($"{totalGold}원");
                 Console.WriteLine($"Exp + {totalExp}");
 
+                character.Gold += totalGold;
+                character.EXP += totalExp;
+
                 // 아이템 카운팅 정리
                 // GroupBy를 활용해서 드랍 아이템을 합쳐서 출력
                 var itemCounts = dropItems
