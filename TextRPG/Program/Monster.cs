@@ -13,6 +13,7 @@ using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
 namespace TextRPG.MonsterManagement
 {
+    // 프로퍼티로 몬스터 상태 저장
     public class Monster
     {
         public string Name { get; set; } // 몬스터이름
@@ -34,7 +35,7 @@ namespace TextRPG.MonsterManagement
         }
         private static Random random = new Random();
 
-        public static List<Monster> currentBattleMonsters = new List<Monster>();
+        public static List<Monster> currentBattleMonsters = new List<Monster>(); // 리스트를 만들어서 currentBattleMonsters와 monterTypes를 몬스터 리스트에 저장
         private static List<Monster> monsterTypes = new List<Monster>();
         public static int CurrentStage = 1;
 
@@ -62,7 +63,7 @@ namespace TextRPG.MonsterManagement
             if (monsterTypes.Count > 0) return;
             monsterTypes = new List<Monster>()
             {
-                 // stage1
+                 // stage 1
                  new Monster("빠대리", 1, 4, 3, 10, 60, 15, 1, 40, 80, new List<string> {"대리의 빠때리" }), // 몬스터 종류와 정보
                  new Monster("신과장", 2, 3, 5, 14, 65, 20, 2, 50, 100, new List<string> { "과장의 사원증" }),
                  // stage 2
@@ -89,6 +90,7 @@ namespace TextRPG.MonsterManagement
 
             List<Monster> availableMonsters;
 
+            // 스테이지 구현
             if (CurrentStage == 5) 
             { 
                 // 스테이지 5에서는 보스만 등장
@@ -102,8 +104,7 @@ namespace TextRPG.MonsterManagement
                     .ToList();
             }
 
-            // 현재 스테이지에 맞느 몬스터만 필터링
-
+            // 현재 스테이지에 맞는 몬스터만 필터링
             if (availableMonsters.Count == 0)
             {
                 Console.WriteLine("출현 가능한 사원이 없습니다.");
@@ -140,10 +141,11 @@ namespace TextRPG.MonsterManagement
             Console.WriteLine($"Exp {character.EXP}     소지금 : {character.Gold}원 ");
         }
     }
-    public class BattleResult // 전투 결과를  출력하는 메소드
+
+    // 전투 결과를  출력하는 메소드
+    public class BattleResult 
     {
         // 전투가 끝난 뒤 결과(승리,패배)를 계산하고 보상 정보 출력
-
         public void ShowResult(Character character, List<Monster> monsters)
         {
             // 전투 결과 계산
