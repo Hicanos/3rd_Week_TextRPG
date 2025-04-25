@@ -488,9 +488,13 @@ namespace TextRPG.SkillManagement
         }
         public void ApplyEffect()
         {
-            CRITBonus[SkillOwner] = critBonus;
-            SkillOwner.CRIT += critBonus;
-            Console.WriteLine($"{SkillOwner}의 치명타 확률이 {critBonus}% 증가했습니다.");
+            if (!ItWorks)
+            {
+                ItWorks = true;
+                CRITBonus[SkillOwner] = critBonus;
+                SkillOwner.CRIT += critBonus;
+                Console.WriteLine($"{SkillOwner}의 치명타 확률이 {critBonus}% 증가했습니다.");
+            }
         }
 
         //전투 종료시 한 번에 처리
@@ -687,20 +691,24 @@ namespace TextRPG.SkillManagement
     {
         float critdmgBonus= 0.3f;
         int critBonus = 20;
+
+        private Dictionary<Character, (float critdmg, int crit)> buffs = new();
+
         public GoalMustBeAchieved() { }
         public GoalMustBeAchieved(SkillData data)
         {
             SetData(data);
         }
 
+        //어차피 HP가 80 밑으로 깎임=에너미 페이즈 다음이므로 시작 타이밍에 사용
         public override void UseSkill(Character character, List<Monster> monsters)
         {
             if (character.Health <= 80)
             {
-
+                ApplyEffect();
             }
         }
-        public void ApplyEffect(Character character)
+        public void ApplyEffect()
         {
 
         }
