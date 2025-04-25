@@ -442,7 +442,7 @@ namespace TextRPG.WeaponManagement
             {
                 Console.WriteLine($"{index}. {weapon.Name} (공격력: {weapon.AttackPower})");
                 index++;
-            }
+            }   
         }
     }
 }
