@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "p256V1QUeEs=",
+  "dgSpecHash": "6FJmiOEKRA8=",
   "success": true,
-  "projectFilePath": "D:\\GitHub\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
+  "projectFilePath": "C:\\Users\\User\\Desktop\\githubdesk\\3rd_Week_TextRPG\\TextRPG\\Program\\Program.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ruda3\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\User\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []
 }
