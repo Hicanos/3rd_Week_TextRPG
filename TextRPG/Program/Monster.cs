@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
+using TextRPG.WeaponManagement;
 namespace TextRPG.MonsterManagement
 {
     // 프로퍼티로 몬스터 상태 저장
@@ -26,7 +27,7 @@ namespace TextRPG.MonsterManagement
         public int Exp { get; set; } // 경험치
         public int MinGold { get; set; }        // 획득 최소 골드
         public int MaxGold { get; set; }        // 획득 최대 골드
-        public List<string> DropItems { get; set; }  // 드랍 아이템이 여러개여서 리스트로 추가
+        public List<Weapons> DropItems { get; set; } = new List<Weapons>();  // 드랍 아이템이 여러개여서 리스트로 추가
 
         // 골드 범위 랜덤 설정
         public int GetRandomGold()
@@ -37,6 +38,9 @@ namespace TextRPG.MonsterManagement
 
         public static List<Monster> currentBattleMonsters = new List<Monster>(); // 리스트를 만들어서 currentBattleMonsters와 monterTypes를 몬스터 리스트에 저장
         private static List<Monster> monsterTypes = new List<Monster>();
+        public static List<Weapons> NotbuyAbleInventory = new List<Weapons>(); // 드랍으로만 얻어야하는 장비만 모아놓는 리스트
+        public static List<Weapons> PotionInventory = new List<Weapons>(); // 포션만 모아놓는 리스트
+        public static List<Weapons> RewardInventory = new List<Weapons>(); // 전리품만 모아놓는 리스트
         public static int CurrentStage = 1;
 
 
@@ -54,7 +58,22 @@ namespace TextRPG.MonsterManagement
             Exp = exp;
             MinGold = minGold;
             MaxGold = maxGold;
-            DropItems = dropItems ?? new List<string>();
+            DropItems = new List<Weapons>();
+        }
+
+        public Monster(string name, int level, int attack, int defense, int health, int dEX, int eVA, int exp, int minGold, int maxGold, List<Weapons> dropItems)
+        {
+            Name = name;
+            Level = level;
+            Attack = attack;
+            Defense = defense;
+            Health = health;
+            DEX = dEX;
+            EVA = eVA;
+            Exp = exp;
+            MinGold = minGold;
+            MaxGold = maxGold;
+            DropItems = dropItems;
         }
 
         public static void InitMonsters()
@@ -172,12 +191,12 @@ namespace TextRPG.MonsterManagement
             if (result == "승리")
             {
                 Console.WriteLine($"사원을 {killedCount}명 쓰러뜨렸습니다.\n");
-          
+
                 // 죽은 몬스터에게 골드와 아이템 수집
                 int totalGold = 0;
                 int totalExp = 0;
                 List<string> dropItems = new List<string>();
-           
+
 
                 if (Monster.CurrentStage < 5)
                 {
@@ -186,7 +205,7 @@ namespace TextRPG.MonsterManagement
                 }
                 else
                 {
-                    Console.WriteLine("\n최종 스테이지 클리어! 보스를 처치하였습니다. 승 진 배 틀 에서 최종 승리자가 되었습니다!");
+                    Console.WriteLine("\n최종 스테이지 클리어! '석회장' 처치하였습니다. 승 진 배 틀 에서 최종 승리자가 되었습니다!");
                 }
 
                 if (Monster.CurrentStage > 5 && result == "승리")
@@ -206,37 +225,47 @@ namespace TextRPG.MonsterManagement
                         Monster.CurrentStage = 1;
                     }
                 }
-                        foreach (var m in monsters.Where(m => m.Health <= 0)) // 전투에서 쓰러진 체력0이하인 몬스터들만 골라서 반복문을 돔
-                        {                                                     // monsters는 전투에 참여한 모든 몬스터 리스트이고 m.Health <= 조건에 해당하는 몬스터만 순회
-                            totalGold += m.GetRandomGold(); // 지정된 골드 범위 내에서 랜덤 보상
-                            totalExp += m.Exp;
+                foreach (var m in monsters.Where(m => m.Health <= 0))
+                {
+                    totalGold += m.GetRandomGold(); // 골드 획득
+                    totalExp += m.Exp;
 
-                            foreach (var item in m.DropItems) // 몬스터가 드롭한 아이템 리스트를 하나씩 꺼내기 위한 반복문
+                    if (m.DropItems != null)
+                    {
+                        foreach (var item in m.DropItems)
+                        {
+                            int dropChance = new Random().Next(1, 101);
+                            if (dropChance <= 90)
                             {
-                                if (!string.IsNullOrWhiteSpace(item)) // 아이템이 null , 빈 문자열 , 공백만 있는 문자열이 아닌 경우에만 처리
-                                {
-                                    dropItems.Add(item); // 드롭 아이템 리스트dropItems에 아이템을 추가
-                                }
+                                // 캐릭터 인벤토리 및 전리품 인벤토리에 추가
+                                character.NotbuyAbleInventory.Add(item);
+                                Monster.RewardInventory.Add(item);
+
+                                dropItems.Add(item.Name); // 전리품 리스트에 추가
+
+                                Console.WriteLine($"-> {item.Name} 을(를) 전리품으로 획득했습니다! (확률: {dropChance}%)");
                             }
                         }
-                Console.WriteLine("\n[캐릭터 정보]");
-                Console.WriteLine($"Lv.{character.Level} {character.Name}");
-                Console.WriteLine($"HP {character.Health}");
 
-                Console.WriteLine("\n[획득 아이템]");
-                Console.WriteLine($"{totalGold}원");
-                Console.WriteLine($"Exp + {totalExp}");
+                        Console.WriteLine("\n[캐릭터 정보]");
+                        Console.WriteLine($"Lv.{character.Level} {character.Name}");
+                        Console.WriteLine($"HP {character.Health}");
 
-                // 아이템 카운팅 정리
-                // GroupBy를 활용해서 드랍 아이템을 합쳐서 출력
-                var itemCounts = dropItems.GroupBy(i => i).ToDictionary(g => g.Key, g => g.Count()); // itemCounts는 Dictionary의 자료형
+                        Console.WriteLine("\n[획득 아이템]");
+                        Console.WriteLine($"{totalGold}원");
+                        Console.WriteLine($"Exp + {totalExp}");
 
-                foreach (var item in itemCounts)  // itemCounts 딕셔너리 안에 있는 각 Key-Value 쌍을 하나씩 가져와서 item에 넣음
-                {
-                    Console.WriteLine($"{item.Key} - {item.Value}");
+                        // 아이템 카운팅 정리
+                        // GroupBy를 활용해서 드랍 아이템을 합쳐서 출력
+                        var itemCounts = dropItems.GroupBy(i => i).ToDictionary(g => g.Key, g => g.Count()); // itemCounts는 Dictionary의 자료형
+
+                        foreach (var item in itemCounts)  // itemCounts 딕셔너리 안에 있는 각 Key-Value 쌍을 하나씩 가져와서 item에 넣음
+                        {
+                            Console.WriteLine($"{item.Key} - {item.Value}");
+                        }
+                    }
                 }
             }
-
             else if (result == "패배")
             {
                 Console.WriteLine("당신은 해고당했습니다.");
@@ -367,8 +396,15 @@ namespace TextRPG.MonsterManagement
                                     int chance = rand.Next(1, 101);
                                     if (chance <= 30)
                                     {
-                                        Console.WriteLine($"-> {item}을(를) 획득했습니다! (획득 확률 : {chance}%)");                                      
-                                        // character.Inventory.Add(item);
+                                        Console.WriteLine($"-> {item.Name}을(를) 획득했습니다! (획득 확률 : {chance}%)");
+                                        // 캐릭터 인벤토리에 추가
+                                        character.NotbuyAbleInventory.Add(item);
+
+                                        // 전리품 인벤토리에 추가
+                                        Monster.RewardInventory.Add(item);
+
+                                        // 전리품 표시 함수 호출
+                                        Weapons.PaginateAndDisplayInventory(character, item);
                                         break;
                                     }
                                 }
@@ -386,10 +422,8 @@ namespace TextRPG.MonsterManagement
                         Console.ReadLine();
                         break;
 
-                    case 3:
-                        Console.WriteLine("소모품");
-                        Console.WriteLine("Enter를 눌러 계속...");
-                        Console.ReadLine();
+                    case 3:                 
+                        Weapons.DrinkingPotion(character);
                         break;
                     default:
                         Console.WriteLine("잘못된 입력입니다");

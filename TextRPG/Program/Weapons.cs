@@ -20,6 +20,7 @@ namespace TextRPG.WeaponManagement
         public string DropObject { get; set; } // 획득처 
         public int DropChance { get; set; } // 드랍확률
         public int SellingPrice { get; set; } // 드랍아이템은 판매가격이 정해져있음
+        public object AttackPower { get; private set; }
 
         //장비들 리스트
         public static List<Weapons> Inventory = new List<Weapons>(); // 상점에서 사는 게 가능한 장비만 모아놓는 리스트
@@ -51,7 +52,7 @@ namespace TextRPG.WeaponManagement
             }
             else
             {
-                Inventory.Add(this);;
+                Inventory.Add(this); ;
             }
         }
 
@@ -105,11 +106,11 @@ namespace TextRPG.WeaponManagement
             {
                 Console.WriteLine("\n인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n");
             }
-            else if (mode == "drink") 
+            else if (mode == "drink")
             {
                 Console.WriteLine("\n인벤토리\n소모품을 섭취할 수 있습니다.\n\n");
             }
-            else if (mode == "equip") 
+            else if (mode == "equip")
             {
                 Console.WriteLine("\n인벤토리 - 장착 관리\n보유중인 아이템을 장착할 수 있습니다.\n\n");
             }
@@ -179,7 +180,7 @@ namespace TextRPG.WeaponManagement
                     break;
                 }
                 else if (input == "2")
-                { 
+                {
                     DrinkingPotion(character);
                     break;
                 }
@@ -212,7 +213,7 @@ namespace TextRPG.WeaponManagement
                 else if (int.TryParse(input, out int index))
                 {
                     (int startIndex, int endIndex) = Shop.GetPageRange(currentPage, itemsPerPage, items.Count);
-                    index -= 1; 
+                    index -= 1;
                     if (index >= startIndex && index < endIndex)
                     {
                         Weapons selected = items[index];
@@ -220,7 +221,7 @@ namespace TextRPG.WeaponManagement
                         Thread.Sleep(1000);
                     }
                 }
-                else 
+                else
                 {
                     Console.WriteLine("잘못된 입력입니다.");
                     Thread.Sleep(1000);
@@ -304,7 +305,7 @@ namespace TextRPG.WeaponManagement
                         return;
                     }
                 }
-                else if (selected.Options.ContainsKey("MP")) 
+                else if (selected.Options.ContainsKey("MP"))
                 {
                     if (character.MP >= character.MaxMP)
                     {
@@ -393,7 +394,7 @@ namespace TextRPG.WeaponManagement
                             Thread.Sleep(1000);
                         }
                     }
-                    else 
+                    else
                     {
                         Console.WriteLine("현재 페이지에 있는 아이템 번호만 입력해주세요.");
                         Thread.Sleep(1000);
@@ -404,6 +405,21 @@ namespace TextRPG.WeaponManagement
                     Console.WriteLine("잘못된 입력입니다.");
                     Thread.Sleep(1000);
                 }
+            }
+        }
+
+        internal static void PaginateAndDisplayInventory(Character character, Weapons item)
+        {
+            // 캐릭터의 인벤토리에 아이템 추가
+            character.NotbuyAbleInventory.Add(item);
+
+            // 인벤토리 출력 (간단하게 목록만 출력할게!)
+            Console.WriteLine("\n[ 인벤토리 목록 ]");
+            int index = 1;
+            foreach (var weapon in character.NotbuyAbleInventory)
+            {
+                Console.WriteLine($"{index}. {weapon.Name} (공격력: {weapon.AttackPower})");
+                index++;
             }
         }
     }
