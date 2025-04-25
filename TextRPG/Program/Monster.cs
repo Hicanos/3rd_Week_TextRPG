@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
 using TextRPG.WeaponManagement;
+using TextRPG.QuestManagement;
 namespace TextRPG.MonsterManagement
 {
     // 프로퍼티로 몬스터 상태 저장
@@ -193,7 +194,10 @@ namespace TextRPG.MonsterManagement
                 {
                     Console.WriteLine("\n최종 스테이지 클리어! '석회장' 처치하였습니다. 승 진 배 틀 에서 최종 승리자가 되었습니다!");
                 }
-
+                if (Quest.ActiveQuest != null)
+                {
+                    Quest.IsQuestCleared = true;
+                }
                 if (Monster.CurrentStage > 5 && result == "승리")
                 {
                     Console.WriteLine("\n\n 축하합니다! 최종보스 '석회장'을 물리치고 게임을 클리어했습니다!");

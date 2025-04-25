@@ -139,7 +139,6 @@ namespace TextRPG.QuestManagement
             Console.WriteLine(quest.Name + "\n");
             Console.WriteLine(quest.Description + "\n");
             if (!string.IsNullOrEmpty(quest.TargetMonster))
-                Console.WriteLine($"- {quest.TargetMonster} 1마리 처치 (0/1)\n");
 
             Console.WriteLine("1. 포기하기");
             Console.WriteLine("2. 돌아가기");
@@ -171,7 +170,6 @@ namespace TextRPG.QuestManagement
             Console.WriteLine(quest.Name + "\n");
             Console.WriteLine(quest.Description + "\n");
             if (!string.IsNullOrEmpty(quest.TargetMonster))
-                Console.WriteLine($"- {quest.TargetMonster} 1마리 처치 (1/1)\n");
 
             Console.WriteLine("- 보상- ");
             Console.WriteLine($"\t{quest.RewardGold}G\n");
