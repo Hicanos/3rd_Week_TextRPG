@@ -29,6 +29,7 @@ namespace TextRPG.MonsterManagement
         public int MinGold { get; set; }        // 획득 최소 골드
         public int MaxGold { get; set; }        // 획득 최대 골드
         public List<Weapons> DropItems { get; set; } = new List<Weapons>();  // 드랍 아이템이 여러개여서 리스트로 추가
+        public bool IsDropProcessed { get; set; } = false;
 
         // 골드 범위 랜덤 설정
         public int GetRandomGold()
@@ -135,7 +136,7 @@ namespace TextRPG.MonsterManagement
                     baseMonster.Exp,
                     baseMonster.MinGold,
                     baseMonster.MaxGold,
-                    baseMonster.DropItems
+                    new List<Weapons>(baseMonster.DropItems)
                 );
                 currentBattleMonsters.Add(selected);
                 Console.WriteLine($"Lv.{selected.Level} {selected.Name}   HP {selected.Health}    공격력 : {selected.Attack}    방어력 : {selected.Defense}");
@@ -197,6 +198,9 @@ namespace TextRPG.MonsterManagement
                 if (Quest.ActiveQuest != null)
                 {
                     Quest.IsQuestCleared = true;
+                    // 스테이지마다 퀘스트 클리어 문구(퀘스트 이름)만 출력
+                    Console.WriteLine(Quest.ActiveQuest.Name);
+                    Console.WriteLine("퀘스트를 성공하셨습니다");
                 }
                 if (Monster.CurrentStage > 5 && result == "승리")
                 {
@@ -219,15 +223,15 @@ namespace TextRPG.MonsterManagement
                         foreach (var item in m.DropItems)
                         {
                             int dropChance = new Random().Next(1, 101);
-                            if (dropChance <= 90)
+                            if (dropChance <= 30)
                             {
                                 if (!character.NotbuyAbleInventory.Contains(item))
                                 {
                                     character.NotbuyAbleInventory.Add(item);
                                 }
 
-                                item.IsSelled = true; // 인벤토리에 보여주기
-                                                      // 아이템 중복 방지 - 드랍 전에 체크
+                                Weapons.PaginateAndDisplayInventory(character, item); // 인벤토리에 보여주기
+                                                                                      // 아이템 중복 방지 - 드랍 전에 체크
 
                                 Console.WriteLine($"-> {item.Name} 을(를) 전리품으로 획득했습니다! (확률: {dropChance}%)");
                             }
@@ -265,7 +269,8 @@ namespace TextRPG.MonsterManagement
 
     // 전투를 관리하는 BattleManager 클래스 생성
     public static class BattleManager
-    {   
+    {
+        public static Random rand = new Random();
         public static void StartBattle(Character character)
         {
             Console.Clear();
@@ -355,8 +360,20 @@ namespace TextRPG.MonsterManagement
                         if (target.Health <= 0)
                         {
                             Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
-                        }
 
+                            if (!target.IsDropProcessed) 
+                            { 
+                               if (target.DropItems != null && target.DropItems.Count > 0)
+                            {
+                                    foreach (var item in target.DropItems)
+                                    {
+                                        int chance = BattleManager.rand.Next(1, 101);
+                                        if (chance <= item.DropChance)
+                                        {
+                                            Weapons.PaginateAndDisplayInventory(character, item);
+                                            break;
+                                        }
+                                    }
                         Console.WriteLine("\n[사원 상태 업데이트]");
                         for (int i = 0; i < Monster.currentBattleMonsters.Count; i++)
                         {
@@ -370,26 +387,7 @@ namespace TextRPG.MonsterManagement
                             else
                             {
                                 Console.WriteLine($"{i + 1}. Lv.{m.Level} {m.Name} HP {m.Health}");
-                            }
-                            // 아이템 드랍 확률 계산
-                            if (target.DropItems != null && target.DropItems.Count > 0)
-                            {
-                                Random rand = new Random();
-                                foreach (var item in target.DropItems)
-                                {
-                                    int chance = rand.Next(1, 101);
-                                    if (chance <= 30)
-                                    {
-                                        Console.WriteLine($"-> {item.Name}을(를) 획득했습니다! (획득 확률 : {chance}%)");
-                                        // 캐릭터 인벤토리에 추가
-                                        character.NotbuyAbleInventory.Add(item);
-
-                                        // 전리품 인벤토리에 추가
-                                        Monster.RewardInventory.Add(item);
-
-                                        // 전리품 표시 함수 호출
-                                        Weapons.PaginateAndDisplayInventory(character, item);
-                                        break;
+                            }                         
                                     }
                                 }
                             }
@@ -416,6 +414,7 @@ namespace TextRPG.MonsterManagement
 
             }
         }
+
         // 적과 대치하는 EnemyPhase 메서드 생성
         public static void EnemyPhase(Character character)
         {

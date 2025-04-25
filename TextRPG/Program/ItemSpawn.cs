@@ -57,7 +57,7 @@ namespace TextRPG.ItemSpawnManagement
 
             // 물약 (임시)
             new Weapons(false, false, "반창고", new Dictionary<string, int> { { "HP", 50 } }, "작은 상처는 반창고 하나면 충분!", "전체", "포션", 300);
-            new Weapons(false, false, "바까스", new Dictionary<string, int> { { "MP", 30 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 300);
+            new Weapons(false, false, "바까스", new Dictionary<string, int> { { "HP", 30 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 300, true);
         }
 
         public static void NotBuyAbleWeaponSpawn()
@@ -85,7 +85,7 @@ namespace TextRPG.ItemSpawnManagement
             new Weapons(false, "한정판 굿즈 인형", "개인 사무실 한편에 전시된 여러 굿즈들 중 가장 비싸보이는 인형", "전리품", "상무", 20, 4800);
             new Weapons(false, "노또 용지", "전무님 책장에는 매주 노또 용지가 쌓여있다.", "전리품", "전무", 20, 6000);
             new Weapons(false, "자서전", "부하 직원들에게 사라고 추천하던 책\n나도 반강제적으로 하나 샀었다.", "전리품", "사장", 15, 8000);
-            new Weapons(true, "직급 명패", "전 회장의 명패이니 필요 없겠지?", "전리품", "회장", 10, 10000);
+            new Weapons(false, "직급 명패", "전 회장의 명패이니 필요 없겠지?", "전리품", "회장", 10, 10000);
 
         }
     }

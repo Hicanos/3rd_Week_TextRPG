@@ -1,4 +1,5 @@
-﻿using TextRPG.CharacterManagement;
+﻿using System.Numerics;
+using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
 using TextRPG.WeaponManagement;
 
@@ -66,64 +67,72 @@ namespace TextRPG.ShopManagement
 
         public static void ShowShop(Character character) // 상점 출력 메소드
         {
-
-            int currentPage = 1;
-            int itemsPerPage = 4; // 5부터는 상단부가 Clear 안됨
-
-            List<Weapons> totalShopOptions = new List<Weapons>();
-            totalShopOptions.AddRange(Weapons.Inventory.Where(x => x.WeaponType != "포션"));
-            totalShopOptions.AddRange(Weapons.PotionInventory.Where(x => x.Price > 0));
-
-            while (true)
+            // 아이템에 대해 구매했던 1회 제한 아이템이면 다시 안보이게 처리
+            foreach (var item in Weapons.Inventory.Concat(Weapons.PotionInventory))
             {
-                currentPage = PageCheck(currentPage, totalShopOptions.Count, itemsPerPage);
-                PaginateAndDisplayItems(totalShopOptions, currentPage, itemsPerPage, character, "view");
-
-                string input = Console.ReadLine();
-                if (input == "0") return;
-                else if (input == "1")
+                if (item.IsOneTimePurchase && character.PurchasedOnceItems.Contains(item.Name))
                 {
+                    item.IsSelled = true;
+                }
+
+                int currentPage = 1;
+                int itemsPerPage = 4; // 5부터는 상단부가 Clear 안됨
+
+                List<Weapons> totalShopOptions = new List<Weapons>();
+                totalShopOptions.AddRange(Weapons.Inventory.Where(x => x.WeaponType != "포션"));
+                totalShopOptions.AddRange(Weapons.PotionInventory.Where(x => x.Price > 0));
+
+                while (true)
+                {
+                    currentPage = PageCheck(currentPage, totalShopOptions.Count, itemsPerPage);
+                    PaginateAndDisplayItems(totalShopOptions, currentPage, itemsPerPage, character, "view");
+
+                    string input = Console.ReadLine();
+                    if (input == "0") return;
+                    else if (input == "1")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("어떤 아이템을 구매하시겠습니까?");
+                        Console.WriteLine("1. 장비");
+                        Console.WriteLine("2. 소모품");
+                        Console.Write(">> ");
+                        int choice = InputHelper.MatchOrNot(1, 2);
+                        List<Weapons> availableWeapons = Weapons.Inventory.Where(w => (w.ClassName == character.ClassName || w.ClassName == "전체")).ToList(); // 구매 가능한 무기 리스트
+                        List<Weapons> potions = Weapons.PotionInventory.Where(w => w.WeaponType == "포션" && w.Price > 0).ToList(); // 구매 가능한 포션 리스트
+
+                        if (choice == 1) BuyItems(character, availableWeapons);  // 장비 구매
+                        else if (choice == 2) BuyItems(character, potions);  // 소모품 구매
+                    }
+                    else if (input == "2")
+                    {
+                        Console.Clear();
+                        Console.WriteLine("어떤 아이템을 판매하시겠습니까?");
+                        Console.WriteLine("1. 장비");
+                        Console.WriteLine("2. 소모품");
+                        Console.WriteLine("3. 전리품");
+                        Console.Write(">> ");
+                        int choice = InputHelper.MatchOrNot(1, 3);
+
+                        List<Weapons> buyweapon = Weapons.Inventory.Where(w => w.IsSelled).ToList(); // 판매가능한 장비 리스트
+                        buyweapon.AddRange(Weapons.NotbuyAbleInventory.Where(w => w.IsSelled)); // 드랍하여 얻은 장비도 포함
+
+                        List<Weapons> potions = Weapons.PotionInventory.Where(w => w.IsSelled).ToList(); // 판매가능한 포션 리스트
+
+                        List<Weapons> rewards = Weapons.RewardInventory.Where(w => w.IsSelled).ToList(); // 판매가능한 전리품 리스트
+
+                        if (choice == 1) SellItems(character, buyweapon);
+                        else if (choice == 2) SellItems(character, potions);
+                        else if (choice == 3) SellItems(character, rewards);
+                    }
+                    else if (input == "p") currentPage--;
+                    else if (input == "n") currentPage++;
+                    else
+                    {
+                        Console.WriteLine("잘못된 입력입니다.");
+                        Thread.Sleep(1000);
+                    }
                     Console.Clear();
-                    Console.WriteLine("어떤 아이템을 구매하시겠습니까?");
-                    Console.WriteLine("1. 장비");
-                    Console.WriteLine("2. 소모품");
-                    Console.Write(">> ");
-                    int choice = InputHelper.MatchOrNot(1, 2);
-                    List<Weapons> availableWeapons = Weapons.Inventory.Where(w => (w.ClassName == character.ClassName || w.ClassName == "전체")).ToList(); // 구매 가능한 무기 리스트
-                    List<Weapons> potions = Weapons.PotionInventory.Where(w => w.WeaponType == "포션" && w.Price > 0).ToList(); // 구매 가능한 포션 리스트
-
-                    if (choice == 1) BuyItems(character, availableWeapons);  // 장비 구매
-                    else if (choice == 2) BuyItems(character, potions);  // 소모품 구매
                 }
-                else if (input == "2")
-                {
-                    Console.Clear();
-                    Console.WriteLine("어떤 아이템을 판매하시겠습니까?");
-                    Console.WriteLine("1. 장비");
-                    Console.WriteLine("2. 소모품");
-                    Console.WriteLine("3. 전리품");
-                    Console.Write(">> ");
-                    int choice = InputHelper.MatchOrNot(1, 3);
-
-                    List<Weapons> buyweapon = Weapons.Inventory.Where(w => w.IsSelled).ToList(); // 판매가능한 장비 리스트
-                    buyweapon.AddRange(Weapons.NotbuyAbleInventory.Where(w => w.IsSelled)); // 드랍하여 얻은 장비도 포함
-
-                    List<Weapons> potions = Weapons.PotionInventory.Where(w => w.IsSelled).ToList(); // 판매가능한 포션 리스트
-
-                    List<Weapons> rewards = Weapons.RewardInventory.Where(w => w.IsSelled).ToList(); // 판매가능한 전리품 리스트
-
-                    if (choice == 1) SellItems(character, buyweapon);
-                    else if (choice == 2) SellItems(character, potions);
-                    else if (choice == 3) SellItems(character, rewards);
-                }
-                else if (input == "p") currentPage--;
-                else if (input == "n") currentPage++;
-                else
-                {
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Thread.Sleep(1000);
-                }
-                Console.Clear();
             }
         }
 
@@ -166,11 +175,29 @@ namespace TextRPG.ShopManagement
 
                         if (mode == "buy")
                         {
+                            Weapons weapon = selected as Weapons;
+                            if (weapon != null && weapon.IsOneTimePurchase)
+                            {
+                                if (character.PurchasedOnceItems.Contains(weapon.Name))
+                                {
+                                    Console.WriteLine("이 아이템은 한 번만 구매할 수 있습니다.");
+                                    Thread.Sleep(1000);
+                                    continue;
+                                }
+
+                                character.PurchasedOnceItems.Add(weapon.Name); // 이 줄은 구매가 확정될 때만 실행해야 함 → 아래로 이동
+                            }
+
                             if (!selected.IsSelled && character.Gold >= selected.Price)
                             {
                                 Console.WriteLine($"{selected.Name}의 구매를 완료했습니다.");
                                 selected.IsSelled = true;
                                 character.Gold -= selected.Price;
+
+                                if (weapon != null && weapon.IsOneTimePurchase)
+                                {
+                                    character.PurchasedOnceItems.Add(weapon.Name);
+                                }
                             }
                             else
                             {
