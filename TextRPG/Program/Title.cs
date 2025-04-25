@@ -58,10 +58,10 @@ namespace TextRPG.TitleManagement
                 while (true)
                 {
                     CheckUnlocks();
-                    Console.WriteLine("\n[칭호 메뉴]");
+                    Console.WriteLine("\n[칭호 메뉴]\n");
                     Console.WriteLine("1. 칭호 목록 보기");
                     Console.WriteLine("2. 칭호 장착하기");
-                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine("0. 나가기\n");
                     Console.Write("입력: ");
                     string input = Console.ReadLine();
 
