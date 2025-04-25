@@ -54,7 +54,7 @@ namespace TextRPG.WeaponManagement
             }
             else
             {
-                Inventory.Add(this); ;
+                NotbuyAbleInventory.Add(this); ;
             }
         }
 
@@ -432,17 +432,15 @@ namespace TextRPG.WeaponManagement
 
         internal static void PaginateAndDisplayInventory(Character character, Weapons item)
         {
-            // 캐릭터의 인벤토리에 아이템 추가
-            character.NotbuyAbleInventory.Add(item);
+            // 캐릭터 인벤토리에 추가
+            if (!character.NotbuyAbleInventory.Contains(item))
+                character.NotbuyAbleInventory.Add(item);
 
-            // 인벤토리 출력 (간단하게 목록만 출력할게!)
-            Console.WriteLine("\n[ 인벤토리 목록 ]");
-            int index = 1;
-            foreach (var weapon in character.NotbuyAbleInventory)
-            {
-                Console.WriteLine($"{index}. {weapon.Name} (공격력: {weapon.AttackPower})");
-                index++;
-            }   
+            if (!RewardInventory.Contains(item))
+                RewardInventory.Add(item);
+
+            item.IsSelled = true;
+        }   
         }
     }
-}
+
