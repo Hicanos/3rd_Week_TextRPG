@@ -135,6 +135,7 @@ namespace TextRPG.CharacterManagement
         {
             Console.Clear();
             Console.WriteLine("-----------------------------");
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"Lv. {Level} ({Rank})");
             Console.WriteLine($"{Name} ({ClassName})");
             Console.WriteLine($"공격력 : {Attack}");
@@ -145,11 +146,12 @@ namespace TextRPG.CharacterManagement
             Console.WriteLine($"회피율 : {EVA}");
             Console.WriteLine($"소지금: {Gold} 원");
             Console.WriteLine($"칭호 : {EquippedTitle?.Name ?? "없음"}");
-            Console.WriteLine("-----------------------------");
+            Console.ResetColor();
 
             AssignSkills();
             ShowSkillList();
-
+            Console.WriteLine("\n-----------------------------");
+            Console.ResetColor();
             Console.WriteLine("\n0. 나가기\n");
             Console.Write("원하시는 행동을 입력해주세요.\n>>");
         }
@@ -188,7 +190,7 @@ namespace TextRPG.CharacterManagement
                 break;
             }
 
-            Console.Write("희망 부서를 입력하세요.\n--부서 리스트--\n1.인사팀: 정곡을 찌르는 HR 전략으로 치명타 확률이 높고, 사람을 상대하는 만큼 안정감(방어력, 체력)이 있음.\n2.홍보팀: 말발로 명중률이 높고, 이미지를 꾸미는 데 능숙해 회피율과 치명타도 강함.\n3.총무팀: 회사의 실질적 방패. 강한 방어력과 치명타 운영 능력을 지님.\n4.영업팀: 공격적인 자세로 거래를 성사시키는 딜러형. 치명타 위주의 세팅.\n5.전산팀: 기술 기반 마법 직군. 높은 마나와 명중률로 스킬 캐스터 역할.\n6.기획팀: 전략과 기획으로 정밀한 타격을 주는 포지션. 치명타 특화.\n>>");
+            Console.Write("\n희망 부서를 입력하세요.\n--부서 리스트--\n1.인사팀: 정곡을 찌르는 HR 전략으로 치명타 확률이 높고, 사람을 상대하는 만큼 안정감(방어력, 체력)이 있음.\n2.홍보팀: 말발로 명중률이 높고, 이미지를 꾸미는 데 능숙해 회피율과 치명타도 강함.\n3.총무팀: 회사의 실질적 방패. 강한 방어력과 치명타 운영 능력을 지님.\n4.영업팀: 공격적인 자세로 거래를 성사시키는 딜러형. 치명타 위주의 세팅.\n5.전산팀: 기술 기반 마법 직군. 높은 마나와 명중률로 스킬 캐스터 역할.\n6.기획팀: 전략과 기획으로 정밀한 타격을 주는 포지션. 치명타 특화.\n>>");
 
             //직업 선택 (번호에 따라 직업 결정. enum Departments 사용) > 이후 직업에 따른 스탯 부여
 

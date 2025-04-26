@@ -73,6 +73,7 @@ namespace TextRPG.GameManager
                 Console.Clear();
                 if (welcomeText)
                 {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine();
                     Console.WriteLine($"평범한 무역회사에 일하는 20년차 대리, 그 이름은 {character.Name}.");
                     Console.WriteLine("업무 능력도, 출근 태도도 나무랄 데 없지만");
@@ -82,6 +83,7 @@ namespace TextRPG.GameManager
                     Console.WriteLine("단 하루뿐인 진급 배틀의 날!");
                     Console.WriteLine($"평소 쌓인 게 많았던 {character.Name}. 결국 결심한다.\r\n");
                     Console.WriteLine(" '이 회사는 내가 먹는다.' \n\n");
+                    Console.ResetColor();
 
                     welcomeText = false;
                 }

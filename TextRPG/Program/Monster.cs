@@ -180,9 +180,11 @@ namespace TextRPG.MonsterManagement
             else result = "오류";
 
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("----");
             Console.WriteLine($"{result}");
             Console.WriteLine("----");
+            Console.ResetColor();
 
 
             if (result == "승리")
@@ -213,6 +215,7 @@ namespace TextRPG.MonsterManagement
                 }
                 if (Monster.CurrentStage > 5 && result == "승리")
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n\n 축하합니다! 최종보스 '석회장'을 물리치고 게임을 클리어했습니다!");
                     Console.WriteLine("당신은 승진배틀(주)의 회장이 되었습니다!\n");
 
@@ -241,8 +244,10 @@ namespace TextRPG.MonsterManagement
 
                                 Weapons.PaginateAndDisplayInventory(character, item); // 인벤토리에 보여주기
                                                                                       // 아이템 중복 방지 - 드랍 전에 체크
-
+                                
+                                Console.ForegroundColor = ConsoleColor.Blue;
                                 Console.WriteLine($"-> {item.Name} 을(를) 전리품으로 획득했습니다! (확률: {dropChance}%)");
+                                Console.ResetColor();
                             }
                         }
                     }
@@ -276,7 +281,9 @@ namespace TextRPG.MonsterManagement
         
             else if (result == "패배")
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("당신은 해고당했습니다.");
+                Console.ResetColor();
                 Console.WriteLine($"Lv.{character.Level} {character.Name}");
                 Console.WriteLine($"HP {character.Health}");
                 Console.WriteLine($"MP {character.MP}");
@@ -328,10 +335,12 @@ namespace TextRPG.MonsterManagement
 
                 character.ShowSkillList();
 
-                Console.WriteLine("[몬스터 목록]");
+                Console.WriteLine("\n[몬스터 목록]");
                 for (int i = 0; i < aliveMonsters.Count; i++)
                 {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine($"{i + 1}. Lv. {aliveMonsters[i].Level} {aliveMonsters[i].Name} HP {aliveMonsters[i].Health}");
+                    Console.ResetColor();
                 }
                 Console.WriteLine();
 
@@ -358,7 +367,7 @@ namespace TextRPG.MonsterManagement
                 switch (actionChoice)
                 {
                     case 1:
-                        Console.WriteLine("[몬스터 목록]");
+                        Console.WriteLine("\n[몬스터 목록]");
                         for (int i = 0; i < Monster.currentBattleMonsters.Count; i++)
                         {
                             if (Monster.currentBattleMonsters[i].Health <= 0)
@@ -369,7 +378,9 @@ namespace TextRPG.MonsterManagement
                             }
                             else
                             {
+                                Console.ForegroundColor= ConsoleColor.Yellow;
                                 Console.WriteLine($"{i + 1}. Lv.{Monster.currentBattleMonsters[i].Level} {Monster.currentBattleMonsters[i].Name} HP {Monster.currentBattleMonsters[i].Health}");
+                                Console.ResetColor();
                             }
                         }
 
@@ -399,7 +410,9 @@ namespace TextRPG.MonsterManagement
                         Character.AttackMethod(character, target);
                         if (target.Health <= 0)
                         {
+                            Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
+                            Console.ResetColor();
 
                             if (!target.IsDropProcessed) 
                             { 
@@ -471,7 +484,9 @@ namespace TextRPG.MonsterManagement
             Console.ReadLine();
             Console.Clear();
 
+            Console.ForegroundColor= ConsoleColor.Red;
             Console.WriteLine("[Enemy Phase] 상대의 턴입니다.\n");
+            Console.ResetColor();
             foreach (var monster in Monster.currentBattleMonsters)
             {
                 if (monster.Health <= 0)

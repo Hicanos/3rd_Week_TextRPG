@@ -8,9 +8,11 @@ namespace TextRPG.RestManagement
         public static void ShowRestMenu(Character character)
         {
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("-----------------------------");
             Console.WriteLine("휴식하기");
             Console.WriteLine($"500 G를 내면 체력을 회복할 수 있습니다. (보유 골드 : {character.Gold} G)");
+            Console.ResetColor();
             Console.WriteLine($"\n1. 휴식하기\n0. 나가기");
             Console.Write("\n원하시는 행동을 입력해주세요.\n>>");
 

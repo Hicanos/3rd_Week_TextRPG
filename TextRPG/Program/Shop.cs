@@ -15,9 +15,11 @@ namespace TextRPG.ShopManagement
 
             Console.Clear();
             Console.WriteLine("-----------------------------");
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"상점 - {(mode == "buy" ? "아이템 구매" : mode == "sell" ? "아이템 판매" : "아이템 보기")}"); // buy, sell, view로 나눔 텍스트 출력에 씀
             Console.WriteLine($"[보유 골드] {character.Gold} G\n");
-            Console.WriteLine($"[아이템 목록 - {page}/{totalPages} 페이지]\n");
+            Console.WriteLine($"[아이템 목록 - {page}/{Math.Max(1, totalPages)} 페이지]\n");
+            Console.ResetColor();
 
             int startIndex = (page - 1) * itemsPerPage; // 페이지당 보여줄 첫 아이템의 인덱스, 처음엔 0으로 시작해야하므로 page - 1
             int endIndex = Math.Min(startIndex + itemsPerPage, weapons.Count); // 페이지당 보여줄 마지막 아이템 인덱스, 첫 인덱스 + 페이지당 보여줄 아이템 갯수로 계산

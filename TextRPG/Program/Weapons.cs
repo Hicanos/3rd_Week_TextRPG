@@ -125,7 +125,8 @@ namespace TextRPG.WeaponManagement
             int totalPages = (int)Math.Ceiling((double)weapons.Count / itemsPerPage); // 페이지 수 계산 -> Ceiling으로 반올림
                                                                                       // 무기 수에서 한 페이지에 보여줄 무기수를 나눈 다음, 반올림
             page = Math.Max(1, Math.Min(page, totalPages));
-
+            
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Clear();
             Console.WriteLine("-----------------------------");
             if (mode == "view")
@@ -140,7 +141,12 @@ namespace TextRPG.WeaponManagement
             {
                 Console.WriteLine("\n인벤토리 - 장착 관리\n보유중인 아이템을 장착할 수 있습니다.\n\n");
             }
-            Console.WriteLine($"[아이템 목록 - {page}/{totalPages} 페이지]\n");
+            else if (mode == "reward") 
+            {
+                Console.WriteLine("\n인벤토리 - 전리품\n보유중인 전리품을 볼 수 있습니다.\n\n");
+            }
+                Console.WriteLine($"[아이템 목록 - {page}/{Math.Max(1, totalPages)} 페이지]\n");
+            Console.ResetColor();
 
             int startIndex = (page - 1) * itemsPerPage; // 페이지당 보여줄 첫 아이템의 인덱스, 처음엔 0으로 시작해야하므로 page - 1
             int endIndex = Math.Min(startIndex + itemsPerPage, weapons.Count); // 페이지당 보여줄 마지막 아이템 인덱스, 첫 인덱스 + 페이지당 보여줄 아이템 갯수로 계산
@@ -162,15 +168,17 @@ namespace TextRPG.WeaponManagement
                 string classNameOnly = weapon.ClassName == null ? "" : weapon.ClassName == "전체" ? " ( 전체 )" : $" ({weapon.ClassName} 전용)";
                 string optionText = weapon.Options != null && weapon.Options.Count > 0 ? 
                 string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}")) : "없음";
+                string sellingPrice = weapon.Price > 0 ? $"{(int)weapon.Price * 0.5}" : $"{weapon.SellingPrice}";
+
 
                 Console.WriteLine(new string('-', 80));
-                Console.WriteLine($"{i + 1}. {equipmessage} {classNameOnly} - {weapon.WeaponType}");
+                Console.WriteLine($"{i + 1}. {equipmessage}{classNameOnly} - {weapon.WeaponType} (판매가 : {sellingPrice} G)");
                 Console.WriteLine($"   옵션: {optionText}");
                 Console.WriteLine($"   설명: {weapon.Explain}");
             }
 
             string selectText = $"0. 나가기 | " +
-                    (mode == "view" ? "1. 장착 관리 | 2. 소모품 사용 | " :
+                    (mode == "view" ? "1. 장착 관리 | 2. 소모품 사용 | 3. 전리품 보기 | " :
                     mode == "drink" ? $"{startIndex} ~ {endIndex}. 소모품 사용 | " :
                     mode == "equip" ? $"{startIndex} ~ {endIndex}. 아이템 장착 | " : "") +
                     "p. 이전 페이지 | n. 다음 페이지";
@@ -204,15 +212,15 @@ namespace TextRPG.WeaponManagement
                 else if (input == "1")
                 {
                     ManageMentWeapons(character);
-                    break;
                 }
                 else if (input == "2")
                 {
                     DrinkingPotion(character);
-                    break;
                 }
-                else if (input == "p") currentPage--;
-                else if (input == "n") currentPage++;
+                else if (input == "3") 
+                {
+                    CheckReward(character);
+                }
                 else
                 {
                     Console.WriteLine("잘못된 입력입니다.");
@@ -255,7 +263,6 @@ namespace TextRPG.WeaponManagement
                 }
             }
         }
-
 
 
         public static void ApplyOptions(Dictionary<string, int> options, bool isEquip, Character character) // 장착 혹은 해제 시 캐릭터의 능력치 변동
@@ -443,7 +450,31 @@ namespace TextRPG.WeaponManagement
                 RewardInventory.Add(item);
 
             item.IsSelled = true;
-        }   
         }
+
+        public static void CheckReward(Character character)
+        {
+            int currentPage = 1;
+            int itemsPerPage = 4;
+
+            while (true)
+            {
+                List<Weapons> items = RewardInventory.Where(w => w.IsSelled).ToList();
+                currentPage = Shop.PageCheck(currentPage, items.Count, itemsPerPage);
+                PaginateAndDisplayInventory(items, currentPage, itemsPerPage, character, "reward");
+
+                string input = Console.ReadLine();
+                if (input == "0") { return; }
+                else if (input.ToLower() == "p") currentPage--;
+                else if (input.ToLower() == "n") currentPage++;
+                else
+                {
+                    Console.WriteLine("잘못된 입력입니다.");
+                    Thread.Sleep(1000);
+                }
+            }
+        }
+
     }
+}   
 
