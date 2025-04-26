@@ -156,6 +156,14 @@ namespace TextRPG.MonsterManagement
         // 전투가 끝난 뒤 결과(승리,패배)를 계산하고 보상 정보 출력
         public void ShowResult(Character character, List<Monster> monsters)
         {
+            //가지고 있는 스킬 전부 효과 제거 및 쿨타임/효과 초기화
+            foreach (var skill in character.Skills)
+            {
+                skill.EndSkillState();
+                //남은 쿨타임, 효과지속시간, 효과 적용 여부 등을 0과 false로 변경
+                //또한 가지고 있던 모든 효과 제거
+            }
+
             // 전투 결과 계산
             string result;
             int killedCount = monsters.Count(m => m.Health <= 0);
@@ -240,6 +248,11 @@ namespace TextRPG.MonsterManagement
                     }
                 }
 
+                if(character.ClassName == "총무팀") //운명의 달인 효과로 보상현금 +20%
+                {
+                    totalGold = (int)(totalGold * 1.2);
+                }
+
                 Console.WriteLine("\n[캐릭터 정보]");
                 Console.WriteLine($"Lv.{character.Level} {character.Name}");
                 Console.WriteLine($"HP {character.Health}");
@@ -250,6 +263,8 @@ namespace TextRPG.MonsterManagement
 
                 character.Gold += totalGold;
                 character.EXP += totalExp;
+
+                character.LevelUP(); //얻은 경험치에 따라 레벨업 메서드 호출
 
                 // 아이템 카운팅 정리
                 // GroupBy를 활용해서 드랍 아이템을 합쳐서 출력
@@ -282,7 +297,8 @@ namespace TextRPG.MonsterManagement
             Monster.SpawnMonster(character);
             foreach (var skill in character.Skills)
             {
-                skill.SetSkillOwner(character);
+                skill.SetSkillOwner(character); 
+                //Skill함수 내에, Apply효과의 Key값으로 할당하는 SkillOwner를 character=플레이어로 설정
             }
             // 전투가 끝날 때까지 무한 반복
             while (true)
@@ -313,6 +329,15 @@ namespace TextRPG.MonsterManagement
                     Console.WriteLine($"{i + 1}. Lv. {aliveMonsters[i].Level} {aliveMonsters[i].Name} HP {aliveMonsters[i].Health}");
                 }
                 Console.WriteLine();
+
+                //패시브 스킬 자동 적용
+                foreach(var skill in character.Skills)
+                {
+                    if (skill.IsActive == false)
+                    {
+                        skill.UseSkill(character, Monster.currentBattleMonsters);
+                    }
+                }
 
                 Console.WriteLine("[행동 선택]");
                 Console.WriteLine("1. 일반 공격");
@@ -371,6 +396,37 @@ namespace TextRPG.MonsterManagement
                         {
                             Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
 
+                            //적 처치시 작동하는 스킬 on
+                            if (character.ClassName == "전산팀") //백업 시스템 효과 구현
+                            {
+                                int realHeal;
+                                int realMPheal;
+
+                                if (character.Health+10 > character.MaxHealth) realHeal = character.MaxHealth - character.Health;
+                                else realHeal = 10;
+                                
+                                if (character.MP + 10 > character.MaxMP) realMPheal = character.MaxMP - character.MP;
+                                else realMPheal = 10;
+
+                                character.Health += realHeal;
+                                character.MP += realMPheal;
+                                
+                                Console.WriteLine($"{character.Name}의 HP가 {realHeal} 회복되었습니다.");
+                                Console.WriteLine($"{character.Name}의 MP가 {realMPheal} 회복되었습니다.");
+                            }
+
+                            if(character.ClassName == "기획팀")
+                            {
+                                foreach(var skill in character.Skills)
+                                {
+                                    if(skill.IsActive == false)
+                                    {
+                                        skill.UseSkill(character, Monster.currentBattleMonsters);
+                                    }
+                                }
+                            }
+
+
                             if (!target.IsDropProcessed) 
                             { 
                                if (target.DropItems != null && target.DropItems.Count > 0)
@@ -410,7 +466,11 @@ namespace TextRPG.MonsterManagement
 
                     case 2:
                         Console.WriteLine("스킬");
-                        Console.WriteLine("Enter를 눌러 계속...");
+
+                        SelectSkill(character);
+
+                        // 플레이어 차례가 끝나면 몬스터들의 공격 차례 진행
+                        EnemyPhase(character);
                         Console.ReadLine();
                         break;
 
@@ -473,9 +533,59 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine("Enter를 입력해주세요..");
                 Console.ReadLine();
             }
+
+            //가지고 있는 스킬의 쿨다운/효과 감소 진행(액티브)
+            foreach(var skill in character.Skills)
+            {
+                if (skill.IsActive == true)
+                {
+                    skill.UpdateSkillState();
+                }                
+            }
+
             Console.WriteLine("\n상대의 공격이 끝났습니다. [플레이어의 차례]");
             Console.WriteLine("계속하려면 Enter를 누르세요...");
             Console.ReadLine();
+        }
+
+
+        public static void SelectSkill(Character character)
+        {
+            Console.WriteLine("\n[보유 스킬]");
+            if (character.Skills.Count > 0)
+            {
+                int index = 1;
+                foreach (var skill in character.Skills)
+                {
+                    Console.WriteLine($"{index} {skill.SkillName} (MP 소모: {skill.CostMP}, 쿨타임: {skill.CoolTime}턴)");
+                    Console.WriteLine($"  설명: {skill.SkillDescription}");
+                    index++;
+                }
+                Console.WriteLine("사용할 스킬을 선택해주세요.");
+                Console.Write(">>");
+                int actionChoice = InputHelper.MatchOrNot(0, 3);
+
+                switch (actionChoice)
+                {
+                    case 0:  return;
+                    case 1:
+                        character.Skills[actionChoice - 1].UseSkill(character, Monster.currentBattleMonsters);
+                        break;
+                    case 2:
+                        character.Skills[actionChoice - 1].UseSkill(character, Monster.currentBattleMonsters);
+                        break;
+                    case 3: Console.WriteLine("해당 스킬은 패시브 스킬이므로 사용할 수 없습니다. 다른 스킬을 선택해주세요."); SelectSkill(character); break;
+                    default:
+                        Console.WriteLine("잘못된 입력입니다");
+                        break;
+
+                }
+                    
+            }
+            else
+            {
+                Console.WriteLine("보유한 스킬이 없습니다.");
+            }
         }
 
     }
