@@ -191,17 +191,18 @@ namespace TextRPG.WeaponManagement
         //인벤토리 보여주기 로직
         public static void ShowInventory(Character character)
         {
-            List<Weapons> isSelledItems = new List<Weapons>();
-            isSelledItems.AddRange(Inventory.Where(w => w.IsSelled == true));
-            isSelledItems.AddRange(NotbuyAbleInventory.Where(w => w.IsSelled == true));
-            isSelledItems.AddRange(PotionInventory.Where(w => w.IsSelled == true));
-            isSelledItems.AddRange(RewardInventory.Where(w => w.IsSelled == true));
 
             int currentPage = 1;
             int itemsPerPage = 4;
 
             while (true)
             {
+                List<Weapons> isSelledItems = new List<Weapons>();
+                isSelledItems.AddRange(Inventory.Where(w => w.IsSelled == true));
+                isSelledItems.AddRange(NotbuyAbleInventory.Where(w => w.IsSelled == true));
+                isSelledItems.AddRange(PotionInventory.Where(w => w.IsSelled == true));
+                isSelledItems.AddRange(RewardInventory.Where(w => w.IsSelled == true));
+
                 currentPage = Shop.PageCheck(currentPage, isSelledItems.Count, itemsPerPage);
                 PaginateAndDisplayInventory(isSelledItems, currentPage, itemsPerPage, character, "view");
 
@@ -390,15 +391,15 @@ namespace TextRPG.WeaponManagement
 
         public static void ManageMentWeapons(Character character)
         {
-            List<Weapons> myweapon = new List<Weapons>();
-            myweapon.AddRange(Weapons.Inventory.Where(w => w.IsSelled && (w.ClassName == "전체" || w.ClassName == character.ClassName)));
-            myweapon.AddRange(Weapons.NotbuyAbleInventory.Where(w => w.IsSelled && (w.ClassName == "전체" || w.ClassName == character.ClassName)));
-
             int currentPage = 1;
             int itemsPerPage = 4;
 
             while (true)
             {
+                List<Weapons> myweapon = new List<Weapons>();
+                myweapon.AddRange(Weapons.Inventory.Where(w => w.IsSelled && (w.ClassName == "전체" || w.ClassName == character.ClassName)));
+                myweapon.AddRange(Weapons.NotbuyAbleInventory.Where(w => w.IsSelled && (w.ClassName == "전체" || w.ClassName == character.ClassName)));
+
                 currentPage = Shop.PageCheck(currentPage, myweapon.Count, itemsPerPage);
                 PaginateAndDisplayInventory(myweapon, currentPage, itemsPerPage, character, "equip");
 
