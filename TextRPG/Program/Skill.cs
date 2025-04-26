@@ -727,7 +727,7 @@ namespace TextRPG.SkillManagement
                 buffs[SkillOwner]=(critdmgBonus, critBonus);
                 SkillOwner.CRIT += critBonus;
                 SkillOwner.CRITDMG += critdmgBonus;
-                Console.WriteLine($"{SkillOwner.Name}의 치명타 확률이 {critBonus}%, 치명타 대미지 배율이 +{critdmgBonus*100}% 증가했습니다.");
+                Console.WriteLine($"{SkillOwner.Name}의 치명타 확률이 {critBonus}%, 치명타 대미지 배율이 +{(int)(critdmgBonus*100)}% 증가했습니다.");
             }
         }
         protected override void OnEffectEnd()
