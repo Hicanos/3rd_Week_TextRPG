@@ -311,7 +311,11 @@ namespace TextRPG.CharacterManagement
                 Console.WriteLine($"Lv.{monster.Level} {monster.Name}을(를) 공격했지만 아무일도 일어나지 않았습니다.");
             }
 
-            if (monster.Health <= 0) monster.Health = 0; //몬스터 체력이 0 이하로 떨어지지 않도록 처리
+            if (monster.Health <= 0)
+            {
+                monster.Health = 0;                
+                BattleManager.CheckDead(character);
+            } //몬스터 체력이 0 이하로 떨어지지 않도록 처리
 
         }
 
