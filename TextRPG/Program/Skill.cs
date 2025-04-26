@@ -762,7 +762,11 @@ namespace TextRPG.SkillManagement
 
             skillDmg = (int)(character.Attack * 1.2 + character.MaxMP * 0.15);
             target.Health -= skillDmg;
-            if(target.Health < 0) target.Health = 0;
+            if (target.Health < 0)
+            {
+                BattleManager.CheckDead(character);
+                target.Health = 0;
+            }
 
             Console.WriteLine($"LV.{target.Level} {target.Name}에게 {skillDmg}의 피해를 입혔습니다.");
             CurrentCoolDown = CoolTime;
@@ -790,7 +794,11 @@ namespace TextRPG.SkillManagement
             {
                 target.Health -= skillDmg;
                 Console.WriteLine($"LV.{target.Level} {target.Name}에게 {skillDmg}의 피해를 입혔습니다.");
-                if (target.Health <= 0) target.Health = 0;
+                if (target.Health <= 0)
+                { 
+                    target.Health = 0;
+                    BattleManager.CheckDead(character);
+                }
             }
 
             CurrentCoolDown = CoolTime;
@@ -836,6 +844,7 @@ namespace TextRPG.SkillManagement
                 target.Health -= skillDmg;
                 if (target.Health <= 0) target.Health = 0;
                 Console.WriteLine($"LV.{target.Level} {target.Name}에게 {skillDmg}의 피해를 입혔습니다.");
+                BattleManager.CheckDead(character);
             }
             CurrentCoolDown = CoolTime;
         }

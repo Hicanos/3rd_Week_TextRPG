@@ -256,6 +256,7 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine("\n[캐릭터 정보]");
                 Console.WriteLine($"Lv.{character.Level} {character.Name}");
                 Console.WriteLine($"HP {character.Health}");
+                Console.WriteLine($"MP {character.MP}");
 
                 Console.WriteLine("\n[획득 아이템]");
                 Console.WriteLine($"{totalGold}원");
@@ -278,6 +279,7 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine("당신은 해고당했습니다.");
                 Console.WriteLine($"Lv.{character.Level} {character.Name}");
                 Console.WriteLine($"HP {character.Health}");
+                Console.WriteLine($"MP {character.MP}");
             }
 
             Console.WriteLine("\n0. 다음");
@@ -295,6 +297,7 @@ namespace TextRPG.MonsterManagement
             Console.Clear();
             Console.WriteLine("=== 승진 전투 개시 ===\n");
             Monster.SpawnMonster(character);
+            character.AssignSkills();
             foreach (var skill in character.Skills)
             {
                 skill.SetSkillOwner(character); 
@@ -319,7 +322,8 @@ namespace TextRPG.MonsterManagement
                 Console.Clear();
                 Console.WriteLine("[내 정보]");
                 Console.WriteLine($"Lv.{character.Level} {character.Name} ({character.ClassName})");
-                Console.WriteLine($"HP {character.Health}/{character.MaxHealth}\n");
+                Console.WriteLine($"HP {character.Health}/{character.MaxHealth}");
+                Console.WriteLine($"MP {character.MP}/{character.MaxMP}\n");
 
 
                 character.ShowSkillList();
@@ -397,37 +401,6 @@ namespace TextRPG.MonsterManagement
                         {
                             Console.WriteLine($"{target.Name} 은(는) 쓰러졌습니다!");
 
-                            //적 처치시 작동하는 스킬 on
-                            if (character.ClassName == "전산팀") //백업 시스템 효과 구현
-                            {
-                                int realHeal;
-                                int realMPheal;
-
-                                if (character.Health+10 > character.MaxHealth) realHeal = character.MaxHealth - character.Health;
-                                else realHeal = 10;
-                                
-                                if (character.MP + 10 > character.MaxMP) realMPheal = character.MaxMP - character.MP;
-                                else realMPheal = 10;
-
-                                character.Health += realHeal;
-                                character.MP += realMPheal;
-                                
-                                Console.WriteLine($"{character.Name}의 HP가 {realHeal} 회복되었습니다.");
-                                Console.WriteLine($"{character.Name}의 MP가 {realMPheal} 회복되었습니다.");
-                            }
-
-                            if(character.ClassName == "기획팀")
-                            {
-                                foreach(var skill in character.Skills)
-                                {
-                                    if(skill.IsActive == false)
-                                    {
-                                        skill.UseSkill(character, Monster.currentBattleMonsters);
-                                    }
-                                }
-                            }
-
-
                             if (!target.IsDropProcessed) 
                             { 
                                if (target.DropItems != null && target.DropItems.Count > 0)
@@ -469,7 +442,7 @@ namespace TextRPG.MonsterManagement
                         Console.WriteLine("스킬");
 
                         SelectSkill(character);
-
+                        
                         // 플레이어 차례가 끝나면 몬스터들의 공격 차례 진행
                         EnemyPhase(character);
                         Console.ReadLine();
@@ -570,10 +543,10 @@ namespace TextRPG.MonsterManagement
                 {
                     case 0:  return;
                     case 1:
-                        character.Skills[actionChoice - 1].UseSkill(character, Monster.currentBattleMonsters);
+                        character.Skills[actionChoice - 1].UseSkill(character, Monster.currentBattleMonsters);                        
                         break;
                     case 2:
-                        character.Skills[actionChoice - 1].UseSkill(character, Monster.currentBattleMonsters);
+                        character.Skills[actionChoice - 1].UseSkill(character, Monster.currentBattleMonsters);                        
                         break;
                     case 3: Console.WriteLine("해당 스킬은 패시브 스킬이므로 사용할 수 없습니다. 다른 스킬을 선택해주세요."); SelectSkill(character); break;
                     default:
@@ -586,6 +559,39 @@ namespace TextRPG.MonsterManagement
             else
             {
                 Console.WriteLine("보유한 스킬이 없습니다.");
+            }
+        }
+
+        public static void CheckDead(Character character)
+        {
+            //적 처치시 작동하는 스킬 on
+            if (character.ClassName == "전산팀") //백업 시스템 효과 구현
+            {
+                int realHeal;
+                int realMPheal;
+
+                if (character.Health + 10 > character.MaxHealth) realHeal = character.MaxHealth - character.Health;
+                else realHeal = 10;
+
+                if (character.MP + 10 > character.MaxMP) realMPheal = character.MaxMP - character.MP;
+                else realMPheal = 10;
+
+                character.Health += realHeal;
+                character.MP += realMPheal;
+
+                Console.WriteLine($"{character.Name}의 HP가 {realHeal} 회복되었습니다.");
+                Console.WriteLine($"{character.Name}의 MP가 {realMPheal} 회복되었습니다.");
+            }
+
+            if (character.ClassName == "기획팀")
+            {
+                foreach (var skill in character.Skills)
+                {
+                    if (skill.IsActive == false)
+                    {
+                        skill.UseSkill(character, Monster.currentBattleMonsters);
+                    }
+                }
             }
         }
 
