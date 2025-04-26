@@ -78,10 +78,10 @@ namespace TextRPG.MonsterManagement
                  new Monster("임차장", 3, 19, 5, 26, 80, 10, 3, 120, 250, new List<Weapons> { Weapons.CreateDrop("차장의 가발") }),
                  new Monster("김부장", 4, 21, 4, 24, 75, 20, 4, 150, 300, new List<Weapons> { Weapons.CreateDrop("부장의 넥타이")}),
                  // stage 3
-                 new Monster("오실장", 5, 24, 10, 36, 80, 15, 5, 250, 400, new List<Weapons> { Weapons.CreateDrop("직업 평가표") }),
+                 new Monster("오실장", 5, 24, 10, 36, 80, 15, 5, 250, 400, new List<Weapons> { Weapons.CreateDrop("직원 평가표") }),
                  new Monster("카이사", 6, 26, 8, 32, 80, 25, 6, 300, 500, new List<Weapons> { Weapons.CreateDrop("유흥업소 명함") }),
                  // stage 4
-                 new Monster("유상무", 7, 28, 17, 43, 90, 20, 7, 400, 700, new List<Weapons> { Weapons.CreateDrop("한정판 굿즈 명함") }),
+                 new Monster("유상무", 7, 28, 17, 43, 90, 20, 7, 400, 700, new List<Weapons> { Weapons.CreateDrop("한정판 굿즈 인형") }),
                  new Monster("박사장", 8, 31, 14, 50, 95, 30, 8, 500, 800, new List<Weapons> { Weapons.CreateDrop("노또 용지") }),
                  // stage 5 Boss
                  new Monster("석회장", 10, 40, 25, 250, 110, 30, 10, 2000, 3000, new List<Weapons> { Weapons.CreateDrop("직급 명패") })

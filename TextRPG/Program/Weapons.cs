@@ -103,6 +103,24 @@ namespace TextRPG.WeaponManagement
 
         public static Weapons CreateDrop(string name)
         {
+            // RewardInventory에서 이름이 일치하는 전리품 검색
+            var rewardItem = Weapons.RewardInventory.FirstOrDefault(item => item.Name == name);
+
+            if (rewardItem != null)
+            {
+                // 검색된 전리품 반환
+                return new Weapons(
+                    rewardItem.IsSelled,
+                    rewardItem.Name,
+                    rewardItem.Explain,
+                    rewardItem.WeaponType,
+                    rewardItem.DropObject,
+                    rewardItem.DropChance,
+                    rewardItem.SellingPrice
+                );
+            }
+
+            // 전리품이 없을 경우 기본값 반환
             return new Weapons
             {
                 Name = name,
@@ -119,7 +137,7 @@ namespace TextRPG.WeaponManagement
         }
 
 
-        
+
         public static void PaginateAndDisplayInventory(List<Weapons> weapons, int page, int itemsPerPage, Character character, string mode)
         { // 아이템 목록 페이지로 나눠 보여주기
             int totalPages = (int)Math.Ceiling((double)weapons.Count / itemsPerPage); // 페이지 수 계산 -> Ceiling으로 반올림
