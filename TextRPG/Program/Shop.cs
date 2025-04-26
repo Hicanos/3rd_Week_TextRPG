@@ -232,7 +232,15 @@ namespace TextRPG.ShopManagement
                         {
                             selected.IsSelled = false;
                             selected.IsEquip = false;
-                            int sellPrice = selected.Price > 0 ? (int)(selected.Price * 0.5) : selected.SellingPrice;
+                            int sellPrice;
+                            if(character.ClassName == "전산팀")
+                            {
+                                sellPrice = selected.Price > 0 ? (int)(selected.Price * 0.5*1.2) : (int)(selected.SellingPrice*1.2);
+                            }
+                            else
+                            {
+                                sellPrice = selected.Price > 0 ? (int)(selected.Price * 0.5) : selected.SellingPrice;
+                            }
                             character.Gold += sellPrice;
                             Console.WriteLine($"{selected.Name}의 판매를 완료했습니다.");
                         }
