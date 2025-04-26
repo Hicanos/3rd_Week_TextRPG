@@ -30,12 +30,20 @@ namespace TextRPG.ShopManagement
                 if (mode == "sell")
                 {
                     if (weapon.Price > 0) // 드랍된 아이템이 아닐 시
-                    {
-                        alreadyBuy = $"판매가 : {(int)weapon.Price * 0.5} G";
+                    {  
+                        if (character.ClassName == "총무팀")
+                        {
+                            alreadyBuy = $"판매가 : {(int)(weapon.Price * 0.5*1.2)} G";
+                        }
+                        else alreadyBuy = $"판매가 : {(int)weapon.Price * 0.5} G";
                     }
                     else // 드랍된 아이템일시
                     {
-                        alreadyBuy = $"판매가 : {weapon.SellingPrice} G";
+                        if (character.ClassName == "총무팀")
+                        {
+                            alreadyBuy = $"판매가 : {(int)(weapon.SellingPrice*1.2)} G";
+                        }
+                        else  alreadyBuy = $"판매가 : {weapon.SellingPrice} G";
                     }
                 }
                 else // 모드가 구매, 보기라면
