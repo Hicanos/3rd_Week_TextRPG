@@ -59,7 +59,7 @@ namespace TextRPG.WeaponManagement
             }
             else
             {
-                Inventory.Add(this); ;
+                Inventory.Add(this);
             }
         }
 
