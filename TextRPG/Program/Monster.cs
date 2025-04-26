@@ -208,9 +208,8 @@ namespace TextRPG.MonsterManagement
                 }
                 if (Quest.ActiveQuest != null)
                 {
-                    Quest.IsQuestCleared = true;
-                    // 스테이지마다 퀘스트 클리어 문구(퀘스트 이름)만 출력
                     Console.WriteLine(Quest.ActiveQuest.Name);
+                    Quest.Complete(character, Quest.ActiveQuest);
                     Console.WriteLine("퀘스트를 성공하셨습니다");
                 }
                 if (Monster.CurrentStage > 5 && result == "승리")
