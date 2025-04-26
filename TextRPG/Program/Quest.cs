@@ -77,6 +77,8 @@ namespace TextRPG.QuestManagement
             CompletedQuestNames.Add(Name);
             ActiveQuest = null;
             ActiveQuestTargetName = null;
+
+            character.LevelUP();
         }
 
         // 퀘스트 수락 상세 UI
