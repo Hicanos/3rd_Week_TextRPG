@@ -100,7 +100,7 @@ namespace TextRPG.CharacterManagement
             Defense = defense;
             Gold = gold;
             EXP = 0;
-            MaxEXP = 2.5 * Level * Level + 17.5 * Level - 10; //필요 경험치 공식 (2.5*level^2 + 17.5*level - 10)
+            MaxEXP = 15 * Level; //기존 필요 경험치 공식 (2.5*level^2 + 17.5*level - 10)
         }
 
         public void AssignSkills()
@@ -238,7 +238,7 @@ namespace TextRPG.CharacterManagement
                     EXP -= (int)MaxEXP; // 남은 경험치
                     Level++;
                     ApplyBenefits(); // 레벨업 시 스탯 증가
-                    MaxEXP = 2.5 * Level * Level + 17.5 * Level - 10; //MaxEXP 갱신
+                    MaxEXP = 15 * Level; //MaxEXP 갱신
                     //레벨업 시 클래스이름-랭크 증가(직급 상승)
                     ClassName = Enum.GetName(typeof(Ranks), Level);
                     Console.WriteLine($"{Name}이(가) {ClassName}(으)로 승진했습니다! 현재 레벨: {Level}");

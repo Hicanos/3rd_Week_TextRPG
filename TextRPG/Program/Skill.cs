@@ -185,13 +185,22 @@ namespace TextRPG.SkillManagement
             }            
         }
 
+        public virtual void EndSkillState()
+        {
+            CurrentCoolDown = 0;
+            EffectDuration = 0;
+            ItWorks = false;
+            WorksNow = false;
+            OnEffectEnd();
+        }
+
         //스킬 사용 로직 - 버프랑 관계없이 쓰자 통일하자
         protected void SkillUse(Character character)
         {
-            Console.WriteLine($"{character.Name}이(가) {SkillName}을(를) 사용!");
+            Console.WriteLine($"{character.Name}이(가) {SkillName}을(를) 사용!\n");
             if (SkillMent != null)
             {
-                Console.WriteLine($"{character.Name}:{SkillMent}");
+                Console.WriteLine($"{character.Name}:{SkillMent}\n");
             }            
             character.MP -= CostMP;
         }
@@ -256,7 +265,6 @@ namespace TextRPG.SkillManagement
             if (DexBonus.ContainsKey(SkillOwner))
             {
                 SkillOwner.DEX -= DexBonus[SkillOwner];
-                Console.WriteLine($"{SkillOwner.Name}의 {SkillName} 효과가 종료되었습니다.");
                 DexBonus.Remove(SkillOwner);
             }
         }
@@ -305,7 +313,6 @@ namespace TextRPG.SkillManagement
 
                 SkillOwner.DEX -= buff.dex;
                 SkillOwner.CRIT -= buff.crit;
-                Console.WriteLine($"{SkillOwner.Name}의 {SkillName} 효과가 종료되었습니다.");
                 buffs.Remove(SkillOwner);
             }
         }
@@ -464,7 +471,6 @@ namespace TextRPG.SkillManagement
             if (EVAbonus.ContainsKey(SkillOwner))
             {
                 SkillOwner.EVA -= EVAbonus[SkillOwner];
-                Console.WriteLine($"{SkillOwner.Name}의 {SkillName}의 효과가 종료되었습니다.");
                 EVAbonus.Remove(SkillOwner);
             }
         }
@@ -493,7 +499,7 @@ namespace TextRPG.SkillManagement
 
                 CRITBonus[SkillOwner] = critBonus;
                 SkillOwner.CRIT += critBonus;
-                Console.WriteLine($"{SkillOwner}의 치명타 확률이 {critBonus}% 증가했습니다.");
+                Console.WriteLine($"{SkillOwner.Name}의 치명타 확률이 {critBonus}% 증가했습니다.");
             }
         }
 
@@ -585,7 +591,7 @@ namespace TextRPG.SkillManagement
                 deffenseBonus = (int)(SkillOwner.Defense * 0.4);
                 DEFBonus[SkillOwner] = deffenseBonus;
                 SkillOwner.Defense += deffenseBonus;
-                Console.WriteLine($"{SkillOwner}의 방어력이 {deffenseBonus} 증가했습니다.");
+                Console.WriteLine($"{SkillOwner.Name}의 방어력이 {deffenseBonus} 증가했습니다.");
                 EffectDuration = Duration; //효과 on
             }
         }
@@ -673,7 +679,7 @@ namespace TextRPG.SkillManagement
                 buffs[SkillOwner] = (EVAbonus, attackbonus);
                 SkillOwner.EVA += EVAbonus;
                 SkillOwner.Attack += attackbonus;
-                Console.WriteLine($"{SkillOwner}의 회피율이 {EVAbonus}%, 공격력이 {attackbonus} 증가했습니다.");
+                Console.WriteLine($"{SkillOwner.Name}의 회피율이 {EVAbonus}%, 공격력이 {attackbonus} 증가했습니다.");
                 EffectDuration = Duration;
             }
 
@@ -862,7 +868,7 @@ namespace TextRPG.SkillManagement
 
                 EvaBonus[SkillOwner] = evaBonus;
                 SkillOwner.EVA += evaBonus;
-                Console.WriteLine($"{SkillOwner}의 회피율이 {evaBonus}% 증가했습니다.");
+                Console.WriteLine($"{SkillOwner.Name}의 회피율이 {evaBonus}% 증가했습니다.");
 
                 EffectDuration = Duration;
             }
