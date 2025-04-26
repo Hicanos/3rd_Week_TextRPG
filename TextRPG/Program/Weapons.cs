@@ -186,10 +186,19 @@ namespace TextRPG.WeaponManagement
                 string classNameOnly = weapon.ClassName == null ? "" : weapon.ClassName == "전체" ? " ( 전체 )" : $" ({weapon.ClassName} 전용)";
                 string optionText = weapon.Options != null && weapon.Options.Count > 0 ? 
                 string.Join(", ", weapon.Options.Select(m => $"{m.Key} {(m.Value >= 0 ? "+" : "")}{m.Value}")) : "없음";
-                string sellingPrice = weapon.Price > 0 ? $"{(int)weapon.Price * 0.5}" : $"{weapon.SellingPrice}";
+                string sellingPrice;
+                if (character.ClassName == "총무팀")
+                {
+                    sellingPrice = weapon.Price > 0 ? $"{(int)weapon.Price * 0.5*1.2}" : $"{(int)(weapon.SellingPrice*1.2)}";
+                }
+                else
+                {
+                    sellingPrice = weapon.Price > 0 ? $"{(int)weapon.Price * 0.5}" : $"{weapon.SellingPrice}";
+                }
 
 
-                Console.WriteLine(new string('-', 80));
+
+                    Console.WriteLine(new string('-', 80));
                 Console.WriteLine($"{i + 1}. {equipmessage}{classNameOnly} - {weapon.WeaponType} (판매가 : {sellingPrice} G)");
                 Console.WriteLine($"   옵션: {optionText}");
                 Console.WriteLine($"   설명: {weapon.Explain}");
