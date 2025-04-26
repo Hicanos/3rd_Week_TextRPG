@@ -97,9 +97,9 @@ namespace TextRPG.QuestManagement
                 Console.WriteLine($"- {quest.TargetMonster} 1마리 처치 (0/1)\n");
 
             Console.WriteLine("- 보상- ");
-            Console.WriteLine($"\t{quest.RewardGold}G");
+            Console.WriteLine($"{quest.RewardGold}G");
             if (quest.RewardExp > 0)
-                Console.WriteLine($"\t{quest.RewardExp}EXP");
+                Console.WriteLine($"{quest.RewardExp}EXP");
             Console.WriteLine();
 
             Console.WriteLine("1. 수락");
