@@ -90,7 +90,7 @@
             "ClassName": "홍보팀",
             "SkillName": "이목 집중",
             "SkillMent": "-",
-            "SkillDescription": "전투 시작 시 2턴 동안 치명타 확률 +40%+방어력 +30%",
+            "SkillDescription": "전투 지속 치명타 확률 + 20% 증가",
             "CostMP": 0,
             "CoolDown": 0,
             "CoolTime": 0,
