@@ -321,7 +321,7 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine($"Lv.{character.Level} {character.Name} ({character.ClassName})");
                 Console.WriteLine($"HP {character.Health}/{character.MaxHealth}\n");
 
-                character.AssignSkills();
+
                 character.ShowSkillList();
 
                 Console.WriteLine("[몬스터 목록]");
