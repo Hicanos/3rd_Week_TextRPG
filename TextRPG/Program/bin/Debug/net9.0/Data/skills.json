@@ -1,0 +1,308 @@
+[
+    {
+        "Type": "TextRPG.SkillManagement.PersonnelEvaluation, Program",
+        "Data": {
+            "ClassName": "인사팀",
+            "SkillName": "인사평가",
+            "SkillMent": "반갑다. 내 주먹은 10점 만점에 몇 점이지?",
+            "SkillDescription": "적 전체에게 범위 공격(공격력 * 1.5), 2턴간 명중률 +30%",
+            "CostMP": 25,
+            "CoolDown": 0,
+            "CoolTime": 2,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 2,
+            "ItWorks": false,
+            "TargetType": 3
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.NoticeToEmployees, Program",
+        "Data": {
+            "ClassName": "인사팀",
+            "SkillName": "사내 공지",
+            "SkillMent": "공지합니다 이제부터 이승 퇴직 권고하겠습니다.",
+            "SkillDescription": "자신의 명중률/치명타확률 +15% (3턴)",
+            "CostMP": 30,
+            "CoolDown": 0,
+            "CoolTime": 4,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 3,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.HRMonitoringNetwork, Program",
+        "Data": {
+            "ClassName": "인사팀",
+            "SkillName": "HR 감시망",
+            "SkillMent": "-",
+            "SkillDescription": "매 턴 자신의 방어력 +2, 명중률 +3%, 회피율 +3%",
+            "CostMP": 0,
+            "CoolDown": 0,
+            "CoolTime": 0,
+            "IsActive": false,
+            "EffectDuration": 0,
+            "Duration": 1,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.PublicRelations, Program",
+        "Data": {
+            "ClassName": "홍보팀",
+            "SkillName": "대외 홍보",
+            "SkillMent": "30초 광고 들어가겠습니다. 스킵 버튼은 없습니다.",
+            "SkillDescription": "적 전체에게 (최대 마나 * 0.3)의 마나피해 범위 공격",
+            "CostMP": 20,
+            "CoolDown": 0,
+            "CoolTime": 2,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 3
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.ImageMaking, Program",
+        "Data": {
+            "ClassName": "홍보팀",
+            "SkillName": "이미지 메이킹",
+            "SkillMent": "겉 모습이 좋아야 잘 먹히는 법.",
+            "SkillDescription": "체력 회복 (최대 체력의 20%), 3턴간 자신의 회피 +25%",
+            "CostMP": 35,
+            "CoolDown": 0,
+            "CoolTime": 4,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 3,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.Attention, Program",
+        "Data": {
+            "ClassName": "홍보팀",
+            "SkillName": "이목 집중",
+            "SkillMent": "-",
+            "SkillDescription": "전투 지속 치명타 확률 + 20% 증가",
+            "CostMP": 0,
+            "CoolDown": 0,
+            "CoolTime": 0,
+            "IsActive": false,
+            "EffectDuration": 0,
+            "Duration": 2,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.BudgetaryControl, Program",
+        "Data": {
+            "ClassName": "총무팀",
+            "SkillName": "예산 통제",
+            "SkillMent": "이건 예산이 부족하겠는데요?",
+            "SkillDescription": "단일 대상 적 대미지(공격력 * 1+방어력 * 2)",
+            "CostMP": 20,
+            "CoolDown": 0,
+            "CoolTime": 3,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 2
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.SuppliesSupport, Program",
+        "Data": {
+            "ClassName": "총무팀",
+            "SkillName": "비품 지원",
+            "SkillMent": "회사 지원이라도 좋아야 일할 맛이 나지.",
+            "SkillDescription": "체력 회복(최대 체력의 15%)+방어력 상승(방어력 *0.4)(2턴)",
+            "CostMP": 40,
+            "CoolDown": 0,
+            "CoolTime": 3,
+            "IsActive": true,
+            "EffectDuration": 2,
+            "Duration": 2,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.MasterOfOperation, Program",
+        "Data": {
+            "ClassName": "총무팀",
+            "SkillName": "운영의 달인",
+            "SkillMent": "-",
+            "SkillDescription": "아이템 되팔기 금액 +20%, 전투 보상 현금 +20%",
+            "CostMP": 0,
+            "CoolDown": 0,
+            "CoolTime": 0,
+            "IsActive": false,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.PerformancePressure, Program",
+        "Data": {
+            "ClassName": "영업팀",
+            "SkillName": "실적 압박",
+            "SkillMent": "본인이 하신 거 맞아요? 왜 이렇게 하셨죠?",
+            "SkillDescription": "단일 대상 적 대미지(공격력 * 2)",
+            "CostMP": 15,
+            "CoolDown": 0,
+            "CoolTime": 2,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 2
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.PersistentPersuasion, Program",
+        "Data": {
+            "ClassName": "영업팀",
+            "SkillName": "끈질긴 설득",
+            "SkillMent": "내가 매번 듣던 말이 있지. 안되면 되게 하라, 센스있게 잘 좀 하자.",
+            "SkillDescription": "자신의 회피율 증가 +40%, 공격력 증가 +20% (2턴)",
+            "CostMP": 30,
+            "CoolDown": 0,
+            "CoolTime": 4,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 2,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.GoalMustBeAchieved, Program",
+        "Data": {
+            "ClassName": "영업팀",
+            "SkillName": "목표는 무조건 달성",
+            "SkillMent": "-",
+            "SkillDescription": "자신의 체력이 80 이하일 때 치명타 대미지+30%, 치명타 확률 +20%",
+            "CostMP": 0,
+            "CoolDown": 0,
+            "CoolTime": 0,
+            "IsActive": false,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.EmergencyPatch, Program",
+        "Data": {
+            "ClassName": "전산팀",
+            "SkillName": "긴급 패치",
+            "SkillMent": "긴급 패치 들어가겠습니다. 협조바랍니다.",
+            "SkillDescription": "단일 적 대미지(공격력 *1.2+최대 마나 *0.15)",
+            "CostMP": 25,
+            "CoolDown": 0,
+            "CoolTime": 2,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 2
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.SystemDown, Program",
+        "Data": {
+            "ClassName": "전산팀",
+            "SkillName": "시스템 다운",
+            "SkillMent": "시스템이 튼튼해야 문제가 없지.",
+            "SkillDescription": "적 전체에게 범위 공격(공격력 *1.2 + 최대 마나*0.2)",
+            "CostMP": 35,
+            "CoolDown": 0,
+            "CoolTime": 3,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 3
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.BackupSystem, Program",
+        "Data": {
+            "ClassName": "전산팀",
+            "SkillName": "백업 시스템",
+            "SkillMent": "-",
+            "SkillDescription": "적 처치 시 체력 +10. 마나 +10",
+            "CostMP": 0,
+            "CoolDown": 0,
+            "CoolTime": 0,
+            "IsActive": false,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.PlanningBombing, Program",
+        "Data": {
+            "ClassName": "기획팀",
+            "SkillName": "기획안 폭격",
+            "SkillMent": "여기 기획안 200페이지 다 확인하셨죠? 기획안에 따라 작업해주세요.",
+            "SkillDescription": "적 전체에게 범위 공격(공격력*1.6)",
+            "CostMP": 25,
+            "CoolDown": 0,
+            "CoolTime": 3,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 3
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.RiskAnalysis, Program",
+        "Data": {
+            "ClassName": "기획팀",
+            "SkillName": "리스크 분석",
+            "SkillMent": "이 문제는 회의를 통해서 진행하시죠.",
+            "SkillDescription": "자신의 회피율+50% (3턴)",
+            "CostMP": 30,
+            "CoolDown": 0,
+            "CoolTime": 3,
+            "IsActive": true,
+            "EffectDuration": 0,
+            "Duration": 3,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    },
+    {
+        "Type": "TextRPG.SkillManagement.ConceptEstablished, Program",
+        "Data": {
+            "ClassName": "기획팀",
+            "SkillName": "컨셉 잡았다",
+            "SkillMent": "-",
+            "SkillDescription": "적 처치 시 치명타 대미지 + 12%, 치명타 확률 10%",
+            "CostMP": 0,
+            "CoolDown": 0,
+            "CoolTime": 0,
+            "IsActive": false,
+            "EffectDuration": 0,
+            "Duration": 0,
+            "ItWorks": false,
+            "TargetType": 1
+        }
+    }
+]

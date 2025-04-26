@@ -170,31 +170,37 @@ namespace TextRPG.SkillManagement
         //스킬의 쿨타임 감소/효과 제거 관리- 매 턴의 마지막에 확인할 것
         public virtual void UpdateSkillState()
         {
-            if (CurrentCoolDown > 0) CurrentCoolDown--;
-
-            //WorksNow가 활성화 되어있다면, WorksNow를 종료시키고 EffectDuration 감소 없음. 
-            if (WorksNow == true) { WorksNow = false;} 
+            //WorksNow가 활성화 되어있다면, WorksNow를 종료시키고 쿨타임과 EffectDuration 감소 없음. 
+            if (WorksNow == true) { WorksNow = false;}
             else
-            {                
+            {
+                if (CurrentCoolDown > 0) CurrentCoolDown--;
                 if (EffectDuration > 0) EffectDuration--;
-
                 if (EffectDuration == 0 && ItWorks) //효과 끝! -효과 되돌려야함
                 {
                     OnEffectEnd();
                     ItWorks = false;
                     Console.WriteLine($"{SkillOwner.Name}의 {SkillName} 효과가 해제되었습니다.");
                 }
-            }
+            }            
+        }
 
+        public virtual void EndSkillState()
+        {
+            CurrentCoolDown = 0;
+            EffectDuration = 0;
+            ItWorks = false;
+            WorksNow = false;
+            OnEffectEnd();
         }
 
         //스킬 사용 로직 - 버프랑 관계없이 쓰자 통일하자
         protected void SkillUse(Character character)
         {
-            Console.WriteLine($"{character.Name}이(가) {SkillName}을(를) 사용!");
+            Console.WriteLine($"{character.Name}이(가) {SkillName}을(를) 사용!\n");
             if (SkillMent != null)
             {
-                Console.WriteLine($"{character.Name}:{SkillMent}");
+                Console.WriteLine($"{character.Name}:{SkillMent}\n");
             }            
             character.MP -= CostMP;
         }
@@ -223,6 +229,7 @@ namespace TextRPG.SkillManagement
             var targets = GetTargets(monsters);
             SkillUse(character); //스킬 사용 선언
 
+
             //"적 전체에게 범위 딜(공격력 * 1.3), 2턴 명중률 +30%"
             int skillDmg = (int)(character.Attack * 1.3);//공격력 * 1.3
 
@@ -234,6 +241,7 @@ namespace TextRPG.SkillManagement
             }
             
             ApplyEffect(); //부가효과 적용
+            WorksNow = true;
             CurrentCoolDown = CoolTime; //쿨다운을 쿨타임이랑 맞춤
         }
 
@@ -257,7 +265,6 @@ namespace TextRPG.SkillManagement
             if (DexBonus.ContainsKey(SkillOwner))
             {
                 SkillOwner.DEX -= DexBonus[SkillOwner];
-                Console.WriteLine($"{SkillOwner.Name}의 {SkillName} 효과가 종료되었습니다.");
                 DexBonus.Remove(SkillOwner);
             }
         }
@@ -281,13 +288,14 @@ namespace TextRPG.SkillManagement
             if (!CanUseSkill(character)) return;
             SkillUse(character);
             ApplyEffect();
+            WorksNow = true;
             CurrentCoolDown = CoolTime;
         }
         public void ApplyEffect()
         {
             if (!ItWorks)
             {
-                ItWorks = true;
+                ItWorks = true;                
                 EffectDuration = Duration;
 
                 //딕셔너리에 각각의 버프값 저장
@@ -305,7 +313,6 @@ namespace TextRPG.SkillManagement
 
                 SkillOwner.DEX -= buff.dex;
                 SkillOwner.CRIT -= buff.crit;
-                Console.WriteLine($"{SkillOwner.Name}의 {SkillName} 효과가 종료되었습니다.");
                 buffs.Remove(SkillOwner);
             }
         }
@@ -330,9 +337,9 @@ namespace TextRPG.SkillManagement
         //매턴 방어력 +2 명중률 +3 회피율 +3
         public override void UseSkill(Character character, List<Monster> monsters)
         {   
-            SkillUse(character);
             ApplyEffect();            
         }
+        //전투 중에는 해제되지 않음. 계속해서 쌓임.
         public void ApplyEffect()
         {
             //buffs 딕셔너리에 SkillOwner라는 key값이 존재하지 않는 경우
@@ -374,7 +381,7 @@ namespace TextRPG.SkillManagement
 
     }
 
-    //홍보팀
+    //홍보팀 스킬 3개
     public class PublicRelations : Skill
     {
         private int skillDmg;
@@ -400,7 +407,7 @@ namespace TextRPG.SkillManagement
                 Console.WriteLine($"LV.{target.Level} {target.Name}에게 {skillDmg}의 피해를 입혔습니다.");
                 if (target.Health <= 0) target.Health = 0;
             }
-
+            WorksNow = true;
             //쿨타임 on
             CurrentCoolDown = CoolTime;
         }
@@ -442,7 +449,9 @@ namespace TextRPG.SkillManagement
                 Console.WriteLine($"{character.Name}의 HP가 {heal} 회복되었습니다.");
             }
 
-                ApplyEffect();
+            ApplyEffect();
+            WorksNow = true;
+            CurrentCoolDown = CoolTime;
 
         }
         public void ApplyEffect()
@@ -462,7 +471,6 @@ namespace TextRPG.SkillManagement
             if (EVAbonus.ContainsKey(SkillOwner))
             {
                 SkillOwner.EVA -= EVAbonus[SkillOwner];
-                Console.WriteLine($"{SkillOwner.Name}의 {SkillName}의 효과가 종료되었습니다.");
                 EVAbonus.Remove(SkillOwner);
             }
         }
@@ -478,22 +486,20 @@ namespace TextRPG.SkillManagement
             SetData(data);
         }
 
-        //전투 지속 치명타 확률 +20
+        //전투 지속 치명타 확률 +20 :패시브
         public override void UseSkill(Character character, List<Monster> monsters)
         {
-            if (!CanUseSkill(character)) return;
-            SkillUse(character); //스킬 사용 선언
             ApplyEffect();
-
         }
         public void ApplyEffect()
         {
-            if (!ItWorks)
+            if (!ItWorks) //중복 적용 방지
             {
                 ItWorks = true;
+
                 CRITBonus[SkillOwner] = critBonus;
                 SkillOwner.CRIT += critBonus;
-                Console.WriteLine($"{SkillOwner}의 치명타 확률이 {critBonus}% 증가했습니다.");
+                Console.WriteLine($"{SkillOwner.Name}의 치명타 확률이 {critBonus}% 증가했습니다.");
             }
         }
 
@@ -533,7 +539,7 @@ namespace TextRPG.SkillManagement
             Console.WriteLine($"LV.{target.Level} {target.Name}에게 {skillDmg}의 피해를 입혔습니다.");
             if (target.Health <= 0) target.Health = 0;
 
-
+            WorksNow = true;
             CurrentCoolDown = CoolTime;
         }
         protected override void OnEffectEnd()
@@ -573,6 +579,7 @@ namespace TextRPG.SkillManagement
                 Console.WriteLine($"{character.Name}의 HP가 {heal} 회복되었습니다.");
             }
             ApplyEffect();
+            WorksNow = true;
             CurrentCoolDown = CoolTime; //쿨타임 시작
         }
         public void ApplyEffect()
@@ -580,9 +587,11 @@ namespace TextRPG.SkillManagement
             if (!ItWorks)
             {
                 ItWorks = true;
+
                 deffenseBonus = (int)(SkillOwner.Defense * 0.4);
                 DEFBonus[SkillOwner] = deffenseBonus;
                 SkillOwner.Defense += deffenseBonus;
+                Console.WriteLine($"{SkillOwner.Name}의 방어력이 {deffenseBonus} 증가했습니다.");
                 EffectDuration = Duration; //효과 on
             }
         }
@@ -609,7 +618,7 @@ namespace TextRPG.SkillManagement
         protected override void OnEffectEnd(){ }
     }
 
-    //영업팀
+    //영업팀 스킬 3개
     public class PerformancePressure : Skill
     {
         int skillDmg;
@@ -633,6 +642,7 @@ namespace TextRPG.SkillManagement
 
             if(target.Health <= 0) target.Health = 0;
 
+            WorksNow = true;
             CurrentCoolDown = CoolTime;
         }
         //해당 없음
@@ -656,19 +666,20 @@ namespace TextRPG.SkillManagement
             SkillUse(character); //스킬 사용 선언
             //즉발 효과 없음
             ApplyEffect();
-            CurrentCoolDown= CoolTime;
+            WorksNow = true;
+            CurrentCoolDown = CoolTime;
         }
         public void ApplyEffect()
         {
             if (!ItWorks)
             {
                 ItWorks = true;
-                WorksNow = true;
+
                 attackbonus = (int)(SkillOwner.Attack * 0.2);
                 buffs[SkillOwner] = (EVAbonus, attackbonus);
                 SkillOwner.EVA += EVAbonus;
                 SkillOwner.Attack += attackbonus;
-
+                Console.WriteLine($"{SkillOwner.Name}의 회피율이 {EVAbonus}%, 공격력이 {attackbonus} 증가했습니다.");
                 EffectDuration = Duration;
             }
 
@@ -710,18 +721,31 @@ namespace TextRPG.SkillManagement
         }
         public void ApplyEffect()
         {
-
+            if(!ItWorks) //효과 중복 적용 방지
+            {
+                ItWorks = true;
+                buffs[SkillOwner]=(critdmgBonus, critBonus);
+                SkillOwner.CRIT += critBonus;
+                SkillOwner.CRITDMG += critdmgBonus;
+                Console.WriteLine($"{SkillOwner.Name}의 치명타 확률이 {critBonus}%, 치명타 대미지 배율이 +{critdmgBonus*100}% 증가했습니다.");
+            }
         }
         protected override void OnEffectEnd()
         {
-
+            if (buffs.ContainsKey(SkillOwner))
+            {
+                var buff = buffs[SkillOwner];
+                SkillOwner.CRIT -= buff.crit;
+                SkillOwner.CRITDMG -= buff.critdmg;
+                buffs.Remove(SkillOwner);
+            }
         }
     }
 
     //전산팀 스킬 3개
     public class EmergencyPatch : Skill
     {
-        int defenseIncrease;
+        int skillDmg;
 
         public EmergencyPatch() { }
         public EmergencyPatch(SkillData data)
@@ -731,20 +755,24 @@ namespace TextRPG.SkillManagement
 
         public override void UseSkill(Character character, List<Monster> monsters)
         {
+            if (!CanUseSkill(character)) return;
+            var targets = GetTargets(monsters);
+            var target= targets[0];
+            SkillUse(character); //스킬 사용 선언
 
-        }
-        public void ApplyEffect(Character character)
-        {
+            skillDmg = (int)(character.Attack * 1.2 + character.MaxMP * 0.15);
+            target.Health -= skillDmg;
+            if(target.Health < 0) target.Health = 0;
 
+            Console.WriteLine($"LV.{target.Level} {target.Name}에게 {skillDmg}의 피해를 입혔습니다.");
+            CurrentCoolDown = CoolTime;
         }
-        protected override void OnEffectEnd()
-        {
-
-        }
+        protected override void OnEffectEnd() {  } //해당 없음
     }
 
     public class SystemDown : Skill
     {
+        int skillDmg;
         public SystemDown() { }
         public SystemDown(SkillData data)
         {
@@ -753,22 +781,26 @@ namespace TextRPG.SkillManagement
 
         public override void UseSkill(Character character, List<Monster> monsters)
         {
+            if (!CanUseSkill(character)) return;
+            var targets = GetTargets(monsters);
+            SkillUse(character); //스킬 사용 선언
+            skillDmg = (int)(character.Attack * 1.2 + character.MaxMP * 0.2);
 
-        }
-        public void ApplyEffect(Character character)
-        {
+            foreach(var target in targets)
+            {
+                target.Health -= skillDmg;
+                Console.WriteLine($"LV.{target.Level} {target.Name}에게 {skillDmg}의 피해를 입혔습니다.");
+                if (target.Health <= 0) target.Health = 0;
+            }
 
+            CurrentCoolDown = CoolTime;
         }
-        protected override void OnEffectEnd()
-        {
 
-        }
+        protected override void OnEffectEnd() {   }
     }
 
     public class BackupSystem : Skill
     {
-        int AttackBonus;
-
         public BackupSystem() { }
         public BackupSystem(SkillData data)
         {
@@ -776,21 +808,16 @@ namespace TextRPG.SkillManagement
         }
         public override void UseSkill(Character character, List<Monster> monsters)
         {
-
+            //전투 로직 직접 수정
         }
-        public void ApplyEffect(Character character)
-        {
 
-        }
-        protected override void OnEffectEnd()
-        {
-
-        }
+        protected override void OnEffectEnd() {   } //해당 없음
     }
 
-    //기획팀
+    //기획팀 스킬 3개
     public class PlanningBombing : Skill
     {
+        int skillDmg;
         public PlanningBombing() { }
         public PlanningBombing(SkillData data)
         {
@@ -799,20 +826,26 @@ namespace TextRPG.SkillManagement
 
         public override void UseSkill(Character character, List<Monster> monsters)
         {
+            if (!CanUseSkill(character)) return;
+            var targets = GetTargets(monsters);
+            SkillUse(character); //스킬 사용 선언
+            skillDmg = (int)(character.Attack * 1.6);
 
+            foreach (var target in targets)
+            {
+                target.Health -= skillDmg;
+                if (target.Health <= 0) target.Health = 0;
+                Console.WriteLine($"LV.{target.Level} {target.Name}에게 {skillDmg}의 피해를 입혔습니다.");
+            }
+            CurrentCoolDown = CoolTime;
         }
-        public void ApplyEffect(Character character)
-        {
-
-        }
-        protected override void OnEffectEnd()
-        {
-
-        }
+        protected override void OnEffectEnd() {  } //해당 없음
     }
 
     public class RiskAnalysis : Skill
     {
+        int evaBonus = 50;
+        Dictionary<Character, int> EvaBonus = new();
         public RiskAnalysis() { }
         public RiskAnalysis(SkillData data)
         {
@@ -821,20 +854,44 @@ namespace TextRPG.SkillManagement
 
         public override void UseSkill(Character character, List<Monster> monsters)
         {
-
+            if (!CanUseSkill(character)) return;
+            SkillUse(character); //스킬 사용 선언
+            ApplyEffect();
+            WorksNow = true;
+            CurrentCoolDown = CoolTime;
         }
-        public void ApplyEffect(Character character)
+        public void ApplyEffect()
         {
+            if (!ItWorks)
+            {
+                ItWorks = true;
+
+                EvaBonus[SkillOwner] = evaBonus;
+                SkillOwner.EVA += evaBonus;
+                Console.WriteLine($"{SkillOwner.Name}의 회피율이 {evaBonus}% 증가했습니다.");
+
+                EffectDuration = Duration;
+            }
+            
 
         }
         protected override void OnEffectEnd()
         {
-
+            if (EvaBonus.ContainsKey(SkillOwner))
+            {
+                SkillOwner.EVA -= EvaBonus[SkillOwner];
+                EvaBonus.Remove(SkillOwner);
+            }
         }
     }
 
     public class ConceptEstablished : Skill
     {
+        float critdmgBonus = 0.12f;
+        int critBonus = 10;
+
+        private Dictionary<Character, (float critdmgSum,int critSum)> buffs =new();
+
         public ConceptEstablished() { }
         public ConceptEstablished(SkillData data)
         {
@@ -843,82 +900,47 @@ namespace TextRPG.SkillManagement
 
         public override void UseSkill(Character character, List<Monster> monsters)
         {
-
+                ApplyEffect();
         }
-        public void ApplyEffect(Character character)
+        public void ApplyEffect()
         {
+            if (!buffs.ContainsKey(SkillOwner))
+            {
+                buffs[SkillOwner] = (0, 0);
+            }
+
+            var current = buffs[SkillOwner];
+
+            //추가되는 버프값 저장 (기본+추가)
+            var newBuff = (current.critdmgSum + critdmgBonus,
+                           current.critSum + critBonus);
+
+            //최신값 갱신
+            buffs[SkillOwner] = newBuff;
+            SkillOwner.CRITDMG += critdmgBonus;
+            SkillOwner.CRIT += critBonus;
+
+            Console.WriteLine($"{SkillOwner.Name}의 치명타 대미지가 {critdmgBonus * 100}%, 치명타 확률이 {critBonus}% 증가했습니다.");
 
         }
         protected override void OnEffectEnd()
         {
-
-        }
-    }
-
-
-    public static class SkillFactory
-    {
-        public static Skill CreateSkillFromData(SkillData data)
-        {
-            Skill skill = data.ClassName switch
+            if (buffs.ContainsKey(SkillOwner))
             {
-                "인사팀" => data.SkillName switch
-                {
-                    "인사평가" => new PersonnelEvaluation(),
-                    "사내 공지" => new NoticeToEmployees(),
-                    "HR 감시망" => new HRMonitoringNetwork(),
-                    _ => null
-                },
-                "홍보팀" => data.SkillName switch
-                {
-                    "대외 홍보" => new PublicRelations(),
-                    "이미지 메이킹" => new ImageMaking(),
-                    "이목 집중" => new Attention(),
-                    _ =>null
-                },
-                "총무팀" => data.SkillName switch
-                {
-                    "예산 통제" => new BudgetaryControl(),
-                    "비품 지원" => new SuppliesSupport(),
-                    "운영의 달인" => new MasterOfOperation(),
-                    _ => null
-                },
-                "영업팀" => data.SkillName switch
-                {
-                    "실적 압박" => new PerformancePressure(),
-                    "끈질긴 설득" => new PersistentPersuasion(),
-                    "목표는 무조건 달성" => new GoalMustBeAchieved(),
-                    _ => null
-                },
-                "전산팀" => data.SkillName switch
-                {
-                    "긴급 패치" => new EmergencyPatch(),
-                    "시스템 다운" => new SystemDown(),
-                    "백업 시스템" => new BackupSystem(),
-                    _ => null
-                },
-                "기획팀" => data.SkillName switch
-                {
-                    "기확인 폭격" => new PlanningBombing(),
-                    "리스크 분석" => new RiskAnalysis(),
-                    "컨셉 잡았다" => new ConceptEstablished(),
-                    _ => null
-                },
-                _ => null
-            };
+                var buff = buffs[SkillOwner];
 
-            if (skill != null)
-            {
-                skill.SetData(data);
+                SkillOwner.CRITDMG -= buff.critdmgSum;
+                SkillOwner.CRIT -= buff.critSum;
+
+                buffs.Remove(SkillOwner);
             }
-
-            return skill;
         }
     }
+
 
     public static class SkillLoader
     {
-        public static List<SkillData> LoadSkillsFromJson()
+        public static List<Skill> LoadSkillObjects()
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string jsonFilePath = Path.Combine(baseDir, "Data", "skills.json");
@@ -926,27 +948,54 @@ namespace TextRPG.SkillManagement
             if (!File.Exists(jsonFilePath))
             {
                 Console.WriteLine($"스킬 JSON 파일을 찾을 수 없습니다: {jsonFilePath}");
-                return new List<SkillData>();
+                return new List<Skill>();
             }
 
             var jsonString = File.ReadAllText(jsonFilePath);
-            var skillList = JsonConvert.DeserializeObject<List<SkillData>>(jsonString);
-            return skillList ?? new List<SkillData>();
-        }
-
-        public static List<Skill> LoadSkillObjects()
-        {
-            var skillDataList = LoadSkillsFromJson();
             var skills = new List<Skill>();
 
-            foreach (var data in skillDataList)
+            try
             {
-                var skill = SkillFactory.CreateSkillFromData(data);
-                if (skill != null)
+                // JSON 데이터를 리스트로 역직렬화
+                var rawSkillData = JsonConvert.DeserializeObject<List<dynamic>>(jsonString);
+
+                foreach (var rawSkill in rawSkillData)
+                {
+                    // Type 정보를 읽어와 동적으로 객체 생성
+                    string typeName = rawSkill.Type;
+                    var skillData = rawSkill.Data;
+
+                    // 어셈블리 이름을 명시적으로 추가
+                    if (!typeName.Contains(","))
+                    {
+                        typeName += ", Program";
+                    }
+
+                    Type skillType = Type.GetType(typeName);
+                    if (skillType == null)
+                    {
+                        Console.WriteLine($"알 수 없는 스킬 타입: {typeName}");
+                        continue;
+                    }
+
+                    // Skill 객체 생성 및 데이터 설정
+                    var skill = (Skill)Activator.CreateInstance(skillType);
+                    var skillDataJson = JsonConvert.SerializeObject(skillData);
+                    var skillDataObject = JsonConvert.DeserializeObject<SkillData>(skillDataJson);
+
+                    skill.SetData(skillDataObject);
                     skills.Add(skill);
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"스킬 데이터를 로드하는 중 오류가 발생했습니다: {ex.Message}");
+            }
+
             return skills;
         }
+
     }
+
 
 }
