@@ -57,24 +57,24 @@ namespace TextRPG.QuestManagement
             IsCompleted = false;
         }
 
-        public static void Complete(Character character, Quest quest)
+        public void Complete(Character character)
         {
-            if (quest.IsCompleted)
+            if (IsCompleted)
             {
-                Console.WriteLine($"'{quest.Name}' 퀘스트는 이미 완료되었습니다.");
+                Console.WriteLine($"'{Name}' 퀘스트는 이미 완료되었습니다.");
                 return;
             }
-            Console.WriteLine($"\n[퀘스트 완료] '{quest.Name}' 퀘스트를 완료했습니다!");
+            Console.WriteLine($"\n[퀘스트 완료] '{Name}' 퀘스트를 완료했습니다!");
             Console.WriteLine("보상:");
-            Console.WriteLine($"  골드: +{quest.RewardGold}");
-            if (quest.RewardExp > 0)
-                Console.WriteLine($"  경험치: +{quest.RewardExp}");
+            Console.WriteLine($"  골드: +{RewardGold}");
+            if (RewardExp > 0)
+                Console.WriteLine($"  경험치: +{RewardExp}");
 
-            character.Gold += quest.RewardGold;
-            character.EXP += quest.RewardExp;
+            character.Gold += RewardGold;
+            character.EXP += RewardExp;
 
-            quest.IsCompleted = true;
-            CompletedQuestNames.Add(quest.Name);
+            IsCompleted = true;
+            CompletedQuestNames.Add(Name);
             ActiveQuest = null;
             ActiveQuestTargetName = null;
 
@@ -185,7 +185,7 @@ namespace TextRPG.QuestManagement
             string input = Console.ReadLine();
             if (input == "1")
             {
-                Complete(character , quest);
+                quest.Complete(character);
                 Console.WriteLine("\n보상을 수령했습니다. Enter를 누르면 퀘스트 목록으로 돌아갑니다.");
                 Console.ReadLine();
             }
