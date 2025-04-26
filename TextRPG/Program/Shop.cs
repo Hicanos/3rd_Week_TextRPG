@@ -67,6 +67,7 @@ namespace TextRPG.ShopManagement
 
         public static void ShowShop(Character character) // 상점 출력 메소드
         {
+
             // 아이템에 대해 구매했던 1회 제한 아이템이면 다시 안보이게 처리
             foreach (var item in Weapons.Inventory.Concat(Weapons.PotionInventory))
             {
@@ -74,9 +75,19 @@ namespace TextRPG.ShopManagement
                 {
                     item.IsSelled = true;
                 }
+            }
 
-                int currentPage = 1;
-                int itemsPerPage = 4; // 5부터는 상단부가 Clear 안됨
+
+
+            //foreach (var item in Weapons.Inventory.Concat(Weapons.PotionInventory))
+            //{
+            //    if (item.IsOneTimePurchase && character.PurchasedOnceItems.Contains(item.Name))
+            //    {
+            //        item.IsSelled = true;
+            //    }
+
+            int currentPage = 1;
+            int itemsPerPage = 4; // 5부터는 상단부가 Clear 안됨
 
                 List<Weapons> totalShopOptions = new List<Weapons>();
                 totalShopOptions.AddRange(Weapons.Inventory.Where(x => x.WeaponType != "포션"));
@@ -134,7 +145,9 @@ namespace TextRPG.ShopManagement
                     Console.Clear();
                 }
             }
-        }
+            
+            
+        
 
         public static int PageCheck(int currentPage, int totalItems, int itemsPerPage) // 현재페이지가 유효한지 검사하는 메소드 (PaginateAndDisplayItems에서도 쓰는 로직)
         {                                                                              // PaginateAndDisplayItems에서는 totalPages를 계산에 사용해서 충돌이 날까봐 쓰지않음

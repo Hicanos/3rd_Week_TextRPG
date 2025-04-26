@@ -61,14 +61,14 @@ namespace TextRPG.ItemSpawnManagement
             new Weapons(false, false, "구급 상자", new Dictionary<string, int> { { "HP", 50 } }, "작은 상처는 반창고 하나면 충분!", "전체", "포션", 1500);
             new Weapons(false, false, "바까스", new Dictionary<string, int> { { "MP", 30 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 600);
             new Weapons(false, false, "아메리카노", new Dictionary<string, int> { { "MP", 100 } }, "직장인들의 힐링포션", "전체", "포션", 1500);
-            new Weapons(false, false, "장어구이", new Dictionary<string, int> { { "공격력", 3 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 1000, true);
-            new Weapons(false, false, "흑마늘", new Dictionary<string, int> { { "방어력", 3 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 1000, true);
-            new Weapons(false, false, "삼계탕", new Dictionary<string, int> { { "MaxHP", 20 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 1000, true);
-            new Weapons(false, false, "복분자주", new Dictionary<string, int> { { "MaxMP", 15 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 1000, true);
-            new Weapons(false, false, "블루베리 스무디", new Dictionary<string, int> { { "명중률", 10 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 1000, true);
-            new Weapons(false, false, "연어회", new Dictionary<string, int> { { "회피율", 8 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 1000, true);
-            new Weapons(false, false, "다크 초콜렛", new Dictionary<string, int> { { "치명타 배율", 10 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 1000, true);
-            new Weapons(false, false, "홍삼젤리", new Dictionary<string, int> { { "치명타 확률", 5 } }, "피로회복제 그 이름, 바까스!", "전체", "포션", 1000, true);
+            new Weapons(false, false, "장어구이", new Dictionary<string, int> { { "공격력", 3 } }, "장어구이 못참지", "전체", "포션", 1000, true);
+            new Weapons(false, false, "흑마늘", new Dictionary<string, int> { { "방어력", 3 } }, "한국인들의 필수 요리 재료 마늘의 강화 버전", "전체", "포션", 1000, true);
+            new Weapons(false, false, "삼계탕", new Dictionary<string, int> { { "MaxHP", 20 } }, "삼계탕 잡숴바 뜨뜻허이", "전체", "포션", 1000, true);
+            new Weapons(false, false, "복분자주", new Dictionary<string, int> { { "MaxMP", 15 } }, "기력 회복에는 복분자여~", "전체", "포션", 1000, true);
+            new Weapons(false, false, "블루베리 스무디", new Dictionary<string, int> { { "명중률", 10 } }, "눈 피로에 좋은 오메가3 함유량이 높은 음료", "전체", "포션", 1000, true);
+            new Weapons(false, false, "연어회", new Dictionary<string, int> { { "회피율", 8 } }, "알래스카산 연어회 군침이 싸~악 도네", "전체", "포션", 1000, true);
+            new Weapons(false, false, "다크 초콜렛", new Dictionary<string, int> { { "치명타 배율", 10 } }, "맛도 좋고 몸에도 좋은 다크 초콜렛 이빨은 꼭 닦도록 하자", "전체", "포션", 1000, true);
+            new Weapons(false, false, "홍삼젤리", new Dictionary<string, int> { { "치명타 확률", 5 } }, "홍삼 냄새가 입안에 가득", "전체", "포션", 1000, true);
 
 
         }
