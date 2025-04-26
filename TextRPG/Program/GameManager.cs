@@ -8,6 +8,7 @@ using TextRPG.RestManagement;
 using TextRPG.ShopManagement;
 using TextRPG.TitleManagement;
 using TextRPG.WeaponManagement;
+using TextRPG.QuestManagement;
 
 namespace TextRPG.GameManager
 {
@@ -87,11 +88,11 @@ namespace TextRPG.GameManager
 
                 // 메인 메뉴
                 Console.WriteLine("-----------------------------");
-                Console.WriteLine("1. 상태창\n2. 전투 시작\n3. 인벤토리\n4. 상점\n5. 휴식하기\n6. 칭호 \n7. 게임 종료& 저장\n\n원하시는 행동을 입력해주세요.");
+                Console.WriteLine("1. 상태창\n2. 전투 시작\n3. 인벤토리\n4. 상점\n5. 휴식하기\n6. 칭호 \n7. 퀘스트\n8. 게임 종료& 저장\n\n원하시는 행동을 입력해주세요.");
                 Console.Write(">> ");
 
                 // 1~6중 선택 후 switch문 발동
-                int choice = InputHelper.MatchOrNot(1, 7);
+                int choice = InputHelper.MatchOrNot(1, 8);
                 Title.TitleManager titleManager = new Title.TitleManager(character);
 
                 switch (choice)
@@ -116,6 +117,9 @@ namespace TextRPG.GameManager
                         titleManager.Tmenu(character);
                         break;
                     case 7:
+                        Quest.ShowQuestMenu(character);
+                        break;
+                    case 8:
                         GameSaveLoad.SaveGame(character, Weapons.Inventory, Weapons.NotbuyAbleInventory, Weapons.PotionInventory, Weapons.RewardInventory);
                         return;
                 }
