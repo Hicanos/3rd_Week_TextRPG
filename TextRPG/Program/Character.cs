@@ -1,4 +1,6 @@
-﻿using TextRPG.MonsterManagement;
+﻿using Newtonsoft.Json;
+using TextRPG.MonsterManagement;
+using TextRPG.SkillManagement;
 using TextRPG.TitleManagement;
 using TextRPG.WeaponManagement;
 
@@ -73,6 +75,10 @@ namespace TextRPG.CharacterManagement
         public double MaxEXP { get; set; } // 필요 경험치
         public List<Weapons> NotbuyAbleInventory { get; set; } = new List<Weapons>();
         public HashSet<string> PurchasedOnceItems { get; set; } = new HashSet<string>(); // 아이템 구매 기록 추가
+       
+        [JsonProperty(ItemTypeNameHandling = TypeNameHandling.Auto)]
+        public List<Skill> Skills { get; set; } = new List<Skill>(); //스킬 추가용 프로퍼티
+
 
 
 
@@ -97,6 +103,33 @@ namespace TextRPG.CharacterManagement
             MaxEXP = 2.5 * Level * Level + 17.5 * Level - 10; //필요 경험치 공식 (2.5*level^2 + 17.5*level - 10)
         }
 
+        public void AssignSkills()
+        {
+            // 모든 스킬 로드
+            var allSkills = SkillLoader.LoadSkillObjects();
+
+            // ClassName과 일치하는 스킬 필터링
+            Skills = allSkills.Where(skill => skill.ClassName == ClassName).ToList();
+        }
+
+        public void ShowSkillList() 
+        {
+            // 스킬 리스트 출력
+            Console.WriteLine("\n[보유 스킬]");
+            if (Skills.Count > 0)
+            {
+                foreach (var skill in Skills)
+                {
+                    Console.WriteLine($"- {skill.SkillName} (MP 소모: {skill.CostMP}, 쿨타임: {skill.CoolTime}턴)");
+                    Console.WriteLine($"  설명: {skill.SkillDescription}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("보유한 스킬이 없습니다.");
+            }
+        }
+
         // 상태 보기
         public void ShowStatus()
         {
@@ -113,6 +146,9 @@ namespace TextRPG.CharacterManagement
             Console.WriteLine($"소지금: {Gold} 원");
             Console.WriteLine($"칭호 : {EquippedTitle?.Name ?? "없음"}");
             Console.WriteLine("-----------------------------");
+
+            AssignSkills();
+            ShowSkillList();
 
             Console.WriteLine("\n0. 나가기\n");
             Console.Write("원하시는 행동을 입력해주세요.\n>>");
@@ -180,6 +216,9 @@ namespace TextRPG.CharacterManagement
                 character.CRITDMG = selectedStats.CRITDMG;
                 character.EVA = selectedStats.EVA;
             }
+
+            //캐릭터 직업에 따른 스킬 부여
+            character.AssignSkills();
 
             character.Gold = 1500;
 
