@@ -39,7 +39,7 @@ namespace TextRPG.GameManager
 
             if (loadChoice == 1)
             {
-                var (loadedChar, loadedInv1, loadedInv2, loadedInv3, loadedInv4) = GameSaveLoad.LoadGame();
+                var (loadedChar, loadedInv1, loadedInv2, loadedInv3, loadedInv4, loadQuest, loadbool, loadHash) = GameSaveLoad.LoadGame();
                 if (loadedChar != null)
                 {
                     character = loadedChar;
@@ -47,6 +47,10 @@ namespace TextRPG.GameManager
                     Weapons.NotbuyAbleInventory = loadedInv2;
                     Weapons.PotionInventory = loadedInv3;
                     Weapons.RewardInventory = loadedInv4;
+                    Quest.ActiveQuest = loadQuest;
+                    Quest.IsQuestCleared = loadbool;
+                    Quest.CompletedQuestNames = loadHash;
+
                     Console.WriteLine("불러오기 완료.");
                     Thread.Sleep(1000);
                     Console.Clear();
@@ -122,7 +126,7 @@ namespace TextRPG.GameManager
                         Quest.ShowQuestMenu(character);
                         break;
                     case 8:
-                        GameSaveLoad.SaveGame(character, Weapons.Inventory, Weapons.NotbuyAbleInventory, Weapons.PotionInventory, Weapons.RewardInventory);
+                        GameSaveLoad.SaveGame(character, Weapons.Inventory, Weapons.NotbuyAbleInventory, Weapons.PotionInventory, Weapons.RewardInventory, Quest.ActiveQuest, Quest.IsQuestCleared, Quest.CompletedQuestNames);
                         return;
                 }
             }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TextRPG.MonsterManagement;
 using TextRPG.CharacterManagement;
+using TextRPG.OtherMethods;
 
 namespace TextRPG.QuestManagement
 {
@@ -177,11 +178,10 @@ namespace TextRPG.QuestManagement
                 Console.WriteLine($"{quest.RewardExp}EXP\n");
 
             Console.WriteLine("1. 보상 받기");
-            Console.WriteLine("2. 돌아가기");
             Console.Write("원하시는 행동을 입력해주세요.\n>> ");
 
-            string input = Console.ReadLine();
-            if (input == "1")
+            int input = InputHelper.MatchOrNot(1, 1);
+            if (input == 1)
             {
                 quest.Complete(character);
                 Console.WriteLine("\n보상을 수령했습니다. Enter를 누르면 퀘스트 목록으로 돌아갑니다.");
