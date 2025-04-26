@@ -233,7 +233,7 @@ namespace TextRPG.ShopManagement
                             selected.IsSelled = false;
                             selected.IsEquip = false;
                             int sellPrice;
-                            if(character.ClassName == "전산팀")
+                            if(character.ClassName == "총무팀")
                             {
                                 sellPrice = selected.Price > 0 ? (int)(selected.Price * 0.5*1.2) : (int)(selected.SellingPrice*1.2);
                             }
