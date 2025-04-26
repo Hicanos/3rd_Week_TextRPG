@@ -59,7 +59,7 @@ namespace TextRPG.WeaponManagement
             }
             else
             {
-                NotbuyAbleInventory.Add(this); ;
+                Inventory.Add(this); ;
             }
         }
 
