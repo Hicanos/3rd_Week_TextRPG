@@ -171,12 +171,10 @@ namespace TextRPG.QuestManagement
 
             Console.WriteLine(quest.Name + "\n");
             Console.WriteLine(quest.Description + "\n");
-            if (!string.IsNullOrEmpty(quest.TargetMonster))
-
             Console.WriteLine("- 보상- ");
-            Console.WriteLine($"\t{quest.RewardGold}G\n");
+            Console.WriteLine($"{quest.RewardGold}G\n");
             if (quest.RewardExp > 0)
-                Console.WriteLine($"\t{quest.RewardExp}EXP\n");
+                Console.WriteLine($"{quest.RewardExp}EXP\n");
 
             Console.WriteLine("1. 보상 받기");
             Console.WriteLine("2. 돌아가기");
