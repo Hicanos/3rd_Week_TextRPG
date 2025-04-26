@@ -240,8 +240,8 @@ namespace TextRPG.CharacterManagement
                     ApplyBenefits(); // 레벨업 시 스탯 증가
                     MaxEXP = 15 * Level; //MaxEXP 갱신
                     //레벨업 시 클래스이름-랭크 증가(직급 상승)
-                    ClassName = Enum.GetName(typeof(Ranks), Level);
-                    Console.WriteLine($"{Name}이(가) {ClassName}(으)로 승진했습니다! 현재 레벨: {Level}");
+                    Rank = Enum.GetName(typeof(Ranks), Level);
+                    Console.WriteLine($"{Name}이(가) {Rank}(으)로 승진했습니다! 현재 레벨: {Level}");
                 }
             }
         }
