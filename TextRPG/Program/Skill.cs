@@ -932,69 +932,9 @@ namespace TextRPG.SkillManagement
     }
 
 
-    public static class SkillFactory
-    {
-        public static Skill CreateSkillFromData(SkillData data)
-        {
-            Skill skill = data.ClassName switch
-            {
-                "인사팀" => data.SkillName switch
-                {
-                    "인사평가" => new PersonnelEvaluation(),
-                    "사내 공지" => new NoticeToEmployees(),
-                    "HR 감시망" => new HRMonitoringNetwork(),
-                    _ => null
-                },
-                "홍보팀" => data.SkillName switch
-                {
-                    "대외 홍보" => new PublicRelations(),
-                    "이미지 메이킹" => new ImageMaking(),
-                    "이목 집중" => new Attention(),
-                    _ =>null
-                },
-                "총무팀" => data.SkillName switch
-                {
-                    "예산 통제" => new BudgetaryControl(),
-                    "비품 지원" => new SuppliesSupport(),
-                    "운영의 달인" => new MasterOfOperation(),
-                    _ => null
-                },
-                "영업팀" => data.SkillName switch
-                {
-                    "실적 압박" => new PerformancePressure(),
-                    "끈질긴 설득" => new PersistentPersuasion(),
-                    "목표는 무조건 달성" => new GoalMustBeAchieved(),
-                    _ => null
-                },
-                "전산팀" => data.SkillName switch
-                {
-                    "긴급 패치" => new EmergencyPatch(),
-                    "시스템 다운" => new SystemDown(),
-                    "백업 시스템" => new BackupSystem(),
-                    _ => null
-                },
-                "기획팀" => data.SkillName switch
-                {
-                    "기확인 폭격" => new PlanningBombing(),
-                    "리스크 분석" => new RiskAnalysis(),
-                    "컨셉 잡았다" => new ConceptEstablished(),
-                    _ => null
-                },
-                _ => null
-            };
-
-            if (skill != null)
-            {
-                skill.SetData(data);
-            }
-
-            return skill;
-        }
-    }
-
     public static class SkillLoader
     {
-        public static List<SkillData> LoadSkillsFromJson()
+        public static List<Skill> LoadSkillObjects()
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
             string jsonFilePath = Path.Combine(baseDir, "Data", "skills.json");
@@ -1002,27 +942,54 @@ namespace TextRPG.SkillManagement
             if (!File.Exists(jsonFilePath))
             {
                 Console.WriteLine($"스킬 JSON 파일을 찾을 수 없습니다: {jsonFilePath}");
-                return new List<SkillData>();
+                return new List<Skill>();
             }
 
             var jsonString = File.ReadAllText(jsonFilePath);
-            var skillList = JsonConvert.DeserializeObject<List<SkillData>>(jsonString);
-            return skillList ?? new List<SkillData>();
-        }
-
-        public static List<Skill> LoadSkillObjects()
-        {
-            var skillDataList = LoadSkillsFromJson();
             var skills = new List<Skill>();
 
-            foreach (var data in skillDataList)
+            try
             {
-                var skill = SkillFactory.CreateSkillFromData(data);
-                if (skill != null)
+                // JSON 데이터를 리스트로 역직렬화
+                var rawSkillData = JsonConvert.DeserializeObject<List<dynamic>>(jsonString);
+
+                foreach (var rawSkill in rawSkillData)
+                {
+                    // Type 정보를 읽어와 동적으로 객체 생성
+                    string typeName = rawSkill.Type;
+                    var skillData = rawSkill.Data;
+
+                    // 어셈블리 이름을 명시적으로 추가
+                    if (!typeName.Contains(","))
+                    {
+                        typeName += ", Program";
+                    }
+
+                    Type skillType = Type.GetType(typeName);
+                    if (skillType == null)
+                    {
+                        Console.WriteLine($"알 수 없는 스킬 타입: {typeName}");
+                        continue;
+                    }
+
+                    // Skill 객체 생성 및 데이터 설정
+                    var skill = (Skill)Activator.CreateInstance(skillType);
+                    var skillDataJson = JsonConvert.SerializeObject(skillData);
+                    var skillDataObject = JsonConvert.DeserializeObject<SkillData>(skillDataJson);
+
+                    skill.SetData(skillDataObject);
                     skills.Add(skill);
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"스킬 데이터를 로드하는 중 오류가 발생했습니다: {ex.Message}");
+            }
+
             return skills;
         }
+
     }
+
 
 }

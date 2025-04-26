@@ -7,6 +7,7 @@ using TextRPG.GameManager;
 using TextRPG.ItemSpawnManagement;
 using TextRPG.WeaponManagement;
 using TextRPG.MonsterManagement;
+using TextRPG.SkillManagement;
 
 namespace TextRPG.GameSaveAndLoad
 {
@@ -26,6 +27,12 @@ namespace TextRPG.GameSaveAndLoad
 
         public static void SaveGame(Character character, List<Weapons> inventory, List<Weapons> notBuyable, List<Weapons> potions, List<Weapons> rewards)
         {
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Formatting.Indented,
+                TypeNameHandling = TypeNameHandling.Auto // 타입 정보를 포함
+            };
+
             GameData data = new GameData
             {
                 CharacterData = character,
@@ -35,10 +42,11 @@ namespace TextRPG.GameSaveAndLoad
                 RewardInventory = rewards
             };
 
-            string json = JsonConvert.SerializeObject(data, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(data, settings);
             File.WriteAllText(savePath, json);
             Console.WriteLine("게임 저장 완료!");
         }
+
 
         public static (Character, List<Weapons>, List<Weapons>, List<Weapons>, List<Weapons>) LoadGame()
         {
@@ -49,9 +57,64 @@ namespace TextRPG.GameSaveAndLoad
             }
 
             string json = File.ReadAllText(savePath);
-            GameData data = JsonConvert.DeserializeObject<GameData>(json);
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto // 타입 정보를 처리
+            };
+
+            GameData data = JsonConvert.DeserializeObject<GameData>(json, settings);
+
+            // 디버깅: 로드된 스킬 출력
+            Console.WriteLine($"로드된 스킬 개수: {data.CharacterData.Skills.Count}");
+            foreach (var skill in data.CharacterData.Skills)
+            {
+                Console.WriteLine($"- {skill.SkillName} (ClassName: {skill.ClassName})");
+            }
 
             return (data.CharacterData, data.Inventory, data.NotBuyAbleInventory, data.PotionInventory, data.RewardInventory);
         }
+
+
+        public static List<Skill> LoadSkills(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                Console.WriteLine($"파일을 찾을 수 없습니다: {filePath}");
+                return new List<Skill>();
+            }
+
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto // 타입 정보를 처리
+            };
+
+            var json = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<List<Skill>>(json, settings);
+        }
+
+
+        public static string SerializeSkills(List<Skill> skills)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto // 타입 정보를 포함
+            };
+
+            return JsonConvert.SerializeObject(skills, settings);
+        }
+
+        public static void SaveSkills(List<Skill> skills, string filePath)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto, // 타입 정보를 포함
+                Formatting = Formatting.Indented // JSON을 보기 좋게 포맷
+            };
+
+            var json = JsonConvert.SerializeObject(skills, settings);
+            File.WriteAllText(filePath, json);
+        }
+
+
     }
 }
