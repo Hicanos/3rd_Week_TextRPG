@@ -13,6 +13,7 @@ using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
 using TextRPG.WeaponManagement;
 using TextRPG.QuestManagement;
+using TextRPG.SkillManagement;
 namespace TextRPG.MonsterManagement
 {
     // 프로퍼티로 몬스터 상태 저장
@@ -279,6 +280,10 @@ namespace TextRPG.MonsterManagement
             Console.Clear();
             Console.WriteLine("=== 승진 전투 개시 ===\n");
             Monster.SpawnMonster(character);
+            foreach (var skill in character.Skills)
+            {
+                skill.SetSkillOwner(character);
+            }
             // 전투가 끝날 때까지 무한 반복
             while (true)
             {
@@ -299,6 +304,8 @@ namespace TextRPG.MonsterManagement
                 Console.WriteLine("[내 정보]");
                 Console.WriteLine($"Lv.{character.Level} {character.Name} ({character.ClassName})");
                 Console.WriteLine($"HP {character.Health}/{character.MaxHealth}\n");
+                
+                character.ShowSkillList();
 
                 Console.WriteLine("[몬스터 목록]");
                 for (int i = 0; i < aliveMonsters.Count; i++)
