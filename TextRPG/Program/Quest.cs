@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TextRPG.MonsterManagement;
 using TextRPG.CharacterManagement;
 using TextRPG.OtherMethods;
+using System.Reflection.Emit;
 
 namespace TextRPG.QuestManagement
 {
@@ -183,14 +184,24 @@ namespace TextRPG.QuestManagement
             int input = InputHelper.MatchOrNot(1, 1);
             if (input == 1)
             {
-                quest.Complete(character);
-                Console.WriteLine("\n보상을 수령했습니다. Enter를 누르면 퀘스트 목록으로 돌아갑니다.");
-                Console.ReadLine();
-            }
-            else
-            {
-                Console.WriteLine("\nEnter를 누르면 퀘스트 목록으로 돌아갑니다.");
-                Console.ReadLine();
+                if (quest.TargetMonster == "석회장")
+                {
+                    quest.Complete(character);
+                    while (character.Level < 11)
+                    {
+                        character.EXP = (int)character.MaxEXP + 10;
+                        character.LevelUP();
+                    }
+                    Console.WriteLine("\n보상을 수령했습니다. Enter를 누르면 퀘스트 목록으로 돌아갑니다.");
+                    Console.ReadLine();
+                }
+                else
+                {
+                    quest.Complete(character);
+                    Console.WriteLine("\n보상을 수령했습니다. Enter를 누르면 퀘스트 목록으로 돌아갑니다.");
+                    Console.ReadLine();
+                }
+
             }
         }
 

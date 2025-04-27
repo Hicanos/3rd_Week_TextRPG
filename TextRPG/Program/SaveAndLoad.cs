@@ -71,13 +71,6 @@ namespace TextRPG.GameSaveAndLoad
 
             GameData data = JsonConvert.DeserializeObject<GameData>(json, settings);
 
-            // 디버깅: 로드된 스킬 출력
-            Console.WriteLine($"로드된 스킬 개수: {data.CharacterData.Skills.Count}");
-            foreach (var skill in data.CharacterData.Skills)
-            {
-                Console.WriteLine($"- {skill.SkillName} (ClassName: {skill.ClassName})");
-            }
-
             return (data.CharacterData, data.Inventory, data.NotBuyAbleInventory, data.PotionInventory, data.RewardInventory, data.ActiveQuest, data.IsQuestCleared, data.CompletedQuestNames);
         }
 

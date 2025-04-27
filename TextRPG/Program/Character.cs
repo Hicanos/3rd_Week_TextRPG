@@ -29,6 +29,7 @@ namespace TextRPG.CharacterManagement
         전무,
         사장,
         부회장,
+        회장,
     }
 
     public struct Stats
