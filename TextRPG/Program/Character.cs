@@ -250,6 +250,10 @@ namespace TextRPG.CharacterManagement
                         Rank = Enum.GetName(typeof(Ranks), Level);
                         Console.WriteLine($"{Name}이(가) {Rank}(으)로 승진했습니다! 현재 레벨: {Level}");
                     }
+                    else 
+                    {
+                        Console.WriteLine($"{Name}이(가) 레벨업했습니다! 현재 레벨: {Level}");
+                    }
                 }
             }
         }
