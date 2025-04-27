@@ -81,6 +81,8 @@ namespace TextRPG.CharacterManagement
         public List<Skill> Skills { get; set; } = new List<Skill>(); //스킬 추가용 프로퍼티
 
 
+        public bool YouClearedGame { get; set; }
+
 
 
         //역직렬용 생성자
@@ -243,8 +245,11 @@ namespace TextRPG.CharacterManagement
                     ApplyBenefits(); // 레벨업 시 스탯 증가
                     MaxEXP = 15 * Level; //MaxEXP 갱신
                     //레벨업 시 클래스이름-랭크 증가(직급 상승)
-                    Rank = Enum.GetName(typeof(Ranks), Level);
-                    Console.WriteLine($"{Name}이(가) {Rank}(으)로 승진했습니다! 현재 레벨: {Level}");
+                    if (!YouClearedGame)
+                    {
+                        Rank = Enum.GetName(typeof(Ranks), Level);
+                        Console.WriteLine($"{Name}이(가) {Rank}(으)로 승진했습니다! 현재 레벨: {Level}");
+                    }
                 }
             }
         }

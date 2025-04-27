@@ -194,11 +194,8 @@ namespace TextRPG.QuestManagement
                 if (quest.TargetMonster == "석회장")
                 {
                     quest.Complete(character);
-                    while (character.Level < 11)
-                    {
-                        character.EXP = (int)character.MaxEXP + 10;
-                        character.LevelUP();
-                    }
+                    character.YouClearedGame = true;
+                    character.ClassName = "회장";
                     Console.WriteLine("\n보상을 수령했습니다. Enter를 누르면 퀘스트 목록으로 돌아갑니다.");
                     Console.ReadLine();
                 }
