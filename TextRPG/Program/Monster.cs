@@ -156,6 +156,7 @@ namespace TextRPG.MonsterManagement
         // 전투가 끝난 뒤 결과(승리,패배)를 계산하고 보상 정보 출력
         public void ShowResult(Character character, List<Monster> monsters)
         {
+            int clearedStage = Monster.CurrentStage;
             //가지고 있는 스킬 전부 효과 제거 및 쿨타임/효과 초기화
             foreach (var skill in character.Skills)
             {
@@ -206,7 +207,7 @@ namespace TextRPG.MonsterManagement
                 {
                     Console.WriteLine("\n최종 스테이지 클리어! '석회장' 처치하였습니다. 승 진 배 틀 에서 최종 승리자가 되었습니다!");
                 }
-                if (Quest.ActiveQuest != null)
+                if (Quest.ActiveQuest != null && Quest.ActiveQuest.Stage == clearedStage)
                 {
                     Quest.IsQuestCleared = true;
                     // 스테이지마다 퀘스트 클리어 문구(퀘스트 이름)만 출력
@@ -444,8 +445,7 @@ namespace TextRPG.MonsterManagement
                                     }
                                 }
                             }
-
-                            Console.WriteLine();
+                                Console.WriteLine();
                         }
                         // 플레이어 차례가 끝나면 몬스터들의 공격 차례 진행
                         EnemyPhase(character);
@@ -609,6 +609,5 @@ namespace TextRPG.MonsterManagement
                 }
             }
         }
-
     }
 }

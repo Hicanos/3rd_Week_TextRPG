@@ -17,25 +17,11 @@ namespace TextRPG.QuestManagement
             { 2, (200, 20) },
             { 3, (300, 30) },
             { 4, (400, 40) },
-            { 5, (1000, 700) }
+            { 5, (1000, 50) }
         };
 
-        // 수정부분: 스테이지 번호로 Quest 인스턴스 생성
-        public static Quest GetStageClearQuest(int stage)
-        {
-            if (!StageClearRewards.TryGetValue(stage, out var reward))
-                throw new ArgumentOutOfRangeException(nameof(stage));
-
-            string name = stage < 5
-                ? $"{stage}단계 클리어"
-                : "보스전 - 석회장 처치";
-            string description = stage < 5
-                ? $"스테이지 {stage}을(를) 클리어하라."
-                : "최종 진급 배틀에서 회장 석회장을 무너뜨려라.";
-            string target = stage < 5 ? null : "석회장";
-
-            return new Quest(name, description, target, reward.gold, reward.exp);
-        }
+        // ★ 추가: 퀘스트가 속한 스테이지
+        public int Stage { get; set; }
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -57,6 +43,26 @@ namespace TextRPG.QuestManagement
             RewardGold = rewardGold;
             RewardExp = rewardExp;
             IsCompleted = false;
+        }
+
+        // 수정부분: 스테이지 번호로 Quest 인스턴스 생성
+        public static Quest GetStageClearQuest(int stage)
+        {
+            if (!StageClearRewards.TryGetValue(stage, out var reward))
+                throw new ArgumentOutOfRangeException(nameof(stage));
+
+            string name = stage < 5
+                ? $"{stage}단계 클리어"
+                : "보스전 - 석회장 처치";
+            string description = stage < 5
+                ? $"스테이지 {stage}을(를) 클리어하라."
+                : "최종 진급 배틀에서 회장 석회장을 무너뜨려라.";
+            string target = stage < 5 ? null : "석회장";
+
+            var quest = new Quest(name, description, target, reward.gold, reward.exp);
+            // ★ 추가: 생성된 Quest에 stage 정보 설정
+            quest.Stage = stage;
+            return quest;
         }
 
         public void Complete(Character character)
@@ -88,7 +94,7 @@ namespace TextRPG.QuestManagement
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("(승진배틀(주)\n");
+            Console.WriteLine("(승진배틀(주))\n");
             Console.ResetColor();
 
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -143,6 +149,7 @@ namespace TextRPG.QuestManagement
             Console.WriteLine(quest.Name + "\n");
             Console.WriteLine(quest.Description + "\n");
             if (!string.IsNullOrEmpty(quest.TargetMonster))
+                Console.WriteLine();
 
             Console.WriteLine("1. 포기하기");
             Console.WriteLine("2. 돌아가기");
@@ -201,7 +208,6 @@ namespace TextRPG.QuestManagement
                     Console.WriteLine("\n보상을 수령했습니다. Enter를 누르면 퀘스트 목록으로 돌아갑니다.");
                     Console.ReadLine();
                 }
-
             }
         }
 
@@ -223,39 +229,39 @@ namespace TextRPG.QuestManagement
             var questList = new List<Quest>
             {
                 new Quest(
-                    "무력 과시: 신과장과 빠대리  격파   ",
+                    "stage 1: 신과장과 빠대리  격파   ",
                     $"평범한 무역회사에 일하는 20년차 대리 {character.Name}, 빠대리와 신과장을 무력으로 제압하고 1단계를 클리어하라.",
                     null,
                     150,
                     15
                 ),
                 new Quest(
-                    "승진 후보 사냥: 임차장·김부장 토벌",
+                    "stage 2: 임차장·김부장 토벌      ",
                     $"사장님 눈밖에 난 {character.Name}, 임차장과 김부장을 쓰러뜨려 2단계를 넘어서라.",
                     null,
                     200,
                     20
                 ),
                 new Quest(
-                    "고공행진: 오실장·카이사 장벽 돌파 ",
+                    "stage 3: 오실장·카이사 장벽 돌파 ",
                     $"진급 배틀 3단계 돌파! 오실장과 카이사의 장벽을 부숴라.",
                     null,
                     300,
                     30
                 ),
                 new Quest(
-                    "권력 누각: 유상무·박사장 섬멸     ",
+                    "stage 4: 유상무·박사장 섬멸     ",
                     $"권력의 끝판왕 유상무와 박사장을 쓰러뜨리고 마지막 보스를 준비하라.",
                     null,
                     400,
                     40
                 ),
                 new Quest(
-                    "최종 진급 배틀: 회장 석회장 격파   ",
+                    "stage 5 Boss: 회장 석회장 격파   ",
                     $"이 회사는 내가 먹는다! 최종 진급 배틀에서 회장 석회장을 무너뜨려라.",
                     "석회장",
                     1000,
-                    80
+                    50
                 ),
             };
 
