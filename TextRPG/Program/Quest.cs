@@ -283,7 +283,7 @@ namespace TextRPG.QuestManagement
                 Console.WriteLine($"{q.Name} {status}  (보상: {q.RewardGold}G/{q.RewardExp}EXP)");
             }
 
-            Console.WriteLine("0. 돌아가기");
+            Console.WriteLine("0. 나가기");
             Console.Write("\n>> ");
             string input = Console.ReadLine();
 
