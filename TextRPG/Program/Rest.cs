@@ -32,13 +32,14 @@ namespace TextRPG.RestManagement
         {
             if (character.Gold >= 500)
             {
-                if (character.Health == 100)
+                if (character.Health == character.MaxHealth && character.MP == character.MaxMP)
                 {
-                    Console.WriteLine("체력이 최대입니다.");
+                    Console.WriteLine("이미 체력과 마나가 둘 다 최대입니다.");
                 }
                 else
                 {
-                    character.Health = 100;
+                    character.Health = character.MaxHealth;
+                    character.MP = character.MaxMP;
                     character.Gold -= 500;
                     Console.WriteLine("휴식을 완료했습니다.");
                 }
