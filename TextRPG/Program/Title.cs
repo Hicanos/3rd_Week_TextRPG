@@ -57,6 +57,7 @@ namespace TextRPG.TitleManagement
             {
                 while (true)
                 {
+                    Console.Clear();
                     CheckUnlocks();
                     Console.WriteLine("\n[칭호 메뉴]\n");
                     Console.WriteLine("1. 칭호 목록 보기");
@@ -98,6 +99,7 @@ namespace TextRPG.TitleManagement
 
             public void ShowTitles()// 해금 여부에 따라 칭호를 다른 색상으로 출력하는 함수
             {
+                Console.Clear();    
                 Console.WriteLine("\n[칭호 목록]");
                
                 int count = 0;
@@ -146,9 +148,10 @@ namespace TextRPG.TitleManagement
                 if (unlocked.Count == 0) 
                 {    // 하나도 없으면 밑처럼 띄우고 메뉴로 리턴 
                     Console.WriteLine("아직 장착 가능한 칭호가 없습니다!");
+                    Thread.Sleep(1000);
                     return;
                 }
-
+                Console.Clear();
                 Console.WriteLine("\n장착할 칭호를 선택하세요:");
 
                 for (int i = 0; i < unlocked.Count; i++)
