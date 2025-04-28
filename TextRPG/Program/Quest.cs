@@ -223,6 +223,7 @@ namespace TextRPG.QuestManagement
             Console.Clear();
             Console.WriteLine("=== 퀘스트 목록 ===\n");
 
+            // 오브젝트 이니셜라이저로 Stage 값을 설정
             var questList = new List<Quest>
             {
                 new Quest(
@@ -231,35 +232,35 @@ namespace TextRPG.QuestManagement
                     null,
                     150,
                     15
-                ),
+                ) { Stage = 1 },
                 new Quest(
                     "stage 2: 임차장·김부장 토벌      ",
                     $"사장님 눈밖에 난 {character.Name}, 임차장과 김부장을 쓰러뜨려 2단계를 넘어서라.",
                     null,
                     200,
                     20
-                ),
+                ) { Stage = 2 },
                 new Quest(
                     "stage 3: 오실장·카이사 장벽 돌파 ",
                     $"진급 배틀 3단계 돌파! 오실장과 카이사의 장벽을 부숴라.",
                     null,
                     300,
                     30
-                ),
+                ) { Stage = 3 },
                 new Quest(
                     "stage 4: 유상무·박사장 섬멸     ",
                     $"권력의 끝판왕 유상무와 박사장을 쓰러뜨리고 마지막 보스를 준비하라.",
                     null,
                     400,
                     40
-                ),
+                ) { Stage = 4 },
                 new Quest(
                     "stage 5 Boss: 회장 석회장 격파   ",
                     $"이 회사는 내가 먹는다! 최종 진급 배틀에서 회장 석회장을 무너뜨려라.",
                     "석회장",
                     1000,
                     50
-                ),
+                ) { Stage = 5 }
             };
 
             for (int i = 0; i < questList.Count; i++)
