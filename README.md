@@ -6,6 +6,8 @@
 # 프로젝트 명
 # 🥊 승진배틀(주) - **Battle for Promotion!**
 
+![승진배틀](https://github.com/Hicanos/3rd_Week_TextRPG/blob/main/Readme%20screenshot.png)
+
 ---
 ## 🎮 게임 소개
 
