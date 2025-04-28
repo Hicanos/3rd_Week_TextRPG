@@ -13,11 +13,11 @@ namespace TextRPG.QuestManagement
         private static readonly Dictionary<int, (int gold, int exp)> StageClearRewards
             = new Dictionary<int, (int, int)>()
         {
-            { 1, (150, 15) },
-            { 2, (200, 20) },
-            { 3, (300, 30) },
-            { 4, (400, 40) },
-            { 5, (1000, 50) }
+            { 1, (800, 40) },
+            { 2, (1500, 60) },
+            { 3, (2500, 80) },
+            { 4, (4000, 100) },
+            { 5, (10000, 150) }
         };
 
         // ★ 추가: 퀘스트가 속한 스테이지
@@ -230,36 +230,36 @@ namespace TextRPG.QuestManagement
                     "stage 1: 신과장과 빠대리  격파   ",
                     $"평범한 무역회사에 일하는 20년차 대리 {character.Name}, 빠대리와 신과장을 무력으로 제압하고 1단계를 클리어하라.",
                     null,
-                    150,
-                    15
+                    800,
+                    40
                 ) { Stage = 1 },
                 new Quest(
                     "stage 2: 임차장·김부장 토벌      ",
                     $"사장님 눈밖에 난 {character.Name}, 임차장과 김부장을 쓰러뜨려 2단계를 넘어서라.",
                     null,
-                    200,
-                    20
+                    1500,
+                    60
                 ) { Stage = 2 },
                 new Quest(
                     "stage 3: 오실장·카이사 장벽 돌파 ",
                     $"진급 배틀 3단계 돌파! 오실장과 카이사의 장벽을 부숴라.",
                     null,
-                    300,
-                    30
+                    2500,
+                    80
                 ) { Stage = 3 },
                 new Quest(
                     "stage 4: 유상무·박사장 섬멸     ",
                     $"권력의 끝판왕 유상무와 박사장을 쓰러뜨리고 마지막 보스를 준비하라.",
                     null,
-                    400,
-                    40
+                    4000,
+                    100
                 ) { Stage = 4 },
                 new Quest(
                     "stage 5 Boss: 회장 석회장 격파   ",
                     $"이 회사는 내가 먹는다! 최종 진급 배틀에서 회장 석회장을 무너뜨려라.",
                     "석회장",
-                    1000,
-                    50
+                    10000,
+                    150
                 ) { Stage = 5 }
             };
 
